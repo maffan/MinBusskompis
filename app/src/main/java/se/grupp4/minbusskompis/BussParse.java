@@ -2,6 +2,7 @@ package se.grupp4.minbusskompis;
 
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.parse.Parse;
 import com.parse.ParseInstallation;
@@ -27,7 +28,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * To send messages just set a sending channel and then use sendData.
  */
 public class BussParse extends Observable {
-    private static BussParse ourInstance;
+    protected static BussParse ourInstance;
 
     private static Context currentContext;
 
@@ -61,20 +62,17 @@ public class BussParse extends Observable {
      * @return True if successful. False if an exception occurred.
      */
     public boolean sendData(String data){
-        try {
-            ParsePush push = new ParsePush();
-            push.setChannel(sendingChannel);
+        return sendData(data,null);
+    }
 
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("incomingData", data);
+    @NonNull
+    protected JSONObject getJsonObject() {
+        return new JSONObject();
+    }
 
-            push.setData(jsonObject);
-            push.sendInBackground();
-            return true;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
+    @NonNull
+    protected ParsePush getParsePush() {
+        return new ParsePush();
     }
 
     /**
@@ -87,11 +85,11 @@ public class BussParse extends Observable {
      */
     public boolean sendData(String data, SendCallback callback){
         try {
-            ParsePush push = new ParsePush();
+            ParsePush push = getParsePush();
             push.setChannel(sendingChannel);
 
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("incomingData", data);
+            JSONObject jsonObject = getJsonObject();
+            jsonObject.put("data", data);
 
             push.setData(jsonObject);
             push.sendInBackground(callback);
