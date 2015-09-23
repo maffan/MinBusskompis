@@ -146,8 +146,12 @@ public class BussParse extends Observable {
      */
     public void setListeningChannel(String listeningChannel) {
         this.listeningChannel = listeningChannel;
-        ParseInstallation.getCurrentInstallation().getList("channels").clear();
+        getCurrentInstallation().getList("channels").clear();
         ParsePush.subscribeInBackground(listeningChannel);
+    }
+
+    protected ParseInstallation getCurrentInstallation() {
+        return ParseInstallation.getCurrentInstallation();
     }
 
     /**
