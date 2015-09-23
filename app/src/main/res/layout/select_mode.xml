@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4fffc5">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Child"
+        android:id="@+id/child_selectbutton"
+        android:layout_marginTop="150dp"
+        android:height="100dp"
+        android:width="300dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:typeface="monospace"
+        android:background="@android:color/holo_blue_dark"
+        android:clickable="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Parent"
+        android:id="@+id/parent_selectbutton"
+        android:height="100dp"
+        android:width="@+id/child_selectbutton"
+        android:layout_marginTop="70dp"
+        android:layout_below="@+id/child_selectbutton"
+        android:layout_alignRight="@+id/child_selectbutton"
+        android:layout_alignEnd="@+id/child_selectbutton"
+        android:layout_alignLeft="@+id/child_selectbutton"
+        android:layout_alignStart="@+id/child_selectbutton"
+        android:typeface="monospace"
+        android:textStyle="bold"
+        android:background="@android:color/holo_blue_dark"
+        android:clickable="true" />
+</RelativeLayout>
