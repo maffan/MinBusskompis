@@ -3,6 +3,8 @@ package se.grupp4.minbusskompis;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.parse.ParsePushBroadcastReceiver;
 
@@ -22,11 +24,17 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     @Override
     protected void onPushReceive(Context context, Intent intent) {
         try {
-            JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+            Bundle extras = intent.getExtras();
+            JSONObject json = getJsonObject(extras);
             String data = json.getString("data");
             BussParse.getInstance(context).dataReceived(data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @NonNull
+    protected JSONObject getJsonObject(Bundle extras) throws JSONException {
+        return new JSONObject(extras.getString("com.parse.data"));
     }
 }
