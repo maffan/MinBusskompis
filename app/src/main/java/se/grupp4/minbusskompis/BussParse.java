@@ -110,7 +110,7 @@ public class BussParse extends Observable {
      * This method should only be called by the applications ParsePushBroadcastReceiver.
      *
      * Enqueues incoming data and notifies observers that new data is available.
-     * @param data
+     * @param data The data to be enqueued
      */
     public void dataReceived(String data){
         this.incomingData.add(data);
