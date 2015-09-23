@@ -11,7 +11,6 @@ import com.parse.SendCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -32,9 +31,6 @@ public class BussParse extends Observable {
 
     private static Context currentContext;
 
-    private static String parseApplicationID = "D7kI64caRSnhaF6ijs3z0DWeU334e2AdXejN7b06";
-    private static String parseClientKey = "He9LcKvRl8pYLjhOBNfaja8bH08gZ5HX76SnIPDF";
-
     private String listeningChannel;
     private String sendingChannel;
 
@@ -54,7 +50,7 @@ public class BussParse extends Observable {
     }
 
     private BussParse(){
-        Parse.initialize(currentContext,parseApplicationID,parseClientKey);
+        Parse.initialize(currentContext);
         incomingData = new ConcurrentLinkedQueue<>();
     }
 
