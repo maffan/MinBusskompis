@@ -3,4 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="parse_client_key" translatable="false">He9LcKvRl8pYLjhOBNfaja8bH08gZ5HX76SnIPDF</string>
+    <string name="parse_app_id" translatable="false">D7kI64caRSnhaF6ijs3z0DWeU334e2AdXejN7b06</string>
 </resources>
