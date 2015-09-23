@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by Marcus on 9/21/2015.
@@ -54,7 +55,7 @@ public class BussParse extends Observable {
 
     private BussParse(){
         Parse.initialize(currentContext,parseApplicationID,parseClientKey);
-        incomingData = new LinkedList<>();
+        incomingData = new ConcurrentLinkedQueue<>();
     }
 
     /**
