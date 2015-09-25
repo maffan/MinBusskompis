@@ -17,7 +17,6 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
             android:inputType="number"
             android:ems="10"
             android:hint="Enter child code"

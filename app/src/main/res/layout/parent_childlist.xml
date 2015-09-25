@@ -16,15 +16,19 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/listView"
+            android:id="@+id/children"
             android:layout_gravity="center_horizontal"
             android:choiceMode="singleChoice"
             android:background="@color/background_material_light" />
     </LinearLayout>
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/round_button"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="+"
+        android:textColor="#ffffff"
         android:id="@+id/imageButton_addchild"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
