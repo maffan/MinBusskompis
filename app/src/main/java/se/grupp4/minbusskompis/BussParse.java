@@ -3,6 +3,7 @@ package se.grupp4.minbusskompis;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.parse.Parse;
 import com.parse.ParseInstallation;
@@ -12,6 +13,7 @@ import com.parse.SendCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -93,6 +95,7 @@ public class BussParse extends Observable {
 
             push.setData(jsonObject);
             push.sendInBackground(callback);
+            Log.d("BUSSPARSE","Data sent with: "+data);
             return true;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -146,7 +149,11 @@ public class BussParse extends Observable {
      */
     public void setListeningChannel(String listeningChannel) {
         this.listeningChannel = listeningChannel;
-        getCurrentInstallation().getList("channels").clear();
+        List<String> channels = getCurrentInstallation().getList("channels");
+        if(channels != null){
+            channels.clear();
+            getCurrentInstallation().put("channels",channels);
+        }
         ParsePush.subscribeInBackground(listeningChannel);
     }
 
@@ -158,7 +165,7 @@ public class BussParse extends Observable {
      * Returns a queue containing yet unprocessed messages.
      * @return a Queue containing incoming data.
      */
-    public Queue<String> getData() {
+    public Queue<String> getDataQueue() {
         return incomingData;
     }
 }

@@ -6,4 +6,10 @@
     <string name="parse_client_key" translatable="false">He9LcKvRl8pYLjhOBNfaja8bH08gZ5HX76SnIPDF</string>
     <string name="parse_app_id" translatable="false">D7kI64caRSnhaF6ijs3z0DWeU334e2AdXejN7b06</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_parse_test">ParseTest</string>
+    <string name="sending_channel">Sending channel:</string>
+    <string name="listen_channel">Listening channel:</string>
+    <string name="received_messages">Received messages:</string>
+    <string name="send_button">Send</string>
+    <string name="message_text">message</string>
 </resources>
