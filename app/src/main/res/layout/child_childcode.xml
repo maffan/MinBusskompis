@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Placeholder text code"
-        android:id="@+id/textView"
+        android:id="@+id/textView_generatedcode"
         android:layout_marginTop="190dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -20,23 +20,19 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Code:"
         android:id="@+id/textView2"
-        android:layout_alignBottom="@+id/textView"
+        android:layout_alignBottom="@+id/textView_generatedcode"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="62dp" />
 
-    <ImageView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageButton2"
+        android:text="Next"
+        android:textColor="#ffffff"
+        android:background="#000000"
+        android:id="@+id/button_next"
         android:layout_marginTop="88dp"
-        android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

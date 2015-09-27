@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="Child"
+        android:textColor="#ffffff"
         android:id="@+id/child_selectbutton"
         android:layout_marginTop="150dp"
         android:height="100dp"
@@ -16,13 +17,14 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:typeface="monospace"
-        android:background="@android:color/holo_blue_dark"
+        android:background="#000000"
         android:clickable="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Parent"
+        android:textColor="#ffffff"
         android:id="@+id/parent_selectbutton"
         android:height="100dp"
         android:width="@+id/child_selectbutton"
@@ -34,6 +36,6 @@
         android:layout_alignStart="@+id/child_selectbutton"
         android:typeface="monospace"
         android:textStyle="bold"
-        android:background="@android:color/holo_blue_dark"
+        android:background="#000000"
         android:clickable="true" />
 </RelativeLayout>
