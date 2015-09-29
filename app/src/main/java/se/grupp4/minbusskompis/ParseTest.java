@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.Observer;
 import java.util.Queue;
 
 public class ParseTest extends AppCompatActivity {
-    private BussParse bussParse;
+    private BussMessenger bussMessenger;
     private EditText  sendingChannelEditText;
     private EditText  listeningChannelEditText;
     private EditText  messageEditText;
@@ -34,7 +33,7 @@ public class ParseTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parse_test);
 
-        bussParse = BussParse.getInstance(this);
+        bussMessenger = BussMessenger.getInstance(this);
         sendingChannelEditText = (EditText) findViewById(R.id.sending_channel_edit_text);
         listeningChannelEditText = (EditText) findViewById(R.id.listening_channel_edit_text);
         messageEditText = (EditText) findViewById(R.id.message_edit_text);
@@ -51,7 +50,7 @@ public class ParseTest extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 listeningChannel = s.toString();
-                bussParse.setListeningChannel(listeningChannel);
+                bussMessenger.setListeningChannel(listeningChannel);
             }
         });
 
@@ -59,8 +58,8 @@ public class ParseTest extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String message = messageEditText.getText().toString();
-                bussParse.setSendingChannel(sendingChannel);
-                bussParse.sendData(message);
+                bussMessenger.setSendingChannel(sendingChannel);
+                bussMessenger.sendData(message);
                 messageEditText.setText("");
             }
         });
@@ -68,10 +67,10 @@ public class ParseTest extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, messageList);
         messagesListView.setAdapter(adapter);
 
-        bussParse.addObserver(new Observer() {
+        bussMessenger.addObserver(new Observer() {
             @Override
             public void update(Observable observable, Object data) {
-                Queue<String> messageQueue = bussParse.getDataQueue();
+                Queue<String> messageQueue = bussMessenger.getDataQueue();
                 while(!messageQueue.isEmpty()){
                     adapter.add(messageQueue.remove());
                 }

@@ -28,7 +28,7 @@ import static org.mockito.Mockito.stub;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Parse.class})
-public class BussParsePushBroadcastReceiverTest {
+public class BussMessengerPushBroadcastReceiverTest {
     BussParsePushBroadcastReceiver receiver;
     Context context;
 
@@ -57,7 +57,7 @@ public class BussParsePushBroadcastReceiverTest {
 
         spyReceiver.onPushReceive(context,intent);
 
-        String data = BussParse.getInstance(context).getDataQueue().remove();
+        String data = BussMessenger.getInstance(context).getDataQueue().remove();
 
         assertEquals(data,"testData");
     }

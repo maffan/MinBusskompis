@@ -29,8 +29,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * To send messages just set a sending channel and then use sendData.
  */
-public class BussParse extends Observable {
-    protected static BussParse ourInstance;
+public class BussMessenger extends Observable {
+    protected static BussMessenger ourInstance;
 
     private static Context currentContext;
 
@@ -44,15 +44,15 @@ public class BussParse extends Observable {
      * @param context Needed for Parse initiation
      * @return the instance of this class
      */
-    public static BussParse getInstance(Context context) {
+    public static BussMessenger getInstance(Context context) {
         currentContext = context;
         if(ourInstance == null){
-            ourInstance = new BussParse();
+            ourInstance = new BussMessenger();
         }
         return ourInstance;
     }
 
-    private BussParse(){
+    private BussMessenger(){
         Parse.initialize(currentContext);
         incomingData = new ConcurrentLinkedQueue<>();
     }

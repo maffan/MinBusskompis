@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verify;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Parse.class,ParsePush.class})
-public class BussParseTest {
+public class BussMessengerTest {
     Context context;
 
     @Before
@@ -44,12 +44,12 @@ public class BussParseTest {
     @After
     public void tearDown(){
         context = null;
-        BussParse.ourInstance = null;
+        BussMessenger.ourInstance = null;
     }
 
     @Test
     public void shouldInitParse(){
-        BussParse.getInstance(context);
+        BussMessenger.getInstance(context);
 
         PowerMockito.verifyStatic();
 
@@ -60,7 +60,7 @@ public class BussParseTest {
     public void shouldSendData() throws Exception{
         ParsePush push = mock(ParsePush.class);
         JSONObject json = mock(JSONObject.class);
-        BussParse spy = spy(BussParse.getInstance(context));
+        BussMessenger spy = spy(BussMessenger.getInstance(context));
         stub(spy.getParsePush()).toReturn(push);
         stub(spy.getJsonObjectWithData(anyString())).toReturn(json);
         spy.setSendingChannel("testingChannel");
@@ -72,17 +72,17 @@ public class BussParseTest {
 
     @Test
     public void shouldQueueData(){
-        BussParse.getInstance(context).dataReceived("testData1");
-        BussParse.getInstance(context).dataReceived("testData2");
-        BussParse.getInstance(context).dataReceived("testData3");
-        BussParse.getInstance(context).dataReceived("testData4");
-        String data = BussParse.getInstance(context).getDataQueue().remove();
+        BussMessenger.getInstance(context).dataReceived("testData1");
+        BussMessenger.getInstance(context).dataReceived("testData2");
+        BussMessenger.getInstance(context).dataReceived("testData3");
+        BussMessenger.getInstance(context).dataReceived("testData4");
+        String data = BussMessenger.getInstance(context).getDataQueue().remove();
         assertEquals(data, "testData1");
-        data = BussParse.getInstance(context).getDataQueue().remove();
+        data = BussMessenger.getInstance(context).getDataQueue().remove();
         assertEquals(data, "testData2");
-        data = BussParse.getInstance(context).getDataQueue().remove();
+        data = BussMessenger.getInstance(context).getDataQueue().remove();
         assertEquals(data, "testData3");
-        data = BussParse.getInstance(context).getDataQueue().remove();
+        data = BussMessenger.getInstance(context).getDataQueue().remove();
         assertEquals(data, "testData4");
     }
 
@@ -97,12 +97,12 @@ public class BussParseTest {
         channels.add("test3");
         stub(installation.getList("channels")).toReturn(channels);
 
-        BussParse bussParse = mock(BussParse.class);
-        doReturn(installation).when(bussParse).getCurrentInstallation();
-        doCallRealMethod().when(bussParse).setListeningChannel(anyString());
-        doCallRealMethod().when(bussParse).getListeningChannel();
-        bussParse.setListeningChannel("testChannel");
-        assertEquals(bussParse.getListeningChannel(),"testChannel");
+        BussMessenger bussMessenger = mock(BussMessenger.class);
+        doReturn(installation).when(bussMessenger).getCurrentInstallation();
+        doCallRealMethod().when(bussMessenger).setListeningChannel(anyString());
+        doCallRealMethod().when(bussMessenger).getListeningChannel();
+        bussMessenger.setListeningChannel("testChannel");
+        assertEquals(bussMessenger.getListeningChannel(),"testChannel");
     }
 
 
