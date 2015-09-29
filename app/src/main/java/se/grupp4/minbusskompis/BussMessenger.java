@@ -31,12 +31,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class BussMessenger extends Observable {
 
+    private static BussMessenger bussMessenger = new BussMessenger();
     private String listeningChannel;
     private String sendingChannel;
 
     private Queue<String> incomingData;
 
-    public BussMessenger(){
+    public static BussMessenger getInstance() {
+        return bussMessenger;
+    }
+
+    private BussMessenger(){
         incomingData = new ConcurrentLinkedQueue<>();
     }
 

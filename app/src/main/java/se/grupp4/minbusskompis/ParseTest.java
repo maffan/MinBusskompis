@@ -33,7 +33,7 @@ public class ParseTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parse_test);
 
-        bussMessenger = BussMessenger.getInstance(this);
+        bussMessenger = BussMessenger.getInstance();
         sendingChannelEditText = (EditText) findViewById(R.id.sending_channel_edit_text);
         listeningChannelEditText = (EditText) findViewById(R.id.listening_channel_edit_text);
         messageEditText = (EditText) findViewById(R.id.message_edit_text);

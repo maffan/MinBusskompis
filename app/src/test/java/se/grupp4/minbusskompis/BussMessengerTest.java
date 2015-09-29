@@ -33,34 +33,24 @@ import static org.mockito.Mockito.verify;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Parse.class,ParsePush.class})
 public class BussMessengerTest {
-    Context context;
+    BussMessenger bussMessenger;
 
     @Before
     public void setUp(){
-        context = mock(Context.class);
-        PowerMockito.mockStatic(Parse.class);
+        PowerMockito.mockStatic(ParsePush.class);
+        bussMessenger = BussMessenger.getInstance();
     }
 
     @After
     public void tearDown(){
-        context = null;
-        BussMessenger.ourInstance = null;
-    }
-
-    @Test
-    public void shouldInitParse(){
-        BussMessenger.getInstance(context);
-
-        PowerMockito.verifyStatic();
-
-        Parse.initialize(context);
+        bussMessenger = null;
     }
 
     @Test
     public void shouldSendData() throws Exception{
         ParsePush push = mock(ParsePush.class);
         JSONObject json = mock(JSONObject.class);
-        BussMessenger spy = spy(BussMessenger.getInstance(context));
+        BussMessenger spy = spy(bussMessenger);
         stub(spy.getParsePush()).toReturn(push);
         stub(spy.getJsonObjectWithData(anyString())).toReturn(json);
         spy.setSendingChannel("testingChannel");
@@ -72,23 +62,23 @@ public class BussMessengerTest {
 
     @Test
     public void shouldQueueData(){
-        BussMessenger.getInstance(context).dataReceived("testData1");
-        BussMessenger.getInstance(context).dataReceived("testData2");
-        BussMessenger.getInstance(context).dataReceived("testData3");
-        BussMessenger.getInstance(context).dataReceived("testData4");
-        String data = BussMessenger.getInstance(context).getDataQueue().remove();
+        bussMessenger.dataReceived("testData1");
+        bussMessenger.dataReceived("testData2");
+        bussMessenger.dataReceived("testData3");
+        bussMessenger.dataReceived("testData4");
+        String data = bussMessenger.getDataQueue().remove();
         assertEquals(data, "testData1");
-        data = BussMessenger.getInstance(context).getDataQueue().remove();
+        data = bussMessenger.getDataQueue().remove();
         assertEquals(data, "testData2");
-        data = BussMessenger.getInstance(context).getDataQueue().remove();
+        data = bussMessenger.getDataQueue().remove();
         assertEquals(data, "testData3");
-        data = BussMessenger.getInstance(context).getDataQueue().remove();
+        data = bussMessenger.getDataQueue().remove();
         assertEquals(data, "testData4");
     }
 
     @Test
     public void shouldSetListeningChannel(){
-        PowerMockito.mockStatic(ParsePush.class);
+
 
         ParseInstallation installation = mock(ParseInstallation.class);
         List<Object> channels = new ArrayList<>();
