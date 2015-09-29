@@ -61,13 +61,11 @@ public class BussParse extends Observable {
      * Used to send data.
      * The data will be sent through the channel specified in the setChannel method
      * @param data data so be sent.
-     * @return True if successful. False if an exception occurred.
+     *
      */
-    public boolean sendData(String data){
-        return sendData(data,null);
+    public void sendData(String data){
+        sendData(data,null);
     }
-
-
 
     /**
      * Used to send data.
@@ -77,14 +75,23 @@ public class BussParse extends Observable {
      * @param callback callback object to be called when the message has been sent.
      *
      */
-    public void sendData(String data, SendCallback callback){
-            ParsePush push = makePushWithCurrentChannel();
-            putDataInPush(data, push);
-            sendPushWithCallback(push, callback);
+    public boolean sendData(String data, SendCallback callback){
+        try {
+            trySendData(data, callback);
+            return true;
+        }catch(JSONException e){
+            return false;
+        }
+    }
+
+    private void trySendData(String data, SendCallback callback) throws JSONException {
+        ParsePush push = makePushWithCurrentChannel();
+        putDataInPush(data, push);
+        sendPushWithCallback(push, callback);
     }
 
     @NonNull
-    protected ParsePush makePushWithCurrentChannel() {
+    private ParsePush makePushWithCurrentChannel() {
         ParsePush push = getParsePush();
         push.setChannel(sendingChannel);
         return push;
@@ -95,30 +102,22 @@ public class BussParse extends Observable {
         return new ParsePush();
     }
 
-    protected void putDataInPush(String data, ParsePush push) {
+    private void putDataInPush(String data, ParsePush push) throws JSONException {
             JSONObject jsonObject = getJsonObjectWithData(data);
             push.setData(jsonObject);
     }
 
     @NonNull
-    private JSONObject getJsonObjectWithData(String data) {
-        try {
-            JSONObject object = new JSONObject();
-            object.put("data",data);
-            return object;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    protected JSONObject getJsonObjectWithData(String data) throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("data", data);
+        return object;
     }
 
-    protected void sendPushWithCallback(ParsePush push, SendCallback callback) {
+    private void sendPushWithCallback(ParsePush push, SendCallback callback) {
         push.sendInBackground(callback);
         Log.d("BUSSPARSE", "Data sent");
     }
-
-
-
-
 
     /**
      * This method should only be called by the applications ParsePushBroadcastReceiver.
@@ -127,7 +126,15 @@ public class BussParse extends Observable {
      * @param data The data to be enqueued
      */
     public void dataReceived(String data){
+        enqueueData(data);
+        notifyListeners(data);
+    }
+
+    private void enqueueData(String data) {
         this.incomingData.add(data);
+    }
+
+    private void notifyListeners(String data) {
         setChanged();
         notifyObservers(data);
     }
@@ -166,16 +173,24 @@ public class BussParse extends Observable {
      */
     public void setListeningChannel(String listeningChannel) {
         this.listeningChannel = listeningChannel;
+        clearInstalledChannels();
+        subscribeToChannel(listeningChannel);
+    }
+
+    private void clearInstalledChannels() {
         List<String> channels = getCurrentInstallation().getList("channels");
         if(channels != null){
             channels.clear();
             getCurrentInstallation().put("channels",channels);
         }
-        ParsePush.subscribeInBackground(listeningChannel);
     }
 
     protected ParseInstallation getCurrentInstallation() {
         return ParseInstallation.getCurrentInstallation();
+    }
+
+    private void subscribeToChannel(String listeningChannel) {
+        ParsePush.subscribeInBackground(listeningChannel);
     }
 
     /**
