@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.parse.ParsePushBroadcastReceiver;
 
@@ -28,6 +29,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
             JSONObject json = getJsonObject(extras);
             String data = json.getString("data");
             BussParse.getInstance(context).dataReceived(data);
+            Log.d("RECEIVER","Data: '"+data+"' received");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -35,6 +37,6 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
 
     @NonNull
     protected JSONObject getJsonObject(Bundle extras) throws JSONException {
-        return new JSONObject(extras.getString("com.parse.data"));
+        return new JSONObject(extras.getString("com.parse.Data"));
     }
 }

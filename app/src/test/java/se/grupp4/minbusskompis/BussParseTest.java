@@ -77,13 +77,13 @@ public class BussParseTest {
         BussParse.getInstance(context).dataReceived("testData2");
         BussParse.getInstance(context).dataReceived("testData3");
         BussParse.getInstance(context).dataReceived("testData4");
-        String data = BussParse.getInstance(context).getData().remove();
+        String data = BussParse.getInstance(context).getDataQueue().remove();
         assertEquals(data, "testData1");
-        data = BussParse.getInstance(context).getData().remove();
+        data = BussParse.getInstance(context).getDataQueue().remove();
         assertEquals(data, "testData2");
-        data = BussParse.getInstance(context).getData().remove();
+        data = BussParse.getInstance(context).getDataQueue().remove();
         assertEquals(data, "testData3");
-        data = BussParse.getInstance(context).getData().remove();
+        data = BussParse.getInstance(context).getDataQueue().remove();
         assertEquals(data, "testData4");
     }
 

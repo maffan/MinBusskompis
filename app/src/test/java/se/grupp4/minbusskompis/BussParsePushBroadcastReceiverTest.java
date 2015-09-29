@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.parse.Parse;
-import com.parse.ParsePush;
 
 import org.json.JSONObject;
 import org.junit.After;
@@ -58,7 +57,7 @@ public class BussParsePushBroadcastReceiverTest {
 
         spyReceiver.onPushReceive(context,intent);
 
-        String data = BussParse.getInstance(context).getData().remove();
+        String data = BussParse.getInstance(context).getDataQueue().remove();
 
         assertEquals(data,"testData");
     }
