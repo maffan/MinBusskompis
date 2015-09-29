@@ -62,11 +62,10 @@ public class BussParseTest {
         JSONObject json = mock(JSONObject.class);
         BussParse spy = spy(BussParse.getInstance(context));
         stub(spy.getParsePush()).toReturn(push);
-        stub(spy.getJsonObject()).toReturn(json);
+        stub(spy.getJsonObjectWithData(anyString())).toReturn(json);
         spy.setSendingChannel("testingChannel");
         spy.sendData("testData");
         verify(push).setChannel("testingChannel");
-        verify(json).put("data", "testData");
         verify(push).setData(json);
         verify(push).sendInBackground(null);
     }
