@@ -27,6 +27,7 @@
     <uses-permission android:name="se.grupp4.minbusskompis.permission.C2D_MESSAGE" />
 
     <application
+        android:name=".BussApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
