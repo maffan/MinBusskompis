@@ -67,9 +67,27 @@ public class BussParse extends Observable {
         return sendData(data,null);
     }
 
+
+
+    /**
+     * Used to send data.
+     * Use this method if you want to provide a callback method to be called when the message
+     * has been successfully sent.
+     *
+     * @param callback callback object to be called when the message has been sent.
+     *
+     */
+    public void sendData(String data, SendCallback callback){
+            ParsePush push = makePushWithCurrentChannel();
+            putDataInPush(data, push);
+            sendPushWithCallback(push, callback);
+    }
+
     @NonNull
-    protected JSONObject getJsonObject() {
-        return new JSONObject();
+    protected ParsePush makePushWithCurrentChannel() {
+        ParsePush push = getParsePush();
+        push.setChannel(sendingChannel);
+        return push;
     }
 
     @NonNull
@@ -77,31 +95,30 @@ public class BussParse extends Observable {
         return new ParsePush();
     }
 
-    /**
-     * Used to send data.
-     * Use this method if you want to provide a callback method to be called when the message
-     * has been successfully sent.
-     * @param data Data to be sent
-     * @param callback callback object to be called when the message has been sent.
-     * @return True if successful. False if an exception occurred.
-     */
-    public boolean sendData(String data, SendCallback callback){
-        try {
-            ParsePush push = getParsePush();
-            push.setChannel(sendingChannel);
-
-            JSONObject jsonObject = getJsonObject();
-            jsonObject.put("data", data);
-
+    protected void putDataInPush(String data, ParsePush push) {
+            JSONObject jsonObject = getJsonObjectWithData(data);
             push.setData(jsonObject);
-            push.sendInBackground(callback);
-            Log.d("BUSSPARSE","Data sent with: "+data);
-            return true;
+    }
+
+    @NonNull
+    private JSONObject getJsonObjectWithData(String data) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put("data",data);
+            return object;
         } catch (JSONException e) {
             e.printStackTrace();
-            return false;
         }
     }
+
+    protected void sendPushWithCallback(ParsePush push, SendCallback callback) {
+        push.sendInBackground(callback);
+        Log.d("BUSSPARSE", "Data sent");
+    }
+
+
+
+
 
     /**
      * This method should only be called by the applications ParsePushBroadcastReceiver.
