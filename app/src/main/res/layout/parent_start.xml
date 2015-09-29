@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="Children"
+        android:textColor="#ffffff"
         android:id="@+id/parent_childrenbutton"
         android:layout_marginTop="150dp"
         android:height="100dp"
@@ -16,13 +17,14 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:typeface="monospace"
-        android:background="@android:color/holo_blue_dark"
+        android:background="#000000"
         android:clickable="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Destinations"
+        android:textColor="#ffffff"
         android:id="@+id/parent_destinationsbutton"
         android:height="100dp"
         android:width="@+id/parent_childrenbutton"
@@ -34,7 +36,7 @@
         android:layout_alignStart="@+id/parent_childrenbutton"
         android:typeface="monospace"
         android:textStyle="bold"
-        android:background="@android:color/holo_blue_dark"
+        android:background="#000000"
         android:clickable="true" />
 
 </RelativeLayout>
