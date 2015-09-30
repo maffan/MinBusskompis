@@ -21,13 +21,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Created by Marcus on 9/21/2015.
  *
- * A singleton for handling all of the Parse interactions.
+ * A singleton for handling sending messages between devices
  *
  * If you want to receive notifications sent to this device, simply implement
  * the Observer interface and add yourself as a listener to this singleton.
- * Set a listening channel and your observer will be called when a message arrives.
  *
- * To send messages just set a sending channel and then use sendData.
  */
 public class BussMessenger extends Observable {
 
