@@ -46,54 +46,7 @@ public class BussMessengerTest {
         bussMessenger = null;
     }
 
-    @Test
-    public void shouldSendData() throws Exception{
-        ParsePush push = mock(ParsePush.class);
-        JSONObject json = mock(JSONObject.class);
-        BussMessenger spy = spy(bussMessenger);
-        stub(spy.getParsePush()).toReturn(push);
-        stub(spy.getJsonObjectWithData(anyString())).toReturn(json);
-        spy.setSendingChannel("testingChannel");
-        spy.sendData("testData");
-        verify(push).setChannel("testingChannel");
-        verify(push).setData(json);
-        verify(push).sendInBackground(null);
-    }
 
-    @Test
-    public void shouldQueueData(){
-        bussMessenger.dataReceived("testData1");
-        bussMessenger.dataReceived("testData2");
-        bussMessenger.dataReceived("testData3");
-        bussMessenger.dataReceived("testData4");
-        String data = bussMessenger.getDataQueue().remove();
-        assertEquals(data, "testData1");
-        data = bussMessenger.getDataQueue().remove();
-        assertEquals(data, "testData2");
-        data = bussMessenger.getDataQueue().remove();
-        assertEquals(data, "testData3");
-        data = bussMessenger.getDataQueue().remove();
-        assertEquals(data, "testData4");
-    }
-
-    @Test
-    public void shouldSetListeningChannel(){
-
-
-        ParseInstallation installation = mock(ParseInstallation.class);
-        List<Object> channels = new ArrayList<>();
-        channels.add("test1");
-        channels.add("test2");
-        channels.add("test3");
-        stub(installation.getList("channels")).toReturn(channels);
-
-        BussMessenger bussMessenger = mock(BussMessenger.class);
-        doReturn(installation).when(bussMessenger).getCurrentInstallation();
-        doCallRealMethod().when(bussMessenger).setListeningChannel(anyString());
-        doCallRealMethod().when(bussMessenger).getListeningChannel();
-        bussMessenger.setListeningChannel("testChannel");
-        assertEquals(bussMessenger.getListeningChannel(),"testChannel");
-    }
 
 
 

@@ -1,14 +1,10 @@
 package se.grupp4.minbusskompis;
 
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
-import com.parse.SendCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,10 +26,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class BussMessenger extends Observable {
 
     private static BussMessenger bussMessenger = new BussMessenger();
-    private String listeningChannel;
-    private String sendingChannel;
 
-    private Queue<String> incomingData;
+    private List<String> recipients;
+
+    private Queue<JSONObject> incomingData;
+    private Queue<JSONObject> incomingSync;
 
     public static BussMessenger getInstance() {
         return bussMessenger;
@@ -41,68 +38,71 @@ public class BussMessenger extends Observable {
 
     private BussMessenger(){
         incomingData = new ConcurrentLinkedQueue<>();
+        incomingSync = new ConcurrentLinkedQueue<>();
     }
 
-    /**
-     * Used to send data.
-     * The data will be sent through the channel specified in the setChannel method
-     * @param data data so be sent.
-     *
-     */
-    public void sendData(String data){
-        sendData(data,null);
-    }
-
-    /**
-     * Used to send data.
-     * Use this method if you want to provide a callback method to be called when the message
-     * has been successfully sent.
-     *
-     * @param callback callback object to be called when the message has been sent.
-     *
-     */
-    public boolean sendData(String data, SendCallback callback){
+    public void sendMessage(String data){
         try {
-            trySendData(data, callback);
-            return true;
-        }catch(JSONException e){
-            return false;
+            trySendMessage(data);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
-    private void trySendData(String data, SendCallback callback) throws JSONException {
-        ParsePush push = makePushWithCurrentChannel();
-        putDataInPush(data, push);
-        sendPushWithCallback(push, callback);
+    private void trySendMessage(String data) throws JSONException {
+        ParsePush push = getParsePushWithChannel(getInstallationId());
+        JSONObject messageObject = getMessageObjectWithData(data);
+        sendPushWithObject(push, messageObject);
+    }
+
+    private void sendPushWithObject(ParsePush push, JSONObject jsonObject) {
+        push.setData(jsonObject);
+        push.sendInBackground();
     }
 
     @NonNull
-    private ParsePush makePushWithCurrentChannel() {
-        ParsePush push = getParsePush();
-        push.setChannel(sendingChannel);
+    private JSONObject getMessageObjectWithData(String data) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", "Message");
+        jsonObject.put("data", data);
+        return jsonObject;
+    }
+
+    private String getInstallationId() {
+        return ParseInstallation.getCurrentInstallation().getInstallationId();
+    }
+
+    @NonNull
+    private ParsePush getParsePushWithChannel(String installationId) {
+        ParsePush push = new ParsePush();
+        push.setChannel(installationId);
         return push;
     }
 
+    public void sendSyncRequest(String syncId){
+        try {
+            trySendSyncRequest(syncId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void trySendSyncRequest(String syncId) throws JSONException {
+        ParsePush push = getParsePushWithChannel(syncId);
+        JSONObject syncObject = getSyncRequestObject();
+        sendPushWithObject(push, syncObject);
+    }
+
     @NonNull
-    protected ParsePush getParsePush() {
-        return new ParsePush();
+    private JSONObject getSyncRequestObject() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", "SyncRequest");
+        jsonObject.put("sender", getInstallationId());
+        return jsonObject;
     }
 
-    private void putDataInPush(String data, ParsePush push) throws JSONException {
-            JSONObject jsonObject = getJsonObjectWithData(data);
-            push.setData(jsonObject);
-    }
+    public void sendSyncResponse(String syncId) {
 
-    @NonNull
-    protected JSONObject getJsonObjectWithData(String data) throws JSONException {
-        JSONObject object = new JSONObject();
-        object.put("data", data);
-        return object;
-    }
-
-    private void sendPushWithCallback(ParsePush push, SendCallback callback) {
-        push.sendInBackground(callback);
-        Log.d("BUSSPARSE", "Data sent");
     }
 
     /**
@@ -111,79 +111,70 @@ public class BussMessenger extends Observable {
      * Enqueues incoming data and notifies observers that new data is available.
      * @param data The data to be enqueued
      */
-    public void dataReceived(String data){
+    public void dataReceived(JSONObject data){
         enqueueData(data);
         notifyListeners(data);
     }
 
-    private void enqueueData(String data) {
-        this.incomingData.add(data);
+    private void enqueueData(JSONObject data) {
+        synchronized (this.incomingData){
+            this.incomingData.add(data);
+            this.incomingData.notify();
+        }
     }
-
-    private void notifyListeners(String data) {
-        setChanged();
-        notifyObservers(data);
-    }
-
-    /**
-     * Get the current sending channel
-     * @return the current sending channel
-     */
-    public String getSendingChannel() {
-        return sendingChannel;
-    }
-
-    /**
-     * Must be called before sendData. Sets the channel the data will be sent through
-     * @param sendingChannel the channel to send data through
-     */
-    public void setSendingChannel(String sendingChannel) {
-        this.sendingChannel = sendingChannel;
-    }
-
-    /**
-     * Get the current listening channel.
-     *
-     * This is the channel the broadcast receiver will be receiving data from.
-     * @return the current listening channel
-     */
-    public String getListeningChannel() {
-        return listeningChannel;
-    }
-
-    /**
-     * Must be set before any data can be received.
-     *
-     * This is the channel the broadcast receiver will be receiving data from.
-     * @param listeningChannel the channel to receive data from.
-     */
-    public void setListeningChannel(String listeningChannel) {
-        this.listeningChannel = listeningChannel;
-        clearInstalledChannels();
-        subscribeToChannel(listeningChannel);
-    }
-
-    private void clearInstalledChannels() {
-        List<String> channels = getCurrentInstallation().getList("channels");
-        if(channels != null){
-            channels.clear();
-            getCurrentInstallation().put("channels",channels);
+    private void enqueueSync(JSONObject data) {
+        synchronized (this.incomingSync){
+            this.incomingData.add(data);
+            this.incomingData.notify();
         }
     }
 
-    protected ParseInstallation getCurrentInstallation() {
-        return ParseInstallation.getCurrentInstallation();
-    }
-
-    private void subscribeToChannel(String listeningChannel) {
-        ParsePush.subscribeInBackground(listeningChannel);
+    private void notifyListeners(JSONObject data) {
+        setChanged();
+        notifyObservers(data);
     }
 
     /**
      * Returns a queue containing yet unprocessed messages.
      * @return a Queue containing incoming data.
      */
-    public Queue<String> getDataQueue() {
+    public Queue<JSONObject> getDataQueue() {
         return incomingData;
     }
+
+    public Queue<JSONObject> getSyncQueue(){
+        return incomingSync;
+    }
+
+    public boolean waitForSyncResponse(String syncId) {
+        synchronized (this.incomingSync){
+            int attempts = 0;
+            while(this.incomingSync.isEmpty()){
+                try {
+                    attempts++;
+                    if(attempts >= 10)
+                        return false;
+                    this.incomingSync.wait(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            JSONObject response = this.incomingSync.remove();
+            try {
+                String type = response.getString("type");
+                if(type.equals("SyncResponse")){
+                    String responseSyncId = response.getString("SyncId");
+                    if(syncId.equals(responseSyncId))
+                        return true;
+                    else
+                        return false;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+    }
+
+
 }

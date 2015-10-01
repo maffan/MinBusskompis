@@ -58,4 +58,12 @@ public class BussData {
         });
     }
 
+    public BussRelationships getParents(){
+        return new BussRelationships(parents);
+    }
+
+    public BussRelationships getChildren(){
+        return new BussRelationships(children);
+    }
+
 }

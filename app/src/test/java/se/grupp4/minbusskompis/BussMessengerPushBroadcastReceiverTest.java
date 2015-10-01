@@ -57,7 +57,7 @@ public class BussMessengerPushBroadcastReceiverTest {
 
         spyReceiver.onPushReceive(context,intent);
 
-        String data = BussMessenger.getInstance(context).getDataQueue().remove();
+        String data = BussMessenger.getInstance().getDataQueue().remove();
 
         assertEquals(data,"testData");
     }
