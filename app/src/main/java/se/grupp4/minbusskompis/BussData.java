@@ -1,12 +1,13 @@
 package se.grupp4.minbusskompis;
 
+import android.util.Log;
+
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,34 +17,36 @@ import java.util.List;
 public class BussData {
     private static BussData bussData = new BussData();
 
-    private LinkedList people;
+    private LinkedList parents;
+    private LinkedList children;
 
-    public enum Type{PARENT,CHILD}
 
     public static BussData getInstance() {
         return bussData;
     }
 
     public BussData(){
-        people = new LinkedList();
+        parents = new LinkedList();
+        children = new LinkedList();
     }
 
-    public void fetchPeopleAsync(Type type){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(type.name());
-        query.whereEqualTo("installationId", ParseInstallation.getCurrentInstallation().getInstallationId());
+    public void fetchRelationships(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Relationships").whereEqualTo("installationId",ParseInstallation.getCurrentInstallation().getInstallationId()).setLimit(1);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                people.clear();
-                people.addAll(list);
+                if(e == null) {
+                    ParseObject relationships = list.get(0);
+                    parents.addAll(relationships.getList("parents"));
+                    children.addAll(relationships.getList("children"));
+                    Log.d("BUSSDATA","Parents: "+parents.toString() );
+                    Log.d("BUSSDATA","Children: "+children.toString() );
+                }
+                else{
+
+                    }
             }
         });
-    }
-
-    public void addPersonAsync(Type type){
-        ParseObject person = new ParseObject(type.name());
-        person.put("installationId",ParseInstallation.getCurrentInstallation().getInstallationId());
-
     }
 
 }
