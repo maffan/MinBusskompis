@@ -36,6 +36,15 @@ public class BussData {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if(e == null) {
+                    if(list.size() == 0){
+                        ParseObject newRelationship = ParseObject.create("Relationships");
+                        newRelationship.put("installationId",ParseInstallation.getCurrentInstallation().getInstallationId());
+                        try {
+                            newRelationship.save();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
                     ParseObject relationships = list.get(0);
                     parents.addAll(relationships.getList("parents"));
                     children.addAll(relationships.getList("children"));
