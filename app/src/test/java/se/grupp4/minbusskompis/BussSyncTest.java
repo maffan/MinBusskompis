@@ -5,6 +5,10 @@ import android.support.annotation.NonNull;
 import org.junit.*;
 import org.mockito.Mockito;
 
+import se.grupp4.minbusskompis.BussParse.BussData;
+import se.grupp4.minbusskompis.BussParse.BussMessenger;
+import se.grupp4.minbusskompis.BussParse.BussSync;
+
 import static org.junit.Assert.*;
 
 /**

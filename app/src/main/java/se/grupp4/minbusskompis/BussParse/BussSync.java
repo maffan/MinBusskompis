@@ -1,4 +1,4 @@
-package se.grupp4.minbusskompis;
+package se.grupp4.minbusskompis.BussParse;
 
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;

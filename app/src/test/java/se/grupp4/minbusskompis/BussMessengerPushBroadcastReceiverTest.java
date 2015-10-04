@@ -16,6 +16,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import se.grupp4.minbusskompis.BussParse.BussMessenger;
+import se.grupp4.minbusskompis.BussParse.BussParsePushBroadcastReceiver;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
