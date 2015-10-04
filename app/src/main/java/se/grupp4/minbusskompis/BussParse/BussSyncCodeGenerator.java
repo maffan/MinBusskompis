@@ -13,17 +13,12 @@ public class BussSyncCodeGenerator implements CodeGenerator {
 
     private String characters = "0123456789";
 
-    public BussSyncCodeGenerator(BussParseSyncMessenger messenger){
-        this.messenger = messenger;
+    public BussSyncCodeGenerator(int length){
+        syncCode = generateSyncCode(length);
     }
 
-    public String getCode(int length) {
-        if(syncCode != null)
-            return syncCode;
-        else{
-            syncCode = generateSyncCode(length);
-            return syncCode;
-        }
+    public String getCode() {
+        return syncCode;
     }
 
     private String generateSyncCode(int length){

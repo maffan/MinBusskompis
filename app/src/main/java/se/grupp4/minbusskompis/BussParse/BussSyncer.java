@@ -40,9 +40,10 @@ public class BussSyncer {
         }
     }
 
-    public void waitForSync(String syncCode, SyncTaskCompleteCallback callback){
+    public void waitForSync(CodeGenerator generator, SyncTaskCompleteCallback callback){
+        String code = generator.getCode();
         WaitForSyncTask task = new WaitForSyncTask(callback);
-        task.execute(syncCode);
+        task.execute(code);
     }
 
     private class WaitForSyncTask extends AsyncTask<String, Void, Boolean>{
@@ -55,7 +56,7 @@ public class BussSyncer {
         @Override
         protected Boolean doInBackground(String... params) {
             String syncId = params[0];
-            if(messenger.waitForSyncResponse(syncId)){
+            if(messenger.waitForSyncRequest(syncId)){
                 messenger.sendSyncResponse(syncId);
                 return true;
             }

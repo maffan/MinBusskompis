@@ -40,7 +40,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
                     provider = BussSyncMessengerProvider.getInstance();
                     if(provider.hasMessenger())
                         try {
-                            provider.getSyncMessenger().enqueueResponse(messageData);
+                            provider.getSyncMessenger().enqueueRequest(messageData);
                         } catch (BussSyncMessengerProvider.NoMessengerPresentException e) {
                             e.printStackTrace();
                         }

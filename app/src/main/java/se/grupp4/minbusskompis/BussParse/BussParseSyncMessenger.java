@@ -15,10 +15,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by Marcus on 10/4/2015.
  */
 public class BussParseSyncMessenger implements SyncMessenger {
-    private Queue<JSONObject> incomingSync;
+    private static final int TRIES = 10;
+    private Queue<JSONObject> incomingSyncRequest;
+    private Queue<JSONObject> incomingSyncResponse;
 
     public BussParseSyncMessenger(){
-        incomingSync = new ConcurrentLinkedQueue<>();
+        incomingSyncRequest = new ConcurrentLinkedQueue<>();
+        incomingSyncResponse = new ConcurrentLinkedQueue<>();
     }
 
     public void sendSyncRequest(String syncId){
@@ -36,9 +39,9 @@ public class BussParseSyncMessenger implements SyncMessenger {
     }
 
     @NonNull
-    private ParsePush getParsePushWithChannel(String installationId) {
+    private ParsePush getParsePushWithChannel(String channel) {
         ParsePush push = new ParsePush();
-        push.setChannel(installationId);
+        push.setChannel(channel);
         return push;
     }
 
@@ -50,13 +53,99 @@ public class BussParseSyncMessenger implements SyncMessenger {
         return jsonObject;
     }
 
+    private String getInstallationId() {
+        return ParseInstallation.getCurrentInstallation().getInstallationId();
+    }
+
     private void sendPushWithObject(ParsePush push, JSONObject jsonObject) {
         push.setData(jsonObject);
         push.sendInBackground();
     }
 
-    private String getInstallationId() {
-        return ParseInstallation.getCurrentInstallation().getInstallationId();
+    public boolean waitForSyncResponse(String syncId) {
+        synchronized (this.incomingSyncResponse){
+            if (noResponse()) return false;
+            if (responseHasSameSyncId(syncId)) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+    }
+
+    private boolean noResponse() {
+        if (this.incomingSyncResponse.isEmpty()) {
+            if (responseQueueStillEmptyAfter(TRIES))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean responseQueueStillEmptyAfter(int tries) {
+        int attempts = 0;
+        while(this.incomingSyncResponse.isEmpty()){
+            try {
+                attempts++;
+                if(attempts >= tries)
+                    return true;
+                this.incomingSyncResponse.wait(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+
+    @NonNull
+    private Boolean responseHasSameSyncId(String syncId) {
+        JSONObject response = this.incomingSyncResponse.remove();
+        try {
+            String responseSyncId = response.getString("SyncId");
+            if(syncId.equals(responseSyncId))
+                return true;
+            else
+                return false;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean waitForSyncRequest(String syncCode) {
+        ParsePush.subscribeInBackground(syncCode);
+        synchronized (this.incomingSyncRequest){
+            if (noRequest()) return false;
+
+        }
+        ParsePush.unsubscribeInBackground(syncCode);
+        return false;
+    }
+
+    private boolean noRequest() {
+        if (this.incomingSyncRequest.isEmpty()) {
+            if (requestQueueStillEmptyAfter(TRIES))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean requestQueueStillEmptyAfter(int tries) {
+        int attempts = 0;
+        while(this.incomingSyncRequest.isEmpty()){
+            try {
+                attempts++;
+                if(attempts >= tries)
+                    return true;
+                this.incomingSyncRequest.wait(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
     public void sendSyncResponse(String syncId) {
@@ -65,36 +154,15 @@ public class BussParseSyncMessenger implements SyncMessenger {
 
     @Override
     public void enqueueResponse(JSONObject response) {
-        incomingSync.add(response);
+        incomingSyncRequest.add(response);
     }
 
-    public boolean waitForSyncResponse(String syncId) {
-        synchronized (this.incomingSync){
-            int attempts = 0;
-            while(this.incomingSync.isEmpty()){
-                try {
-                    attempts++;
-                    if(attempts >= 10)
-                        return false;
-                    this.incomingSync.wait(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            JSONObject response = this.incomingSync.remove();
-            try {
-                String type = response.getString("type");
-                if(type.equals("SyncResponse")){
-                    String responseSyncId = response.getString("SyncId");
-                    if(syncId.equals(responseSyncId))
-                        return true;
-                    else
-                        return false;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return true;
-        }
+    @Override
+    public void enqueueRequest(JSONObject request) {
+        incomingSyncRequest.add(request);
     }
+
+
+
+
 }
