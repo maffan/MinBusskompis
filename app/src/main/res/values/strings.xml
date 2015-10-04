@@ -12,4 +12,15 @@
     <string name="received_messages">Received messages:</string>
     <string name="send_button">Send</string>
     <string name="message_text">message</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_parent_start">ParentStartActivity</string>
+    <string name="title_activity_child_destinations">Child_destinations</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_parent_destinations">ParentDestinations</string>
+    <string name="title_activity_parent_children">ParentChildren</string>
+    <string name="title_activity_parent_destinations_add">ParentDestinationsAdd</string>
 </resources>

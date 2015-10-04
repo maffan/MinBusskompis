@@ -28,7 +28,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
             Bundle extras = intent.getExtras();
             JSONObject json = getJsonObject(extras);
             String data = json.getString("data");
-            BussMessenger.getInstance().dataReceived(data);
+           // BussMessenger.getInstance().dataReceived(data);
             Log.d("RECEIVER","Data: '"+data+"' received");
         } catch (JSONException e) {
             e.printStackTrace();

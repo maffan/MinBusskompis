@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:typeface="monospace"
         android:background="#000000"
-        android:clickable="true" />
+        android:clickable="true"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
         android:textColor="#ffffff"
         android:id="@+id/parent_selectbutton"
         android:height="100dp"
-        android:width="@+id/child_selectbutton"
+        android:width="300dp"
         android:layout_marginTop="70dp"
         android:layout_below="@+id/child_selectbutton"
         android:layout_alignRight="@+id/child_selectbutton"
@@ -37,5 +37,5 @@
         android:typeface="monospace"
         android:textStyle="bold"
         android:background="#000000"
-        android:clickable="true" />
+        android:clickable="true"/>
 </RelativeLayout>

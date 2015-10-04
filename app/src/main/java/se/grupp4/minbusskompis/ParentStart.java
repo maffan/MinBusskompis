@@ -9,16 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+public class ParentStart extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
-
-    Button button_parent;
-    Button button_child;
+    Button button_destinations;
+    Button button_children;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_mode);
+        setContentView(R.layout.activity_parent_start);
         addListenerButton();
     }
 
@@ -26,35 +25,33 @@ public class MainActivity extends AppCompatActivity {
 
         final Context context = this;
 
-        button_parent = (Button) findViewById(R.id.parent_selectbutton);
+        button_destinations = (Button) findViewById(R.id.parent_destinationsbutton);
 
-        button_child = (Button) findViewById(R.id.child_selectbutton);
+        button_children = (Button) findViewById(R.id.parent_childrenbutton);
 
-        button_parent.setOnClickListener(new View.OnClickListener() {
+        button_destinations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(MainActivity.this, ParentStart.class);
+                Intent intent = new Intent(ParentStart.this, ParentDestinations.class);
                 startActivity(intent);
             }
         });
 
-        button_child.setOnClickListener(new View.OnClickListener() {
+        button_children.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
 
-                Intent intent = new Intent(MainActivity.this, ChildDestinations.class);
+                Intent intent = new Intent(ParentStart.this, ParentChildrenList.class);
                 startActivity(intent);
             }
         });
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_parent_start, menu);
         return true;
     }
 
