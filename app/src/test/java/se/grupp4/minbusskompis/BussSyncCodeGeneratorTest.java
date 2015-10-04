@@ -5,20 +5,19 @@ import android.support.annotation.NonNull;
 import org.junit.*;
 import org.mockito.Mockito;
 
-import se.grupp4.minbusskompis.BussParse.BussData;
-import se.grupp4.minbusskompis.BussParse.BussMessenger;
-import se.grupp4.minbusskompis.BussParse.BussSync;
+import se.grupp4.minbusskompis.BussParse.BussRelationMessenger;
+import se.grupp4.minbusskompis.BussParse.BussSyncCodeGenerator;
 
 import static org.junit.Assert.*;
 
 /**
  * Created by Marcus on 10/1/2015.
  */
-public class BussSyncTest {
-    BussSync bussSync;
+public class BussSyncCodeGeneratorTest {
+    BussSyncCodeGenerator bussSyncCodeGenerator;
     @Before
     public void setUp() {
-        bussSync = new BussSync(Mockito.mock(BussMessenger.class),Mockito.mock(BussData.class));
+        bussSyncCodeGenerator = new BussSyncCodeGenerator(Mockito.mock(BussRelationMessenger.class));
     }
 
     @Test
@@ -30,7 +29,7 @@ public class BussSyncTest {
 
     @NonNull
     private String getRandomString() {
-        String random = bussSync.generateAndGetSyncCode();
+        String random = bussSyncCodeGenerator.generateAndGetSyncCode(4);
         assertFalse(random.isEmpty());
         return random;
     }

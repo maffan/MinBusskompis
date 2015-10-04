@@ -10,7 +10,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import se.grupp4.minbusskompis.BussParse.BussMessenger;
+import se.grupp4.minbusskompis.BussParse.BussRelationMessenger;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -22,18 +22,18 @@ import static org.mockito.Mockito.verify;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Parse.class,ParsePush.class})
-public class BussMessengerTest {
-    BussMessenger bussMessenger;
+public class BussRelationMessengerTest {
+    BussRelationMessenger bussRelationMessenger;
 
     @Before
     public void setUp(){
         PowerMockito.mockStatic(ParsePush.class);
-        bussMessenger = BussMessenger.getInstance();
+        bussRelationMessenger = BussRelationMessenger.getInstance();
     }
 
     @After
     public void tearDown(){
-        bussMessenger = null;
+        bussRelationMessenger = null;
     }
 
 
