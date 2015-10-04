@@ -1,4 +1,4 @@
-package se.grupp4.minbusskompis;
+package se.grupp4.minbusskompis.BussParse;
 
 
 import android.content.Context;
@@ -16,19 +16,36 @@ import org.json.JSONObject;
  * Created by Marcus on 9/21/2015.
  *
  * A broadcast receiver that intercepts all incoming pushes from Parse and
- * sends them to the BussMessenger singleton.
+ * sends them to the BussRelationMessenger singleton.
  *
  * This class must be set as receiver in the manifest file.
  */
 public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
+
+    private BussSyncMessengerProvider provider;
 
     @Override
     protected void onPushReceive(Context context, Intent intent) {
         try {
             Bundle extras = intent.getExtras();
             JSONObject json = getJsonObject(extras);
-            String data = json.getString("data");
-           // BussMessenger.getInstance().dataReceived(data);
+            JSONObject data = json.getJSONObject("data");
+            String type = data.getString("type");
+            JSONObject messageData = data.getJSONObject("data");
+            switch (type){
+                case "Message":
+                    BussRelationMessenger.getInstance().dataReceived(messageData);
+                    break;
+                case "SyncRequest":
+                    provider = BussSyncMessengerProvider.getInstance();
+                    if(provider.hasMessenger())
+                        try {
+                            provider.getSyncMessenger().enqueueRequest(messageData);
+                        } catch (BussSyncMessengerProvider.NoMessengerPresentException e) {
+                            e.printStackTrace();
+                        }
+            }
+
             Log.d("RECEIVER","Data: '"+data+"' received");
         } catch (JSONException e) {
             e.printStackTrace();

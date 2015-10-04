@@ -1,57 +1,23 @@
-package se.grupp4.minbusskompis;
+package se.grupp4.minbusskompis.BussParse;
 
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-
-import java.util.Random;
 
 /**
- * Created by Marcus on 10/1/2015.
+ * Created by Marcus on 10/4/2015.
  */
-public class BussSync {
-    private String syncCode;
-    private BussMessenger messenger;
-    private BussData bussData;
+public class BussSyncer {
+    private SyncMessenger messenger;
 
-    private String characters = "0123456789";
-
-    public BussSync(BussMessenger messenger, BussData bussData){
+    public BussSyncer(SyncMessenger messenger) {
         this.messenger = messenger;
-        this.bussData = bussData;
     }
 
-    public String getSyncCode() {
-        if(syncCode != null)
-            return syncCode;
-        else
-            return "";
-    }
-
-    public String generateAndGetSyncCode(){
-        syncCode = generateRandomString();
-        return syncCode;
-    }
-
-    @NonNull
-    private String generateRandomString() {
-        Random random = new Random();
-        StringBuilder builder = new StringBuilder();
-
-        while(builder.length() < 4)
-            builder.append(characters.charAt(random.nextInt(characters.length())));
-        return builder.toString();
-    }
-
-    public void syncWithIdAsync(String id, SyncTaskCompleteCallback callback ){
+    public void syncWithSyncCode(String syncCode, SyncTaskCompleteCallback callback){
         SyncRequestTask task = new SyncRequestTask(callback);
-        task.execute(id);
+        task.execute(syncCode);
     }
 
-    public void waitForIdSyncAsync(String id, SyncTaskCompleteCallback callback){
-
-    }
-
-    private class SyncRequestTask extends AsyncTask<String,Void,Boolean>{
+    private class SyncRequestTask extends AsyncTask<String,Void,Boolean> {
         private SyncTaskCompleteCallback callback;
 
         public SyncRequestTask(SyncTaskCompleteCallback callback) {
@@ -74,6 +40,12 @@ public class BussSync {
         }
     }
 
+    public void waitForSync(CodeGenerator generator, SyncTaskCompleteCallback callback){
+        String code = generator.getCode();
+        WaitForSyncTask task = new WaitForSyncTask(callback);
+        task.execute(code);
+    }
+
     private class WaitForSyncTask extends AsyncTask<String, Void, Boolean>{
         private SyncTaskCompleteCallback callback;
 
@@ -84,7 +56,7 @@ public class BussSync {
         @Override
         protected Boolean doInBackground(String... params) {
             String syncId = params[0];
-            if(messenger.waitForSyncResponse(syncId)){
+            if(messenger.waitForSyncRequest(syncId)){
                 messenger.sendSyncResponse(syncId);
                 return true;
             }

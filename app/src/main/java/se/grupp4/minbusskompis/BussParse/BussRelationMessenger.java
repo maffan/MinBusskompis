@@ -1,4 +1,4 @@
-package se.grupp4.minbusskompis;
+package se.grupp4.minbusskompis.BussParse;
 
 
 import android.support.annotation.NonNull;
@@ -23,22 +23,21 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * the Observer interface and add yourself as a listener to this singleton.
  *
  */
-public class BussMessenger extends Observable {
+public class BussRelationMessenger extends Observable {
 
-    private static BussMessenger bussMessenger = new BussMessenger();
+    private static BussRelationMessenger bussRelationMessenger = new BussRelationMessenger();
 
     private List<String> recipients;
 
     private Queue<JSONObject> incomingData;
-    private Queue<JSONObject> incomingSync;
 
-    public static BussMessenger getInstance() {
-        return bussMessenger;
+
+    public static BussRelationMessenger getInstance() {
+        return bussRelationMessenger;
     }
 
-    private BussMessenger(){
+    private BussRelationMessenger(){
         incomingData = new ConcurrentLinkedQueue<>();
-        incomingSync = new ConcurrentLinkedQueue<>();
     }
 
     public void sendMessage(String data){
@@ -79,31 +78,13 @@ public class BussMessenger extends Observable {
         return push;
     }
 
-    public void sendSyncRequest(String syncId){
-        try {
-            trySendSyncRequest(syncId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void trySendSyncRequest(String syncId) throws JSONException {
-        ParsePush push = getParsePushWithChannel(syncId);
-        JSONObject syncObject = getSyncRequestObject();
-        sendPushWithObject(push, syncObject);
-    }
 
-    @NonNull
-    private JSONObject getSyncRequestObject() throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("type", "SyncRequest");
-        jsonObject.put("sender", getInstallationId());
-        return jsonObject;
-    }
 
-    public void sendSyncResponse(String syncId) {
 
-    }
+
+
+
 
     /**
      * This method should only be called by the applications ParsePushBroadcastReceiver.
@@ -122,12 +103,7 @@ public class BussMessenger extends Observable {
             this.incomingData.notify();
         }
     }
-    private void enqueueSync(JSONObject data) {
-        synchronized (this.incomingSync){
-            this.incomingData.add(data);
-            this.incomingData.notify();
-        }
-    }
+
 
     private void notifyListeners(JSONObject data) {
         setChanged();
@@ -142,39 +118,7 @@ public class BussMessenger extends Observable {
         return incomingData;
     }
 
-    public Queue<JSONObject> getSyncQueue(){
-        return incomingSync;
-    }
 
-    public boolean waitForSyncResponse(String syncId) {
-        synchronized (this.incomingSync){
-            int attempts = 0;
-            while(this.incomingSync.isEmpty()){
-                try {
-                    attempts++;
-                    if(attempts >= 10)
-                        return false;
-                    this.incomingSync.wait(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            JSONObject response = this.incomingSync.remove();
-            try {
-                String type = response.getString("type");
-                if(type.equals("SyncResponse")){
-                    String responseSyncId = response.getString("SyncId");
-                    if(syncId.equals(responseSyncId))
-                        return true;
-                    else
-                        return false;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return true;
-        }
-    }
 
 
 }

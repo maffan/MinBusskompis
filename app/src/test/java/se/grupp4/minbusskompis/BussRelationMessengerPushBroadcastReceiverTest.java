@@ -16,6 +16,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import se.grupp4.minbusskompis.BussParse.BussRelationMessenger;
+import se.grupp4.minbusskompis.BussParse.BussParsePushBroadcastReceiver;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -28,7 +31,7 @@ import static org.mockito.Mockito.stub;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Parse.class})
-public class BussMessengerPushBroadcastReceiverTest {
+public class BussRelationMessengerPushBroadcastReceiverTest {
     BussParsePushBroadcastReceiver receiver;
     Context context;
 
@@ -45,20 +48,6 @@ public class BussMessengerPushBroadcastReceiverTest {
 
     @Test
     public void shouldPassMessageToBussParse() throws Exception {
-        PowerMockito.mockStatic(Parse.class);
 
-        Intent intent = mock(Intent.class);
-        JSONObject json = mock(JSONObject.class);
-
-        stub(json.getString(anyString())).toReturn("testData");
-
-        BussParsePushBroadcastReceiver spyReceiver = spy(receiver);
-        doReturn(json).when(spyReceiver).getJsonObject(any(Bundle.class));
-
-        spyReceiver.onPushReceive(context,intent);
-
-        String data = BussMessenger.getInstance().getDataQueue().remove();
-
-        assertEquals(data,"testData");
     }
 }
