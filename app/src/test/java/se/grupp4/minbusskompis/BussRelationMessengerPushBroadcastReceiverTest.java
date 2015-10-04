@@ -48,20 +48,6 @@ public class BussRelationMessengerPushBroadcastReceiverTest {
 
     @Test
     public void shouldPassMessageToBussParse() throws Exception {
-        PowerMockito.mockStatic(Parse.class);
 
-        Intent intent = mock(Intent.class);
-        JSONObject json = mock(JSONObject.class);
-
-        stub(json.getString(anyString())).toReturn("testData");
-
-        BussParsePushBroadcastReceiver spyReceiver = spy(receiver);
-        doReturn(json).when(spyReceiver).getJsonObject(any(Bundle.class));
-
-        spyReceiver.onPushReceive(context,intent);
-
-        String data = BussRelationMessenger.getInstance().getDataQueue().remove();
-
-        assertEquals(data,"testData");
     }
 }
