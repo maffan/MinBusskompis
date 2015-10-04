@@ -1,17 +1,50 @@
 package se.grupp4.minbusskompis;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class ParentChildrenList extends AppCompatActivity {
+
+    protected Button buttonAddChild;
+    protected Button dummyButtonActiveChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_children);
+        addButtonListener();
     }
+
+    public void addButtonListener(){
+
+        Context context = this;
+
+        buttonAddChild = (Button)findViewById(R.id.button_addchild);
+        dummyButtonActiveChild = (Button)findViewById(R.id.button_dummyactivechild);
+
+        dummyButtonActiveChild.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ParentChildrenList.this, ParentActiveChild.class);
+                startActivity(intent);
+            }
+        });
+
+        buttonAddChild.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ParentChildrenList.this, ParentChildrenAdd.class);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -9,51 +9,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+public class ParentSettings extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
-
-    Button button_parent;
-    Button button_child;
+    protected Button resetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_mode);
-        addListenerButton();
+        setContentView(R.layout.activity_parent_settings);
+        addButtonListener();
     }
 
-    public void addListenerButton(){
+    public void addButtonListener(){
+        Context context = this;
 
-        final Context context = this;
+        resetButton=(Button) findViewById(R.id.parent_reset_button);
 
-        button_parent = (Button) findViewById(R.id.parent_selectbutton);
-
-        button_child = (Button) findViewById(R.id.child_selectbutton);
-
-        button_parent.setOnClickListener(new View.OnClickListener() {
+        resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(MainActivity.this, ParentStart.class);
-                startActivity(intent);
-            }
-        });
-
-        button_child.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ChildDestinations.class);
+                Intent intent = new Intent(ParentSettings.this, MainActivity.class);
                 startActivity(intent);
             }
         });
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_parent_settings, menu);
         return true;
     }
 

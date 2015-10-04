@@ -32,9 +32,18 @@
         android:gravity="center_vertical|center_horizontal"
         android:text="+"
         android:textColor="#ffffff"
-        android:id="@+id/imageButton_addchild"
+        android:id="@+id/button_addchild"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="35dp"
         android:visibility="visible" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Active Child"
+        android:id="@+id/button_dummyactivechild"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

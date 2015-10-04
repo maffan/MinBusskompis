@@ -9,49 +9,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+public class ChildBusStop extends AppCompatActivity {
 
-//Note that dummybuttons are temporary for debugging
-public class ChildDestinations extends AppCompatActivity {
-
-    protected Button childCodeButton;
     protected Button dummyButton1;
-    protected Button dummyButton2;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child_destinations);
+        setContentView(R.layout.activity_child_bus_stop);
         addButtonListener();
     }
 
-    public void addButtonListener() {
+    public void addButtonListener(){
         final Context context = this;
 
-        childCodeButton = (Button) findViewById(R.id.button_childcode);
-        dummyButton1 = (Button) findViewById(R.id.button_dummy1);
-        dummyButton2 = (Button) findViewById(R.id.button_dummy2);
-
-        childCodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChildDestinations.this, ChildChildCode.class);
-                startActivity(intent);
-            }
-        });
+        dummyButton1 = (Button)findViewById(R.id.button_dummy_busstop);
 
         dummyButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChildDestinations.this, ChildWalkMode.class);
-                startActivity(intent);
-            }
-        });
-
-        dummyButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChildDestinations.this, ChildBusStation.class);
+                Intent intent = new Intent(ChildBusStop.this, ChildWalkMode.class);
                 startActivity(intent);
             }
         });
@@ -60,7 +37,7 @@ public class ChildDestinations extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_child_destinations, menu);
+        getMenuInflater().inflate(R.menu.menu_child_bus_stop, menu);
         return true;
     }
 
@@ -77,11 +54,5 @@ public class ChildDestinations extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void settingsItem(){
-
-        Intent intent = new Intent(this, ChildChildCode.class);
-        startActivity(intent);
     }
 }
