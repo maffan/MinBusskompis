@@ -27,10 +27,7 @@ public class BussRelationMessenger extends Observable {
 
     private static BussRelationMessenger bussRelationMessenger = new BussRelationMessenger();
 
-    private List<String> recipients;
-
     private Queue<JSONObject> incomingData;
-
 
     public static BussRelationMessenger getInstance() {
         return bussRelationMessenger;
@@ -38,6 +35,19 @@ public class BussRelationMessenger extends Observable {
 
     private BussRelationMessenger(){
         incomingData = new ConcurrentLinkedQueue<>();
+    }
+
+    public void setRelationships(BussRelationships relationships){
+        clearOldAndSetNewChannels(relationships);
+    }
+
+    private void clearOldAndSetNewChannels(BussRelationships relationships) {
+        ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
+        List channels = parseInstallation.getList("channels");
+        channels.clear();
+        channels.addAll(relationships.getRelationships());
+        parseInstallation.put("channels", channels);
+        parseInstallation.saveInBackground();
     }
 
     public void sendMessage(String data){
@@ -77,14 +87,6 @@ public class BussRelationMessenger extends Observable {
         push.setChannel(installationId);
         return push;
     }
-
-
-
-
-
-
-
-
 
     /**
      * This method should only be called by the applications ParsePushBroadcastReceiver.

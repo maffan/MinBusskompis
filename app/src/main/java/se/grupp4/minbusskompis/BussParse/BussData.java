@@ -21,6 +21,12 @@ import java.util.List;
  */
 public class BussData {
     public static final String TAG = "BUSSDATA";
+    private static final int PARENT = 0;
+    private static final int CHILD = 1;
+    private static final String PARENTS_FIELD = "parents";
+    private static final String CHILDREN_FIELD = "children";
+    private static final String RELATIONSHIPS_CLASS = "Relationships";
+    private static final String INSTALLATION_ID_FIELD = "installationId";
     private static BussData bussData = new BussData();
 
     private LinkedList parents;
@@ -39,7 +45,7 @@ public class BussData {
 
     public void fetchRelationships(){
         if (relationships == null) {
-            fetchRelationshipsObject();
+            fetchRelationshipsObjectAndUpdate();
         } else {
             updateFromRelationshipsObject();
         }
@@ -58,21 +64,21 @@ public class BussData {
 
     private void clearAndSetParents(ParseObject parseObject) {
         parents.clear();
-        parents.addAll(parseObject.getList("parents"));
+        parents.addAll(parseObject.getList(PARENTS_FIELD));
     }
 
     private void clearAndSetChildren(ParseObject parseObject) {
         children.clear();
-        children.addAll(parseObject.getList("children"));
+        children.addAll(parseObject.getList(CHILDREN_FIELD));
     }
 
-    private void fetchRelationshipsObject() {
+    private void fetchRelationshipsObjectAndUpdate() {
         ParseQuery<ParseObject> query = getParseQuery();
         fetchQuery(query);
     }
 
     private ParseQuery<ParseObject> getParseQuery() {
-        return ParseQuery.getQuery("Relationships").whereEqualTo("installationId", getInstallationId()).setLimit(1);
+        return ParseQuery.getQuery(RELATIONSHIPS_CLASS).whereEqualTo(INSTALLATION_ID_FIELD, getInstallationId()).setLimit(1);
     }
 
     private String getInstallationId() {
@@ -116,10 +122,10 @@ public class BussData {
 
     @NonNull
     private ParseObject getEmptyRelationshipsWithId() {
-        ParseObject newRelationships = new ParseObject("Relationships");
-        newRelationships.put("installationId",getInstallationId());
-        newRelationships.put("parents", new JSONArray());
-        newRelationships.put("children", new JSONArray());
+        ParseObject newRelationships = new ParseObject(RELATIONSHIPS_CLASS);
+        newRelationships.put(INSTALLATION_ID_FIELD,getInstallationId());
+        newRelationships.put(PARENTS_FIELD, new JSONArray());
+        newRelationships.put(CHILDREN_FIELD, new JSONArray());
         return newRelationships;
     }
 
@@ -145,11 +151,11 @@ public class BussData {
     }
 
     private void extractChildrenFromRelationships(ParseObject relationships) {
-        children.addAll(relationships.getList("children"));
+        children.addAll(relationships.getList(CHILDREN_FIELD));
     }
 
     private void extractParentsFromRelationships(ParseObject relationships) {
-        parents.addAll(relationships.getList("parents"));
+        parents.addAll(relationships.getList(PARENTS_FIELD));
     }
 
     public BussRelationships getParents(){
@@ -158,6 +164,34 @@ public class BussData {
 
     public BussRelationships getChildren(){
         return new BussRelationships(children);
+    }
+
+    public void addRelationship(String id, int type){
+        switch (type){
+            case PARENT:
+                parents.add(id);
+                relationships.addAllUnique(PARENTS_FIELD, parents);
+                break;
+            case CHILD:
+                children.add(id);
+                relationships.addAllUnique(CHILDREN_FIELD,children);
+                break;
+        }
+        relationships.saveInBackground();
+    }
+
+    public void removeRalationship(String id, int type){
+        switch (type){
+            case PARENT:
+                parents.remove(id);
+                relationships.put(PARENTS_FIELD, parents);
+                break;
+            case CHILD:
+                children.remove(id);
+                relationships.put(CHILDREN_FIELD,children);
+                break;
+        }
+        relationships.saveInBackground();
     }
 
 }
