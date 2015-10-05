@@ -28,6 +28,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     @Override
     protected void onPushReceive(Context context, Intent intent) {
         try {
+            Log.d(TAG,"Data received!");
             tryReceive(intent);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -37,13 +38,11 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     private void tryReceive(Intent intent) throws JSONException {
         JSONObject data = getDataFromIntent(intent);
         dispatch(data);
-        Log.d(TAG, "Data: '" + data + "' received");
     }
 
     private JSONObject getDataFromIntent(Intent intent) throws JSONException {
         Bundle extras = intent.getExtras();
-        JSONObject json = getDataFromParseJsonObject(extras);
-        return getDataFromJSONData(json);
+        return getDataFromParseJsonObject(extras);
     }
 
     @NonNull
@@ -53,16 +52,11 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
 
     private void dispatch(JSONObject data) throws JSONException {
         String type = getTypeFromJSONData(data);
-        JSONObject messageData = getDataFromJSONData(data);
-        dispatchDataByType(messageData, type);
+        dispatchDataByType(data, type);
     }
 
     private String getTypeFromJSONData(JSONObject data) throws JSONException {
         return data.getString("type");
-    }
-
-    private JSONObject getDataFromJSONData(JSONObject data) throws JSONException {
-        return data.getJSONObject("data");
     }
 
     private void dispatchDataByType(JSONObject messageData, String type) {

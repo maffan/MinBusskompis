@@ -1,7 +1,9 @@
 package se.grupp4.minbusskompis.BussParse;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 
@@ -12,11 +14,12 @@ import org.json.JSONObject;
  * Created by Marcus on 10/4/2015.
  */
 public class BussParseSyncMessenger {
-    private static final int TRIES = 10;
+    private static final int TRIES = 20;
     private static final String REQUEST_STRING = "SyncRequest";
     private static final String RESPONSE_STRING = "SyncResponse";
     public static final int REQUEST_TYPE = 0;
     public static final int RESPONSE_TYPE = 1;
+    private static final String TAG = "SYNC_MESSENGER";
 
     private JSONObject incomingSync;
     private String syncInstallationId;
@@ -37,10 +40,14 @@ public class BussParseSyncMessenger {
 
     public void sendSyncResponse() {
         try {
-            SendMessageToChannelWithType(syncInstallationId, RESPONSE_STRING);
+            SendMessageToChannelWithType(getSyncInstallationIdAsChannel(), RESPONSE_STRING);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getSyncInstallationIdAsChannel() {
+        return "i"+syncInstallationId;
     }
 
     private void SendMessageToChannelWithType(String channel, String type) throws JSONException {
@@ -70,10 +77,16 @@ public class BussParseSyncMessenger {
 
     private void sendPushWithObject(ParsePush push, JSONObject jsonObject) {
         push.setData(jsonObject);
-        push.sendInBackground();
+        try {
+            push.send();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG,"Object sent!" );
     }
 
     public boolean waitForSyncMessage() {
+        Log.d(TAG,"Wating for response");
         return gotResponse();
     }
 
@@ -133,8 +146,10 @@ public class BussParseSyncMessenger {
     }
 
     private void retrieveMessageAndNotify(JSONObject response) {
-        incomingSync = response;
-        incomingSync.notify();
+        synchronized (lock) {
+            incomingSync = response;
+            lock.notify();
+        }
     }
 
 

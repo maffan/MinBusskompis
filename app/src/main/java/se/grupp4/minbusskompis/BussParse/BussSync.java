@@ -7,16 +7,24 @@ import com.parse.ParsePush;
 /**
  * Created by Marcus on 10/4/2015.
  */
-public class BussSyncer {
+public class BussSync {
     private BussParseSyncMessenger messenger;
 
 
-    public BussSyncer(BussParseSyncMessenger messenger) {
+    public BussSync(BussParseSyncMessenger messenger) {
         this.messenger = messenger;
     }
 
     public void syncWithSyncCode(String syncCode, SyncTaskCompleteCallback callback){
-        startSyncTask(syncCode, callback);
+        String legalSyncCode = makeLegalSyncCode(syncCode);
+        startSyncTask(legalSyncCode, callback);
+    }
+
+    private String makeLegalSyncCode(String syncCode) {
+        if(Character.isDigit(syncCode.charAt(0)))
+            return "c" + syncCode;
+        else
+            return syncCode;
     }
 
     private void startSyncTask(String syncCode, SyncTaskCompleteCallback callback) {
@@ -62,7 +70,8 @@ public class BussSyncer {
 
     public void waitForSync(CodeGenerator generator, SyncTaskCompleteCallback callback){
         String syncCode = generator.getCode();
-        WaitForSyncTask task = new WaitForSyncTask(syncCode, callback);
+        String legalSyncCode = makeLegalSyncCode(syncCode);
+        WaitForSyncTask task = new WaitForSyncTask(legalSyncCode, callback);
         task.execute();
     }
 

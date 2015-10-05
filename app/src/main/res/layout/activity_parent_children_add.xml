@@ -28,7 +28,7 @@
             android:layout_gravity="center_horizontal"
             android:allowUndo="true"
             android:textColor="#000000"
-            android:id="@+id/editText"/>
+            android:id="@+id/childCodeEditText"/>
 
         <Button
             android:layout_width="wrap_content"
