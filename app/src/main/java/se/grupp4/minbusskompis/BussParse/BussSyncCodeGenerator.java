@@ -8,10 +8,8 @@ import java.util.Random;
  * Created by Marcus on 10/1/2015.
  */
 public class BussSyncCodeGenerator implements CodeGenerator {
+    public static final String CHARACTERS = "0123456789";
     private String syncCode;
-    private BussParseSyncMessenger messenger;
-
-    private String characters = "0123456789";
 
     public BussSyncCodeGenerator(int length){
         syncCode = generateSyncCode(length);
@@ -32,7 +30,7 @@ public class BussSyncCodeGenerator implements CodeGenerator {
         StringBuilder builder = new StringBuilder();
 
         while(builder.length() < length)
-            builder.append(characters.charAt(random.nextInt(characters.length())));
+            builder.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         return builder.toString();
     }
 
