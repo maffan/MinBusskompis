@@ -25,7 +25,7 @@ public class BussData {
         return bussData;
     }
 
-    public BussData(){
+    private BussData(){
         parents = new LinkedList();
         children = new LinkedList();
     }
