@@ -1,6 +1,8 @@
 package se.grupp4.minbusskompis.BussParse;
 
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.parse.FindCallback;
@@ -16,13 +18,10 @@ import org.json.JSONArray;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Marcus on 9/29/2015.
- */
 public class BussData {
     public static final String TAG = "BUSSDATA";
-    private static final int PARENT = 0;
-    private static final int CHILD = 1;
+    public static final int PARENT = 0;
+    public static final int CHILD = 1;
     private static final String PARENTS_FIELD = "parents";
     private static final String CHILDREN_FIELD = "children";
     private static final String RELATIONSHIPS_CLASS = "Relationships";
@@ -43,23 +42,45 @@ public class BussData {
         children = new LinkedList();
     }
 
-    public void fetchRelationships(){
-        if (relationships == null) {
-            fetchRelationshipsObjectAndUpdate();
-        } else {
-            updateFromRelationshipsObject();
+    public void fetchRelationships(AsyncTaskCompleteCallback callback){
+        new FetchDataTask(callback).execute();
+    }
+
+    /**
+     * Created by Marcus on 9/29/2015.
+     */
+    private class FetchDataTask extends AsyncTask<Void, Void, Void> {
+        private AsyncTaskCompleteCallback callback;
+
+        public FetchDataTask(@Nullable AsyncTaskCompleteCallback callback) {
+            this.callback = callback;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (relationships == null) {
+                fetchRelationshipsObjectAndUpdate();
+            } else {
+                updateFromRelationshipsObject();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(callback != null)
+                callback.done();
         }
     }
 
     private void updateFromRelationshipsObject() {
-        relationships.fetchInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                if(noError(e)){
-                    extractRelationsFromRelationships(parseObject);
-                }
-            }
-        });
+        try {
+            ParseObject parseObject = relationships.fetch();
+            extractRelationsFromRelationships(parseObject);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void clearAndSetParents(ParseObject parseObject) {
@@ -86,16 +107,13 @@ public class BussData {
     }
 
     private void fetchQuery(ParseQuery<ParseObject> query) {
-        query.findInBackground(new FindCallback<ParseObject>() {
 
-            @Override
-            public void done(List<ParseObject> result, ParseException e) {
-                if (noError(e))
-                    handleResult(result);
-            }
-
-
-        });
+        try {
+            List result = query.find();
+            handleResult(result);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean noError(ParseException e) {
@@ -109,15 +127,15 @@ public class BussData {
             extractDataFromResult(result);
     }
 
+
     private void handleEmptyResult() {
-        ParseObject newRelationships = getEmptyRelationshipsWithId();
-        newRelationships.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(noError(e))
-                    fetchRelationships();
-            }
-        });
+        try {
+            ParseObject newRelationships = getEmptyRelationshipsWithId();
+            newRelationships.save();
+            fetchRelationships(null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @NonNull
@@ -128,7 +146,6 @@ public class BussData {
         newRelationships.put(CHILDREN_FIELD, new JSONArray());
         return newRelationships;
     }
-
 
     private void extractDataFromResult(List<ParseObject> result) {
         getAndSetRelationshipsObject(result);
@@ -188,7 +205,7 @@ public class BussData {
                 break;
             case CHILD:
                 children.remove(id);
-                relationships.put(CHILDREN_FIELD,children);
+                relationships.put(CHILDREN_FIELD, children);
                 break;
         }
         relationships.saveInBackground();

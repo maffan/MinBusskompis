@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.parse.Parse;
 
+import se.grupp4.minbusskompis.BussParse.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.BussParse.BussData;
 
 /**
@@ -14,6 +15,5 @@ public class BussApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Parse.initialize(this);
-        BussData.getInstance().fetchRelationships();
     }
 }
