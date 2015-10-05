@@ -11,8 +11,9 @@ import android.widget.Button;
 
 public class ParentStart extends AppCompatActivity {
 
-    Button button_destinations;
-    Button button_children;
+    Button buttonChildren;
+    Button buttonDestinations;
+    Button buttonSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,25 +26,34 @@ public class ParentStart extends AppCompatActivity {
 
         final Context context = this;
 
-        button_destinations = (Button) findViewById(R.id.parent_destinationsbutton);
+        buttonChildren = (Button) findViewById(R.id.parent_childrenbutton);
+        buttonDestinations = (Button) findViewById(R.id.parent_destinationsbutton);
+        buttonSettings = (Button) findViewById(R.id.parent_settingsbutton);
 
-        button_children = (Button) findViewById(R.id.parent_childrenbutton);
 
-        button_destinations.setOnClickListener(new View.OnClickListener() {
+
+        buttonDestinations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(ParentStart.this, ParentDestinations.class);
                 startActivity(intent);
             }
         });
 
-        button_children.setOnClickListener(new View.OnClickListener() {
+        buttonChildren.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-
                 Intent intent = new Intent(ParentStart.this, ParentChildrenList.class);
                 startActivity(intent);
+            }
+        });
+
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ParentStart.this, ParentSettings.class);
+                startActivity(intent);
+
             }
         });
     }

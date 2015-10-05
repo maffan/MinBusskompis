@@ -14,14 +14,14 @@
         android:text="Children"
         android:textColor="#ffffff"
         android:id="@+id/parent_childrenbutton"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="40dp"
         android:height="100dp"
         android:width="300dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:typeface="monospace"
         android:background="#000000"
-        android:clickable="true" />
+        android:clickable="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 
     <Button
@@ -42,5 +42,22 @@
         android:textStyle="bold"
         android:background="#000000"
         android:clickable="true"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:height="100dp"
+        android:width="300dp"
+        android:layout_marginTop="70dp"
+        android:text="Settings"
+        android:textColor="#ffffff"
+        android:id="@+id/parent_settingsbutton"
+        android:layout_below="@+id/parent_destinationsbutton"
+        android:layout_centerHorizontal="true"
+        android:typeface="monospace"
+        android:textStyle="bold"
+        android:background="#000000"
+        android:clickable="true" />
         />
 </RelativeLayout>

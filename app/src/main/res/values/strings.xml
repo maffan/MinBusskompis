@@ -23,4 +23,12 @@
     <string name="title_activity_parent_destinations">ParentDestinations</string>
     <string name="title_activity_parent_children">ParentChildren</string>
     <string name="title_activity_parent_destinations_add">ParentDestinationsAdd</string>
+    <string name="title_activity_child_buss_station">ChildBussStation</string>
+    <string name="title_activity_child_walk_mode">ChildWalkMode</string>
+    <string name="title_activity_child_on_bus">ChildOnBus</string>
+    <string name="title_activity_child_bus_stop">ChildBusStop</string>
+    <string name="title_activity_parent_active_child">ParentActiveChild</string>
+    <string name="title_activity_parent_children_add">ParentChildrenAdd</string>
+    <string name="title_activity_child_child_code">ChildChildCode</string>
+    <string name="title_activity_parent_settings">ParentSettings</string>
 </resources>
