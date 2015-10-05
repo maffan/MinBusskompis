@@ -20,8 +20,7 @@ public class BussSyncCodeGenerator implements CodeGenerator {
     }
 
     private String generateSyncCode(int length){
-        String syncCode = generateRandomString(length);
-        return syncCode;
+        return generateRandomString(length);
     }
 
     @NonNull
