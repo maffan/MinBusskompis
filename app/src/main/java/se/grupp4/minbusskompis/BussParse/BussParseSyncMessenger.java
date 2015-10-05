@@ -8,33 +8,41 @@ import com.parse.ParsePush;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 /**
  * Created by Marcus on 10/4/2015.
  */
 public class BussParseSyncMessenger implements SyncMessenger {
     private static final int TRIES = 10;
-    private Queue<JSONObject> incomingSyncRequest;
-    private Queue<JSONObject> incomingSyncResponse;
+    public static final String SYNC_REQUEST = "SyncRequest";
+    public static final String SYNC_RESPONSE = "SyncResponse";
+    private JSONObject incomingSync;
+    private String syncInstallationId;
+
+    private final Object lock;
 
     public BussParseSyncMessenger(){
-        incomingSyncRequest = new ConcurrentLinkedQueue<>();
-        incomingSyncResponse = new ConcurrentLinkedQueue<>();
+        lock = new Object();
     }
 
-    public void sendSyncRequest(String syncId){
+    public void sendSyncRequest(String syncCode){
         try {
-            trySendSyncRequest(syncId);
+            SendMessageToChannelWithType(syncCode, SYNC_REQUEST);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void trySendSyncRequest(String syncId) throws JSONException {
-        ParsePush push = getParsePushWithChannel(syncId);
-        JSONObject syncObject = getSyncRequestObject();
+    public void sendSyncResponse() {
+        try {
+            SendMessageToChannelWithType(syncInstallationId, SYNC_RESPONSE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void SendMessageToChannelWithType(String channel, String type) throws JSONException {
+        ParsePush push = getParsePushWithChannel(channel);
+        JSONObject syncObject = getSyncObject(type);
         sendPushWithObject(push, syncObject);
     }
 
@@ -46,9 +54,9 @@ public class BussParseSyncMessenger implements SyncMessenger {
     }
 
     @NonNull
-    private JSONObject getSyncRequestObject() throws JSONException {
+    private JSONObject getSyncObject(String type) throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("type", "SyncRequest");
+        jsonObject.put("type", type);
         jsonObject.put("sender", getInstallationId());
         return jsonObject;
     }
@@ -62,85 +70,50 @@ public class BussParseSyncMessenger implements SyncMessenger {
         push.sendInBackground();
     }
 
-    public boolean waitForSyncResponse(String syncId) {
-        synchronized (this.incomingSyncResponse){
-            if (noResponse()) return false;
-            if (responseHasSameSyncId(syncId)) {
-                return true;
-            } else {
-                return false;
-            }
+    public boolean waitForSyncMessage() {
+        return gotResponse();
+    }
 
+    private boolean gotResponse() {
+        synchronized (this.lock){
+            return responseReceivedAndUnpacked();
         }
     }
 
-    private boolean noResponse() {
-        if (this.incomingSyncResponse.isEmpty()) {
+    private boolean responseReceivedAndUnpacked() {
+        if (noIncommingMessageAfterWait()) return false;
+        unpackMessage();
+        return true;
+    }
+
+    private boolean noIncommingMessageAfterWait() {
+        if (this.incomingSync == null) {
             if (responseQueueStillEmptyAfter(TRIES))
                 return true;
         }
         return false;
     }
 
-    private boolean responseQueueStillEmptyAfter(int tries) {
-        int attempts = 0;
-        while(this.incomingSyncResponse.isEmpty()){
-            try {
-                attempts++;
-                if(attempts >= tries)
-                    return true;
-                this.incomingSyncResponse.wait(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-
-
-    @NonNull
-    private Boolean responseHasSameSyncId(String syncId) {
-        JSONObject response = this.incomingSyncResponse.remove();
+    private void unpackMessage() {
         try {
-            String responseSyncId = response.getString("SyncId");
-            if(syncId.equals(responseSyncId))
-                return true;
-            else
-                return false;
+            retrieveInstallationId();
         } catch (JSONException e) {
             e.printStackTrace();
-            return false;
         }
     }
 
-    @Override
-    public boolean waitForSyncRequest(String syncCode) {
-        ParsePush.subscribeInBackground(syncCode);
-        synchronized (this.incomingSyncRequest){
-            if (noRequest()) return false;
-
-        }
-        ParsePush.unsubscribeInBackground(syncCode);
-        return false;
+    private void retrieveInstallationId() throws JSONException {
+        syncInstallationId = incomingSync.getString("sender");
     }
 
-    private boolean noRequest() {
-        if (this.incomingSyncRequest.isEmpty()) {
-            if (requestQueueStillEmptyAfter(TRIES))
-                return true;
-        }
-        return false;
-    }
-
-    private boolean requestQueueStillEmptyAfter(int tries) {
+    private boolean responseQueueStillEmptyAfter(int tries) {
         int attempts = 0;
-        while(this.incomingSyncRequest.isEmpty()){
+        while(this.incomingSync == null){
             try {
                 attempts++;
                 if(attempts >= tries)
                     return true;
-                this.incomingSyncRequest.wait(1000);
+                this.lock.wait(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -148,21 +121,20 @@ public class BussParseSyncMessenger implements SyncMessenger {
         return false;
     }
 
-    public void sendSyncResponse(String syncId) {
-
+    @Override
+    public String getSyncInstallationId() {
+        return syncInstallationId;
     }
 
     @Override
-    public void enqueueResponse(JSONObject response) {
-        incomingSyncRequest.add(response);
+    public void setSyncMessage(JSONObject response) {
+        retrieveMessageAndNotify(response);
     }
 
-    @Override
-    public void enqueueRequest(JSONObject request) {
-        incomingSyncRequest.add(request);
+    private void retrieveMessageAndNotify(JSONObject response) {
+        incomingSync = response;
+        incomingSync.notify();
     }
-
-
 
 
 }

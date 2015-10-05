@@ -114,7 +114,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
         if (type == SyncMessenger.REQUEST) {
             provider.getSyncMessenger().enqueueRequest(messageData);
         } else if (type == SyncMessenger.RESPONSE) {
-            provider.getSyncMessenger().enqueueResponse(messageData);
+            provider.getSyncMessenger().setSyncMessage(messageData);
         }
     }
 }

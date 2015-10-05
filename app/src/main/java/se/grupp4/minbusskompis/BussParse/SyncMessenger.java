@@ -10,9 +10,8 @@ public interface SyncMessenger {
     int RESPONSE = 1;
 
     void sendSyncRequest(String syncCode);
-    boolean waitForSyncResponse(String syncCode);
-    boolean waitForSyncRequest(String syncCode);
-    void sendSyncResponse(String syncCode);
-    void enqueueResponse(JSONObject response);
-    void enqueueRequest(JSONObject request);
+    void sendSyncResponse();
+    boolean waitForSyncMessage();
+    void setSyncMessage(JSONObject response);
+    String getSyncInstallationId();
 }
