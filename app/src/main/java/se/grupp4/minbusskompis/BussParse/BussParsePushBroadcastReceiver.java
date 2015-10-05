@@ -112,7 +112,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
 
     private void enqueueSyncDataByType(JSONObject messageData, int type) throws NoMessengerPresentException {
         if (type == SyncMessenger.REQUEST) {
-            provider.getSyncMessenger().enqueueRequest(messageData);
+            provider.getSyncMessenger().setSyncMessage(messageData);
         } else if (type == SyncMessenger.RESPONSE) {
             provider.getSyncMessenger().setSyncMessage(messageData);
         }
