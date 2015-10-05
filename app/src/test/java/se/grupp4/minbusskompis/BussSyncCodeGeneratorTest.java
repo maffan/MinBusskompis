@@ -17,21 +17,9 @@ public class BussSyncCodeGeneratorTest {
     BussSyncCodeGenerator bussSyncCodeGenerator;
     @Before
     public void setUp() {
-        bussSyncCodeGenerator = new BussSyncCodeGenerator(Mockito.mock(BussRelationMessenger.class));
+        bussSyncCodeGenerator = new BussSyncCodeGenerator(4);
     }
 
-    @Test
-    public void shouldGenerateRandomStrings() {
-        String random1 = getRandomString();
-        String random2 = getRandomString();
-        assertFalse(random1.equals(random2));
-    }
 
-    @NonNull
-    private String getRandomString() {
-        String random = bussSyncCodeGenerator.generateAndGetSyncCode(4);
-        assertFalse(random.isEmpty());
-        return random;
-    }
 
 }

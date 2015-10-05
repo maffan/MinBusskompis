@@ -11,10 +11,13 @@ import org.json.JSONObject;
 /**
  * Created by Marcus on 10/4/2015.
  */
-public class BussParseSyncMessenger implements SyncMessenger {
+public class BussParseSyncMessenger {
     private static final int TRIES = 10;
-    public static final String SYNC_REQUEST = "SyncRequest";
-    public static final String SYNC_RESPONSE = "SyncResponse";
+    private static final String REQUEST_STRING = "SyncRequest";
+    private static final String RESPONSE_STRING = "SyncResponse";
+    public static final int REQUEST_TYPE = 0;
+    public static final int RESPONSE_TYPE = 1;
+
     private JSONObject incomingSync;
     private String syncInstallationId;
 
@@ -26,7 +29,7 @@ public class BussParseSyncMessenger implements SyncMessenger {
 
     public void sendSyncRequest(String syncCode){
         try {
-            SendMessageToChannelWithType(syncCode, SYNC_REQUEST);
+            SendMessageToChannelWithType(syncCode, REQUEST_STRING);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -34,7 +37,7 @@ public class BussParseSyncMessenger implements SyncMessenger {
 
     public void sendSyncResponse() {
         try {
-            SendMessageToChannelWithType(syncInstallationId, SYNC_RESPONSE);
+            SendMessageToChannelWithType(syncInstallationId, RESPONSE_STRING);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -121,12 +124,10 @@ public class BussParseSyncMessenger implements SyncMessenger {
         return false;
     }
 
-    @Override
     public String getSyncInstallationId() {
         return syncInstallationId;
     }
 
-    @Override
     public void setSyncMessage(JSONObject response) {
         retrieveMessageAndNotify(response);
     }

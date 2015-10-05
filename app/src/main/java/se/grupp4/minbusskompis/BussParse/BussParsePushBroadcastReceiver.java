@@ -71,10 +71,10 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
                 sendToRelationMessenger(messageData);
                 break;
             case "SyncRequest":
-                sendDataByTypeToSyncMessenger(messageData, SyncMessenger.REQUEST);
+                sendDataByTypeToSyncMessenger(messageData, BussParseSyncMessenger.REQUEST_TYPE);
                 break;
             case "SyncResponse":
-                sendDataByTypeToSyncMessenger(messageData, SyncMessenger.RESPONSE);
+                sendDataByTypeToSyncMessenger(messageData, BussParseSyncMessenger.RESPONSE_TYPE);
                 break;
             default:
                 Log.d(TAG,type+" is not a valid message type");
@@ -111,9 +111,9 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     }
 
     private void enqueueSyncDataByType(JSONObject messageData, int type) throws NoMessengerPresentException {
-        if (type == SyncMessenger.REQUEST) {
+        if (type == BussParseSyncMessenger.REQUEST_TYPE) {
             provider.getSyncMessenger().setSyncMessage(messageData);
-        } else if (type == SyncMessenger.RESPONSE) {
+        } else if (type == BussParseSyncMessenger.RESPONSE_TYPE) {
             provider.getSyncMessenger().setSyncMessage(messageData);
         }
     }

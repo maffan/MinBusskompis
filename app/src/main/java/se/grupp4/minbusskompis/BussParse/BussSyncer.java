@@ -8,10 +8,10 @@ import com.parse.ParsePush;
  * Created by Marcus on 10/4/2015.
  */
 public class BussSyncer {
-    private SyncMessenger messenger;
+    private BussParseSyncMessenger messenger;
 
 
-    public BussSyncer(SyncMessenger messenger) {
+    public BussSyncer(BussParseSyncMessenger messenger) {
         this.messenger = messenger;
     }
 
