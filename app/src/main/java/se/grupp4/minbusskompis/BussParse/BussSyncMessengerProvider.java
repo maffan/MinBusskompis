@@ -31,10 +31,4 @@ public class BussSyncMessengerProvider {
         else
             throw new NoMessengerPresentException("No SyncMessenger present");
     }
-
-    class NoMessengerPresentException extends Exception {
-        public NoMessengerPresentException(String s) {
-            super(s);
-        }
-    }
 }
