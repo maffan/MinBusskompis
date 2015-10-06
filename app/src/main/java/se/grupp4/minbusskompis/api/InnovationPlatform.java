@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -107,8 +105,6 @@ class InnovationPlatform
 
 		JSONArray data = new JSONArray(response);
 
-		System.out.println(response);
-
 		String name = getLatestStringValueOf("Bus_Stop_Name_Value", data);
 
 		return name;
@@ -118,8 +114,8 @@ class InnovationPlatform
 	{
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$GPS";
 
-//		String response = httpGet(5, params);
-		String response = "[{\"resourceSpec\":\"Course_Value\",\"timestamp\":1443458957144,\"value\":\"266\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Latitude_Value\",\"timestamp\":1443458957144,\"value\":\"57.719976\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Speed_Value\",\"timestamp\":1443458957144,\"value\":\"66.1\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Longitude_Value\",\"timestamp\":1443458957144,\"value\":\"11.960828\",\"gatewayId\":\"Vin_Num_001\"}]";
+		String response = httpGet(5, params);
+		//String response = JsonTestResponses.getLatestCoordOf;
 
 		JSONArray data = new JSONArray(response);
 
@@ -133,8 +129,8 @@ class InnovationPlatform
 	{
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Journey_Info";
 
-//		String response = httpGet(5, params);
-		String response = "[{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443469928208,\"value\":\"Lindholmen\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443469938209,\"value\":\"Lindholmen\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443469943272,\"value\":\"Lindholmen\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443469948209,\"value\":\"Lindholmen\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443469928208,\"value\":\"45\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443469938209,\"value\":\"45\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443469943272,\"value\":\"45\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443469948209,\"value\":\"45\",\"gatewayId\":\"Vin_Num_001\"}]";
+		String response = httpGet(5, params);
+		//String response = JsonTestResponses.getJourneyInfo;
 
 		JSONArray data = new JSONArray(response);
 
@@ -148,8 +144,8 @@ class InnovationPlatform
 	{
 		String params = "sensorSpec=Ericsson$Journey_Info";
 
-//		String response = httpGet(50, params);
-		String response = "[{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443600133779,\"value\":\"Lindholmen\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443600148765,\"value\":\"Lindholmen\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443600158765,\"value\":\"Lindholmen\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443600163765,\"value\":\"Lindholmen\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443600133779,\"value\":\"45\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443600148765,\"value\":\"45\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443600158765,\"value\":\"45\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443600163765,\"value\":\"45\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443600148416,\"value\":\"Johanneberg\",\"gatewayId\":\"100021\"},{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443600153980,\"value\":\"Johanneberg\",\"gatewayId\":\"100021\"},{\"resourceSpec\":\"Destination_Value\",\"timestamp\":1443600178378,\"value\":\"Johanneberg\",\"gatewayId\":\"100021\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443600148416,\"value\":\"49\",\"gatewayId\":\"100021\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443600153980,\"value\":\"49\",\"gatewayId\":\"100021\"},{\"resourceSpec\":\"Journey_Name_Value\",\"timestamp\":1443600178378,\"value\":\"49\",\"gatewayId\":\"100021\"}]";
+		String response = httpGet(50, params);
+		//String response = JsonTestResponses.getAllJourneyNames;
 		
 		JSONArray data = new JSONArray(response);
 		HashMap<String, String> busses = new HashMap<String, String>();
@@ -176,9 +172,7 @@ class InnovationPlatform
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Ambient_Temperature";
 
 		String response = httpGet(50, params);
-//		String response = "[{\"resourceSpec\":\"Ambient_Temperature_Value\",\"timestamp\":1443599508901,\"value\":\"29.061187\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Ambient_Temperature_Value\",\"timestamp\":1443599518558,\"value\":\"26.408052\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Ambient_Temperature_Value\",\"timestamp\":1443599523558,\"value\":\"29.020434\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Ambient_Temperature_Value\",\"timestamp\":1443599538684,\"value\":\"26.257422\",\"gatewayId\":\"Vin_Num_001\"},{\"resourceSpec\":\"Ambient_Temperature_Value\",\"timestamp\":1443599548606,\"value\":\"24.682406\",\"gatewayId\":\"Vin_Num_001\"}]";
-		
-		System.out.println(response);
+		//String response = JsonTestResponses.getOutsideTemperature;
 		
 		JSONArray data = new JSONArray(response);
 
