@@ -1,4 +1,4 @@
-package se.grupp4.minbusskompis.BussParse;
+package se.grupp4.minbusskompis.parsebuss;
 
 import android.support.annotation.NonNull;
 import android.util.Log;

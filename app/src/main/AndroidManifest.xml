@@ -53,7 +53,7 @@
         <service android:name="com.parse.PushService" />
 
         <receiver
-            android:name=".BussParse.BussParsePushBroadcastReceiver"
+            android:name=".parsebuss.BussParsePushBroadcastReceiver"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />

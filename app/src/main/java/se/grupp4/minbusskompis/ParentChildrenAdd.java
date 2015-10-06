@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import se.grupp4.minbusskompis.BussParse.BussParseSyncMessenger;
-import se.grupp4.minbusskompis.BussParse.BussSync;
-import se.grupp4.minbusskompis.BussParse.SyncTaskCompleteCallback;
+import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
+import se.grupp4.minbusskompis.parsebuss.BussSync;
+import se.grupp4.minbusskompis.parsebuss.SyncTaskCompleteCallback;
 
 public class ParentChildrenAdd extends AppCompatActivity {
 
