@@ -1,4 +1,4 @@
-package se.grupp4.minbusskompis;
+package se.grupp4.minbusskompis.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,16 +9,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class ParentStart extends AppCompatActivity {
+import se.grupp4.minbusskompis.R;
 
-    Button buttonChildren;
-    Button buttonDestinations;
-    Button buttonSettings;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button button_parent;
+    Button button_child;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parent_start);
+        setContentView(R.layout.activity_select_mode);
         addListenerButton();
     }
 
@@ -26,42 +28,34 @@ public class ParentStart extends AppCompatActivity {
 
         final Context context = this;
 
-        buttonChildren = (Button) findViewById(R.id.parent_childrenbutton);
-        buttonDestinations = (Button) findViewById(R.id.parent_destinationsbutton);
-        buttonSettings = (Button) findViewById(R.id.parent_settingsbutton);
+        button_parent = (Button) findViewById(R.id.parent_selectbutton);
 
+        button_child = (Button) findViewById(R.id.child_selectbutton);
 
-
-        buttonDestinations.setOnClickListener(new View.OnClickListener() {
+        button_parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ParentStart.this, ParentDestinations.class);
+
+                Intent intent = new Intent(MainActivity.this, ParentStart.class);
                 startActivity(intent);
             }
         });
 
-        buttonChildren.setOnClickListener(new View.OnClickListener() {
+        button_child.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                Intent intent = new Intent(ParentStart.this, ParentChildrenList.class);
+                Intent intent = new Intent(MainActivity.this, ChildDestinations.class);
                 startActivity(intent);
-            }
-        });
-
-        buttonSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ParentStart.this, ParentSettings.class);
-                startActivity(intent);
-
             }
         });
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_parent_start, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

@@ -1,4 +1,4 @@
-package se.grupp4.minbusskompis;
+package se.grupp4.minbusskompis.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,26 +9,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class ChildBusStop extends AppCompatActivity {
+import se.grupp4.minbusskompis.R;
 
-    protected Button dummyButton1;
+public class ParentDestinationsAdd extends AppCompatActivity {
+
+    Button buttonAddToDestinations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child_bus_stop);
+        setContentView(R.layout.activity_parent_destinations_add);
         addButtonListener();
     }
 
     public void addButtonListener(){
+
         final Context context = this;
 
-        dummyButton1 = (Button)findViewById(R.id.button_dummy_busstop);
+        buttonAddToDestinations = (Button)findViewById(R.id.button_addToDestinationList);
 
-        dummyButton1.setOnClickListener(new View.OnClickListener() {
+        buttonAddToDestinations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChildBusStop.this, ChildWalkMode.class);
+                Intent intent = new Intent(ParentDestinationsAdd.this, ParentStart.class);
                 startActivity(intent);
             }
         });
@@ -37,7 +40,7 @@ public class ChildBusStop extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_child_bus_stop, menu);
+        getMenuInflater().inflate(R.menu.menu_parent_destinations_add, menu);
         return true;
     }
 

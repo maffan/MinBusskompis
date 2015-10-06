@@ -1,22 +1,45 @@
-package se.grupp4.minbusskompis;
+package se.grupp4.minbusskompis.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
-public class ParentActiveChild extends AppCompatActivity {
+import se.grupp4.minbusskompis.R;
+
+public class ChildOnBus extends AppCompatActivity {
+
+    protected Button dummyButtonOnBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parent_active_child);
+        setContentView(R.layout.activity_child_on_bus);
+        addButtonListener();
+    }
+
+    public void addButtonListener(){
+        final Context context = this;
+
+        dummyButtonOnBus = (Button)findViewById(R.id.button_dummy_busonbus);
+
+        dummyButtonOnBus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChildOnBus.this, ChildBusStop.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_parent_active_child, menu);
+        getMenuInflater().inflate(R.menu.menu_child_on_bus, menu);
         return true;
     }
 

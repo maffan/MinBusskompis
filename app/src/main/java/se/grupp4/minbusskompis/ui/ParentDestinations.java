@@ -1,4 +1,4 @@
-package se.grupp4.minbusskompis;
+package se.grupp4.minbusskompis.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,14 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class ParentDestinationsAdd extends AppCompatActivity {
+import se.grupp4.minbusskompis.R;
 
-    Button buttonAddToDestinations;
+public class ParentDestinations extends AppCompatActivity {
+
+    Button buttonAddDestination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parent_destinations_add);
+        setContentView(R.layout.activity_parent_destinations);
         addButtonListener();
     }
 
@@ -24,21 +26,23 @@ public class ParentDestinationsAdd extends AppCompatActivity {
 
         final Context context = this;
 
-        buttonAddToDestinations = (Button)findViewById(R.id.button_addToDestinationList);
+        buttonAddDestination = (Button) findViewById(R.id.Button_AddDestination);
 
-        buttonAddToDestinations.setOnClickListener(new View.OnClickListener() {
+        buttonAddDestination.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ParentDestinationsAdd.this, ParentStart.class);
+                Intent intent = new Intent(ParentDestinations.this, ParentDestinationsAdd.class);
                 startActivity(intent);
             }
+
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_parent_destinations_add, menu);
+        getMenuInflater().inflate(R.menu.menu_parent_destinations, menu);
         return true;
     }
 

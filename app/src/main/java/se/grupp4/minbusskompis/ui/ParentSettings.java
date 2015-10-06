@@ -1,4 +1,4 @@
-package se.grupp4.minbusskompis;
+package se.grupp4.minbusskompis.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,26 +9,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class ChildOnBus extends AppCompatActivity {
+import se.grupp4.minbusskompis.R;
 
-    protected Button dummyButtonOnBus;
+public class ParentSettings extends AppCompatActivity {
+
+    protected Button resetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child_on_bus);
+        setContentView(R.layout.activity_parent_settings);
         addButtonListener();
     }
 
     public void addButtonListener(){
-        final Context context = this;
+        Context context = this;
 
-        dummyButtonOnBus = (Button)findViewById(R.id.button_dummy_busonbus);
+        resetButton=(Button) findViewById(R.id.parent_reset_button);
 
-        dummyButtonOnBus.setOnClickListener(new View.OnClickListener() {
+        resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChildOnBus.this, ChildBusStop.class);
+                Intent intent = new Intent(ParentSettings.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -37,7 +39,7 @@ public class ChildOnBus extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_child_on_bus, menu);
+        getMenuInflater().inflate(R.menu.menu_parent_settings, menu);
         return true;
     }
 
