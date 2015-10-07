@@ -1,6 +1,7 @@
 package se.grupp4.minbusskompis.backgroundtasks;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationProvider;
@@ -10,13 +11,13 @@ import android.widget.Toast;
 /**
  * Created by Tobias on 2015-10-07.
  */
-public class ParseLocationUpdater implements LocationListener {
+public class UpdateLocListener implements LocationListener {
         private int tripStatus;
-        private Activity activity;
+        private Context context;
 
-        public ParseLocationUpdater(int tripStatus, Activity activity){
+        public UpdateLocListener(int tripStatus, Context context){
             this.tripStatus = tripStatus;
-            this.activity = activity;
+            this.context = context;
         }
 
         //Skicka data till parse vid ändring av position
@@ -25,12 +26,12 @@ public class ParseLocationUpdater implements LocationListener {
             double longitude = loc.getLongitude();
             double latitude = loc.getLatitude();
 
-            Toast.makeText(activity.getApplicationContext(), "Sending data to PARSE, mode: " + longitude + " Long: " + longitude + " Lat: " + latitude, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.getApplicationContext(), "Sending data to PARSE, mode: " + longitude + " Long: " + longitude + " Lat: " + latitude, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-            Toast.makeText(activity.getApplicationContext(), "Enable GPS to send updates to parent", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.getApplicationContext(), "Enable GPS to send updates to parent", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -55,7 +56,7 @@ public class ParseLocationUpdater implements LocationListener {
                     break;
             }
 
-            Toast.makeText(activity.getApplicationContext(), provider.toString() + " status changed: " + statusText, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.getApplicationContext(), provider.toString() + " status changed: " + statusText, Toast.LENGTH_SHORT).show();
 
         }
 }

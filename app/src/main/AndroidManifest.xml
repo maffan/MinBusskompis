@@ -147,6 +147,12 @@
             android:name=".ui.ParentSettings"
             android:label="@string/title_activity_parent_settings" >
         </activity>
+
+        <service
+            android:name=".backgroundtasks.UpdateLocToParseService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package se.grupp4.minbusskompis.backgroundtasks;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -17,10 +18,14 @@ public class WifiChecker implements Runnable {
 
     private WifiManager wifiManager;
     private HashMap<String,Integer> localWifis;
+    private WifiReceiver wifiReceiver;
 
 
     public WifiChecker (Activity activity){
         this.wifiManager = (WifiManager) activity.getSystemService(Context.WIFI_SERVICE);
+        //Initera receiver som triggas då scanresults finns, dvs då sökningen är klar.
+        wifiReceiver = new WifiReceiver();
+        activity.registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
 
     @Override
