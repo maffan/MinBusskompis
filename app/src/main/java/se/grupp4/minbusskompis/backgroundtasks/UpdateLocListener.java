@@ -28,7 +28,7 @@ public class UpdateLocListener implements LocationListener {
         public void onLocationChanged(Location loc) {
             //Spara location
             ChildLocationAndStatus childLocationAndStatus = new ChildLocationAndStatus(loc,tripStatus);
-            BussData.getInstance().updateLatestPosition(childLocationAndStatus);
+            //BussData.getInstance().updateLatestPosition(childLocationAndStatus);
 
             //Skicka push till alla föräldrar att nu finns ny position.
             BussRelationMessenger.getInstance().notifyPositionUpdate();
