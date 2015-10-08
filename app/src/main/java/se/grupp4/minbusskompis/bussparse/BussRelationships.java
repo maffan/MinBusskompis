@@ -1,4 +1,4 @@
-package se.grupp4.minbusskompis.parsebuss;
+package se.grupp4.minbusskompis.bussparse;
 
 import java.util.Collection;
 import java.util.LinkedList;
