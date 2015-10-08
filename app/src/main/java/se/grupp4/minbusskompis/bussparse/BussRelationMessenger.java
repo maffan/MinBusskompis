@@ -64,9 +64,11 @@ public class BussRelationMessenger extends Observable {
         sendPushWithObject(push, messageObject);
     }
 
-    private void sendPushWithObject(ParsePush push, JSONObject jsonObject) {
-        push.setData(jsonObject);
-        push.sendInBackground();
+    @NonNull
+    private ParsePush getParsePushWithChannel(String installationId) {
+        ParsePush push = new ParsePush();
+        push.setChannel(installationId);
+        return push;
     }
 
     @NonNull
@@ -77,15 +79,35 @@ public class BussRelationMessenger extends Observable {
         return jsonObject;
     }
 
-    private String getInstallationId() {
-        return ParseInstallation.getCurrentInstallation().getInstallationId();
+    private void sendPushWithObject(ParsePush push, JSONObject jsonObject) {
+        push.setData(jsonObject);
+        push.sendInBackground();
+    }
+
+    public void notifyPositionUpdate(){
+        try {
+            tryNotifyPositionUpdate();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void tryNotifyPositionUpdate() throws JSONException {
+        ParsePush push = getParsePushWithChannel(getInstallationId());
+        JSONObject object = getPositionObjectWithData("");
+        sendPushWithObject(push,object);
     }
 
     @NonNull
-    private ParsePush getParsePushWithChannel(String installationId) {
-        ParsePush push = new ParsePush();
-        push.setChannel(installationId);
-        return push;
+    private JSONObject getPositionObjectWithData(String data) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", "PositionUpdate");
+        jsonObject.put("data", data);
+        return jsonObject;
+    }
+
+    private String getInstallationId() {
+        return ParseInstallation.getCurrentInstallation().getInstallationId();
     }
 
     /**

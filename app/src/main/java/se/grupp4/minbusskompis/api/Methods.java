@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import se.grupp4.minbusskompis.api.datatypes.ip.JourneyInfo;
 import se.grupp4.minbusskompis.api.datatypes.vt.Coord;
-import se.grupp4.minbusskompis.api.datatypes.vt.Location;
+import se.grupp4.minbusskompis.api.datatypes.vt.VTLocation;
 import se.grupp4.minbusskompis.api.datatypes.vt.StopLocation;
 import se.grupp4.minbusskompis.api.datatypes.vt.Trip;
 
@@ -21,7 +21,7 @@ public class Methods
 		return VastTrafik.getNearbyStops(lat, lng);
 	}
 	
-	public static ArrayList<Location> getLocationNamesByString(String input) throws IOException, JSONException
+	public static ArrayList<VTLocation> getLocationNamesByString(String input) throws IOException, JSONException
 	{
 		return VastTrafik.getLocationNamesByString(input);
 	}

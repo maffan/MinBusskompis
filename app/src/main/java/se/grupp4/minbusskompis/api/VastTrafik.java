@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import se.grupp4.minbusskompis.api.datatypes.vt.Coord;
 import se.grupp4.minbusskompis.api.datatypes.vt.Destination;
 import se.grupp4.minbusskompis.api.datatypes.vt.Leg;
-import se.grupp4.minbusskompis.api.datatypes.vt.Location;
+import se.grupp4.minbusskompis.api.datatypes.vt.VTLocation;
 import se.grupp4.minbusskompis.api.datatypes.vt.Origin;
 import se.grupp4.minbusskompis.api.datatypes.vt.StopLocation;
 import se.grupp4.minbusskompis.api.datatypes.vt.Trip;
@@ -91,7 +91,7 @@ class VastTrafik
 		return locationList;
 	}
 	
-	public static ArrayList<Location> getLocationNamesByString(String input) throws IOException, JSONException
+	public static ArrayList<VTLocation> getLocationNamesByString(String input) throws IOException, JSONException
 	{
 		UrlCallBuilder uBuilder = new UrlCallBuilder(baseurl, "location.name");
 		uBuilder.AddParameter("input", getISO88591String(input));
@@ -102,7 +102,7 @@ class VastTrafik
 
 		JSONObject jsonData = new JSONObject(response);
 		
-		ArrayList<Location> locationList = new ArrayList<Location>();
+		ArrayList<VTLocation> locationList = new ArrayList<VTLocation>();
 
 		Iterator<String> keysIter = jsonData.getJSONObject("LocationList").keys();
 		while (keysIter.hasNext())
@@ -120,14 +120,14 @@ class VastTrafik
 				
 				for (int i = 0; i < stopLocArr.length(); i++)
 				{
-					Location loc = getJSONLocation((JSONObject) stopLocArr.get(i));
+					VTLocation loc = getJSONLocation((JSONObject) stopLocArr.get(i));
 
 					locationList.add(loc);
 				}
 			}
 			else
 			{
-				Location loc = getJSONLocation((JSONObject) locations);
+				VTLocation loc = getJSONLocation((JSONObject) locations);
 
 				locationList.add(loc);
 			}
@@ -199,12 +199,12 @@ class VastTrafik
 		return triplist;
 	}
 	
-	private static Location getJSONLocation(JSONObject location) throws JSONException
+	private static VTLocation getJSONLocation(JSONObject location) throws JSONException
 	{
 		String name = location.getString("name");
 		Coord coord = new Coord(location.getString("lat"),location.getString("lon"));
 		
-		return new Location(name, coord);
+		return new VTLocation(name, coord);
 	}
 	
 	private static String getISO88591String(String input) throws UnsupportedEncodingException

@@ -8,6 +8,9 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import se.grupp4.minbusskompis.bussparse.BussData;
+import se.grupp4.minbusskompis.bussparse.BussRelationMessenger;
+
 /**
  * Created by Tobias on 2015-10-07.
  */
@@ -23,10 +26,12 @@ public class UpdateLocListener implements LocationListener {
         //Skicka data till parse vid ändring av position
         @Override
         public void onLocationChanged(Location loc) {
-            double longitude = loc.getLongitude();
-            double latitude = loc.getLatitude();
+            //Spara location
+            ChildLocationAndStatus childLocationAndStatus = new ChildLocationAndStatus(loc,tripStatus);
+            BussData.getInstance().updateLatestPosition(childLocationAndStatus);
 
-            Toast.makeText(context.getApplicationContext(), "Sending data to PARSE, mode: " + longitude + " Long: " + longitude + " Lat: " + latitude, Toast.LENGTH_SHORT).show();
+            //Skicka push till alla föräldrar att nu finns ny position.
+            BussRelationMessenger.getInstance().notifyPositionUpdate();
         }
 
         @Override
@@ -52,7 +57,7 @@ public class UpdateLocListener implements LocationListener {
                     statusText = "Temporarily unavailable";
                     break;
                 default:
-                    statusText = "Uknown status";
+                    statusText = "Unknown status";
                     break;
             }
 

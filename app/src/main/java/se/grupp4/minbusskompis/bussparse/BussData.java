@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -14,6 +15,8 @@ import org.json.JSONArray;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 
 public class BussData {
     public static final String TAG = "BUSSDATA";
@@ -27,8 +30,17 @@ public class BussData {
 
     private LinkedList parents;
     private LinkedList children;
-    private ParseObject relationships;
+    private List<ParseObject> destinations;
 
+
+    /*
+        1, Vid start av app initeras de alla ParseObject, dvs skapar en koppling mot parse
+            * Vid en query begränsas urvalet, normalt en rad i tabellen i fråga, detta blir ett objekt
+            * Vid hämting av flera rader skapas en lista med objekt, dvs man hämtar då ett objekt för att nå den radens data
+        2, För att hämta data, kallar man på ParseObjektet i fråga, ex position.fetch().
+            * Detta hämtar den senaste datan, begränsat av queryn ovan
+        3, För att spara används .save() på objektet, detta skall ske efter ändringar är gjorda.
+     */
 
     public static BussData getInstance() {
         return bussData;
@@ -39,13 +51,14 @@ public class BussData {
         children = new LinkedList();
     }
 
-    public void fetchRelationships(AsyncTaskCompleteCallback callback){
+   /* //Initerar parseobjekten, gör kopplingen mot parse.
+    public void fetchData(AsyncTaskCompleteCallback callback){
         new FetchDataTask(callback).execute();
     }
 
-    /**
+    *//**
      * Created by Marcus on 9/29/2015.
-     */
+     *//*
     private class FetchDataTask extends AsyncTask<Void, Void, Void> {
         private AsyncTaskCompleteCallback callback;
 
@@ -55,29 +68,45 @@ public class BussData {
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (relationships == null) {
-                fetchRelationshipsObjectAndUpdate();
-            } else {
-                updateFromRelationshipsObject();
-            }
+            //ParseInstallation already initialized, can be used to fetch data
+
+            ParseQuery destinationQuery = ParseQuery.getQuery("Destinations");
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(Void Void) {
             if(callback != null)
                 callback.done();
         }
     }
 
-    private void updateFromRelationshipsObject() {
+    private void fetchObjectsAndUpdate() {
+        ParseQuery<ParseObject> relationshipQuery = getRelationshipParseQuery();
+        fetchQuery(relationshipQuery);
+    }
+
+    private ParseQuery<ParseObject> getRelationshipParseQuery() {
+        return ParseQuery.getQuery(RELATIONSHIPS_CLASS).whereEqualTo(INSTALLATION_ID_FIELD, getInstallationId()).setLimit(1);
+    }
+
+    private void fetchQuery(ParseQuery<ParseObject> query) {
+
+        try {
+            List result = query.find();
+            handleResult(result);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateFromObjects() {
         try {
             ParseObject parseObject = relationships.fetch();
             extractRelationsFromRelationships(parseObject);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
 
     private void clearAndSetParents(ParseObject parseObject) {
@@ -90,27 +119,8 @@ public class BussData {
         children.addAll(parseObject.getList(CHILDREN_FIELD));
     }
 
-    private void fetchRelationshipsObjectAndUpdate() {
-        ParseQuery<ParseObject> query = getParseQuery();
-        fetchQuery(query);
-    }
-
-    private ParseQuery<ParseObject> getParseQuery() {
-        return ParseQuery.getQuery(RELATIONSHIPS_CLASS).whereEqualTo(INSTALLATION_ID_FIELD, getInstallationId()).setLimit(1);
-    }
-
     private String getInstallationId() {
         return ParseInstallation.getCurrentInstallation().getInstallationId();
-    }
-
-    private void fetchQuery(ParseQuery<ParseObject> query) {
-
-        try {
-            List result = query.find();
-            handleResult(result);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
 
     private boolean noError(ParseException e) {
@@ -129,7 +139,7 @@ public class BussData {
         try {
             ParseObject newRelationships = getEmptyRelationshipsWithId();
             newRelationships.save();
-            fetchRelationships(null);
+            fetchData(null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -208,4 +218,18 @@ public class BussData {
         relationships.saveInBackground();
     }
 
+    public void updateLatestPosition(ChildLocationAndStatus location){
+        ParseGeoPoint geoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+        int status = location.getTripStatus();
+        ParseObject object = new ParseObject("Position");
+        object.put("installationId", getInstallationId());
+        object.put("latestPosition",geoPoint);
+        object.put("tripStatus",status);
+        object.saveInBackground();
+    }
+
+    private void fetchPosition(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("GameScore");
+        query.whereEqualTo("playerName", "Dan Stemkoski");
+    }*/
 }
