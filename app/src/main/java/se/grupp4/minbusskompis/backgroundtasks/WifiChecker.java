@@ -67,7 +67,7 @@ public class WifiChecker implements Runnable {
         }
 
         //Puts scanresults in hashmap, bssid/level.
-        public HashMap<String, Integer> getWifiList() {
+        private HashMap<String, Integer> getWifiList() {
             localWifis = new HashMap<>();
             List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
@@ -77,7 +77,7 @@ public class WifiChecker implements Runnable {
             return localWifis;
         }
 
-        public boolean checkIfClose(String compareBSSID, Map<String, Integer> accessPoints) {
+        private boolean checkIfClose(String compareBSSID, Map<String, Integer> accessPoints) {
             //Return if no list
             if (accessPoints == null) {
                 Log.v((this).getClass().getSimpleName(), "No wifilist");
