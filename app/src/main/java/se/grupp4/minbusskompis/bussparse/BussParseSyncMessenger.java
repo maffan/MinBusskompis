@@ -14,7 +14,7 @@ import org.json.JSONObject;
  * Created by Marcus on 10/4/2015.
  */
 public class BussParseSyncMessenger {
-    private static final int TRIES = 20;
+    private static final int TRIES = 60*10;
     private static final String REQUEST_STRING = "SyncRequest";
     private static final String RESPONSE_STRING = "SyncResponse";
     public static final int REQUEST_TYPE = 0;
