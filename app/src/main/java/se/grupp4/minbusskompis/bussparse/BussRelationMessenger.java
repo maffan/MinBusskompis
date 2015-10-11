@@ -76,6 +76,7 @@ public class BussRelationMessenger extends Observable {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", "Message");
         jsonObject.put("data", data);
+        jsonObject.put("from", getInstallationId());
         return jsonObject;
     }
 
@@ -103,6 +104,7 @@ public class BussRelationMessenger extends Observable {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", "PositionUpdate");
         jsonObject.put("data", data);
+        jsonObject.put("from", getInstallationId());
         return jsonObject;
     }
 

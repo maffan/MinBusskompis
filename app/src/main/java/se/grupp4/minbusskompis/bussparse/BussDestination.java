@@ -42,6 +42,15 @@ public class BussDestination {
         return destinationList;
     }
 
+    public static List<JSONObject> getAsJSONList(List<BussDestination> list) throws JSONException {
+        List<JSONObject> jsonObjects = new LinkedList<>();
+        for (BussDestination destination :
+                list) {
+            jsonObjects.add(destination.getAsJSONObject());
+        }
+        return jsonObjects;
+    }
+
     public JSONObject getAsJSONObject() throws JSONException {
         JSONObject object = new JSONObject();
         object.put("destination",destination);

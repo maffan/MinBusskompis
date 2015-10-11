@@ -107,6 +107,27 @@ public class BussData {
         }
     }
 
+    public void removeDestinationFromChild(String destinationName, String childId){
+        try {
+            ParseQuery query = ParseQuery.getQuery("Installation");
+            ParseObject installation = query.whereEqualTo("installationId",childId).getFirst();
+            List<BussDestination> destinationList = BussDestination.getAsDestinationList(installation.<JSONObject>getList("destinations"));
+            for (BussDestination destination :
+                    destinationList) {
+                if (destination.getName().equals(destinationName)) {
+                    destinationList.remove(destination);
+                    break;
+                }
+            }
+            installation.put("destinations",BussDestination.getAsJSONList(destinationList));
+            installation.saveInBackground();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addRelationship(String id, int type){
         switch (type){
             case PARENT:
