@@ -6,6 +6,11 @@ import android.support.annotation.Nullable;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -19,9 +24,9 @@ public class BussData {
     private static final String CHILDREN_FIELD = "children";
     private static final BussData bussData = new BussData();
 
-    private List parents;
-    private List children;
-    private List destinations;
+    private List<String> parents;
+    private List<String> children;
+    private List<JSONObject> destinations;
 
 
     /*
@@ -85,8 +90,21 @@ public class BussData {
         return new BussRelationships(children);
     }
 
-    public List getDestinations(){
-        return destinations;
+    public List<BussDestination> getDestinations(){
+        return BussDestination.getAsDestinationList(destinations);
+    }
+
+    public void addDestinationToChild(BussDestination destination, String childId){
+        try {
+            ParseQuery query = ParseQuery.getQuery("Installation");
+            ParseObject installation = query.whereEqualTo("installationId",childId).getFirst();
+            installation.getList("destinations").add(destination.getAsJSONObject());
+            installation.saveInBackground();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addRelationship(String id, int type){
@@ -103,7 +121,7 @@ public class BussData {
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
-    public void removeRalationship(String id, int type){
+    public void removeRelationship(String id, int type){
         switch (type){
             case PARENT:
                 parents.remove(id);
