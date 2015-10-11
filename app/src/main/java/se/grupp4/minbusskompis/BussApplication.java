@@ -14,6 +14,5 @@ public class BussApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Parse.initialize(this);
-        ParsePush.subscribeInBackground("i"+ParseInstallation.getCurrentInstallation().getInstallationId());
     }
 }
