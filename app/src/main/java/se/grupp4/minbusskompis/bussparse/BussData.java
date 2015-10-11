@@ -23,6 +23,11 @@ public class BussData {
     private static final String PARENTS_FIELD = "parents";
     private static final String CHILDREN_FIELD = "children";
     private static final BussData bussData = new BussData();
+    public static final String DESTINATIONS_FIELD = "destinations";
+    public static final String INSTALLATION_CLASS = "Installation";
+    public static final String INSTALLATION_FIELD = "installationId";
+    public static final String POSITION_FIELD = "position";
+    public static final String STATUS_FIELD = "status";
 
     private List<String> parents;
     private List<String> children;
@@ -62,9 +67,9 @@ public class BussData {
             //ParseInstallation already initialized, can be used to fetch data
             try {
                 ParseInstallation.getCurrentInstallation().fetch();
-                parents = ParseInstallation.getCurrentInstallation().getList("parents");
-                children = ParseInstallation.getCurrentInstallation().getList("children");
-                destinations = ParseInstallation.getCurrentInstallation().getList("destinations");
+                parents = ParseInstallation.getCurrentInstallation().getList(PARENTS_FIELD);
+                children = ParseInstallation.getCurrentInstallation().getList(CHILDREN_FIELD);
+                destinations = ParseInstallation.getCurrentInstallation().getList(DESTINATIONS_FIELD);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -96,9 +101,9 @@ public class BussData {
 
     public void addDestinationToChild(BussDestination destination, String childId){
         try {
-            ParseQuery query = ParseQuery.getQuery("Installation");
-            ParseObject installation = query.whereEqualTo("installationId",childId).getFirst();
-            installation.getList("destinations").add(destination.getAsJSONObject());
+            ParseQuery query = ParseQuery.getQuery(INSTALLATION_CLASS);
+            ParseObject installation = query.whereEqualTo(INSTALLATION_FIELD,childId).getFirst();
+            installation.getList(DESTINATIONS_FIELD).add(destination.getAsJSONObject());
             installation.saveInBackground();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -109,9 +114,9 @@ public class BussData {
 
     public void removeDestinationFromChild(String destinationName, String childId){
         try {
-            ParseQuery query = ParseQuery.getQuery("Installation");
-            ParseObject installation = query.whereEqualTo("installationId",childId).getFirst();
-            List<BussDestination> destinationList = BussDestination.getAsDestinationList(installation.<JSONObject>getList("destinations"));
+            ParseQuery query = ParseQuery.getQuery(INSTALLATION_CLASS);
+            ParseObject installation = query.whereEqualTo(INSTALLATION_FIELD,childId).getFirst();
+            List<BussDestination> destinationList = BussDestination.getAsDestinationList(installation.<JSONObject>getList(DESTINATIONS_FIELD));
             for (BussDestination destination :
                     destinationList) {
                 if (destination.getName().equals(destinationName)) {
@@ -119,7 +124,7 @@ public class BussData {
                     break;
                 }
             }
-            installation.put("destinations",BussDestination.getAsJSONList(destinationList));
+            installation.put(DESTINATIONS_FIELD,BussDestination.getAsJSONList(destinationList));
             installation.saveInBackground();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -132,7 +137,7 @@ public class BussData {
         switch (type){
             case PARENT:
                 parents.add(id);
-                ParseInstallation.getCurrentInstallation().addAllUnique("parents", parents);
+                ParseInstallation.getCurrentInstallation().addAllUnique(PARENTS_FIELD, parents);
                 break;
             case CHILD:
                 children.add(id);
@@ -159,8 +164,8 @@ public class BussData {
     public void updateLatestPosition(ChildLocationAndStatus location){
         ParseGeoPoint geoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
         int status = location.getTripStatus();
-        ParseInstallation.getCurrentInstallation().put("position",geoPoint);
-        ParseInstallation.getCurrentInstallation().put("status",status);
+        ParseInstallation.getCurrentInstallation().put(POSITION_FIELD,geoPoint);
+        ParseInstallation.getCurrentInstallation().put(STATUS_FIELD,status);
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
