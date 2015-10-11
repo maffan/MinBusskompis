@@ -124,7 +124,7 @@ public class BussData {
                     break;
                 }
             }
-            installation.put(DESTINATIONS_FIELD,BussDestination.getAsJSONList(destinationList));
+            installation.put(DESTINATIONS_FIELD, BussDestination.getAsJSONList(destinationList));
             installation.saveInBackground();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -151,7 +151,7 @@ public class BussData {
         switch (type){
             case PARENT:
                 parents.remove(id);
-                ParseInstallation.getCurrentInstallation().put(PARENTS_FIELD,parents);
+                ParseInstallation.getCurrentInstallation().put(PARENTS_FIELD, parents);
                 break;
             case CHILD:
                 children.remove(id);
@@ -167,6 +167,18 @@ public class BussData {
         ParseInstallation.getCurrentInstallation().put(POSITION_FIELD,geoPoint);
         ParseInstallation.getCurrentInstallation().put(STATUS_FIELD,status);
         ParseInstallation.getCurrentInstallation().saveInBackground();
+    }
+
+    public String getNameFromId(String id){
+        ParseQuery query = ParseQuery.getQuery(INSTALLATION_CLASS);
+        try {
+            ParseObject installation = query.whereEqualTo(INSTALLATION_FIELD,id).getFirst();
+            String name = installation.getString("name");
+            return name;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
