@@ -1,18 +1,11 @@
 package se.grupp4.minbusskompis.bussparse;
 
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import org.json.JSONArray;
 
 import java.util.List;
 
@@ -24,9 +17,7 @@ public class BussData {
     public static final int CHILD = 1;
     private static final String PARENTS_FIELD = "parents";
     private static final String CHILDREN_FIELD = "children";
-    private static final String RELATIONSHIPS_CLASS = "Relationships";
-    private static final String INSTALLATION_ID_FIELD = "installationId";
-    private static BussData bussData = new BussData();
+    private static final BussData bussData = new BussData();
 
     private List parents;
     private List children;
@@ -46,10 +37,6 @@ public class BussData {
         return bussData;
     }
 
-    private BussData(){
-
-    }
-
     //Initerar parseobjekten, gör kopplingen mot parse.
     public void fetchData(AsyncTaskCompleteCallback callback){
         new FetchDataTask(callback).execute();
@@ -59,7 +46,7 @@ public class BussData {
      * Created by Marcus on 9/29/2015.
      */
     private class FetchDataTask extends AsyncTask<Void, Void, Void> {
-        private AsyncTaskCompleteCallback callback;
+        private final AsyncTaskCompleteCallback callback;
 
         public FetchDataTask(@Nullable AsyncTaskCompleteCallback callback) {
             this.callback = callback;
@@ -96,6 +83,10 @@ public class BussData {
 
     public BussRelationships getChildren(){
         return new BussRelationships(children);
+    }
+
+    public List getDestinations(){
+        return destinations;
     }
 
     public void addRelationship(String id, int type){
