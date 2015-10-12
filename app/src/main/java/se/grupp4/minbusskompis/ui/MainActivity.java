@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         button_parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(MainActivity.this, ParentStart.class);
+                //Ändrade startvy till listan på children då man är parent.
+                Intent intent = new Intent(MainActivity.this, ParentChildrenList.class);
                 startActivity(intent);
             }
         });

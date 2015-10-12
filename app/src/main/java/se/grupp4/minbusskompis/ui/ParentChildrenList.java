@@ -1,43 +1,45 @@
 package se.grupp4.minbusskompis.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import se.grupp4.minbusskompis.R;
 
 public class ParentChildrenList extends AppCompatActivity {
 
     protected Button buttonAddChild;
-    protected Button dummyButtonActiveChild;
+    private ArrayAdapter<String> childrenListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_children);
-        addButtonListener();
+        addButtonListeners();
+
+        //Populate children with list based on fragment_parent_child_list_item
+        childrenListAdapter =
+                new ArrayAdapter<String>(
+                        this, // Current activity
+                        R.layout.fragment_parent_child_list_item, // List item layout
+                        getChildrenList());
+        ListView childrenListView = (ListView) findViewById(R.id.parent_children_list);
+        childrenListView.setAdapter(childrenListAdapter);
     }
 
-    public void addButtonListener(){
-
-        Context context = this;
-
+    public void addButtonListeners(){
+        //Add child button
         buttonAddChild = (Button)findViewById(R.id.button_addchild);
-        dummyButtonActiveChild = (Button)findViewById(R.id.button_dummyactivechild);
-
-        dummyButtonActiveChild.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ParentChildrenList.this, ParentActiveChild.class);
-                startActivity(intent);
-            }
-        });
-
         buttonAddChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +48,6 @@ public class ParentChildrenList extends AppCompatActivity {
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,5 +69,22 @@ public class ParentChildrenList extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //hämta data från parse
+    public List<String> getChildrenList() {
+        String[] data = {
+                "Kalle",
+                "Berit",
+                "John",
+                "Kalle",
+                "Berit",
+                "John",
+                "Kalle",
+                "Berit",
+                "John",
+                "Ceeeena"
+        };
+        return new ArrayList<String>(Arrays.asList(data));
     }
 }

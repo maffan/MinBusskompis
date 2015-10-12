@@ -13,13 +13,13 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="100dp">
+        android:layout_marginTop="20dp"
+        android:layout_above="@+id/button_addchild">
 
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/children"
+            android:id="@+id/parent_children_list"
             android:layout_gravity="center_horizontal"
             android:choiceMode="singleChoice"
             android:background="@color/background_material_light" />
@@ -28,6 +28,7 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/round_button"
         android:gravity="center_vertical|center_horizontal"
         android:text="+"
@@ -35,15 +36,6 @@
         android:id="@+id/button_addchild"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="10dp"
         android:visibility="visible" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Active Child"
-        android:id="@+id/button_dummyactivechild"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
 </RelativeLayout>
