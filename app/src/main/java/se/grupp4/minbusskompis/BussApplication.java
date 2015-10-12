@@ -18,11 +18,6 @@ public class BussApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Parse.initialize(this);
-        BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
-            @Override
-            public void done() {
-                BussData.getInstance().addDestinationToChild(new BussDestination(new ParseGeoPoint(0, 0), "Saxofonlektion"), ParseInstallation.getCurrentInstallation().getInstallationId());
-            }
-        });
+
     }
 }
