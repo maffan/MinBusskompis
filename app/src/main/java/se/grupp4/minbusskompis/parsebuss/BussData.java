@@ -1,7 +1,8 @@
-package se.grupp4.minbusskompis.bussparse;
+package se.grupp4.minbusskompis.parsebuss;
 
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -12,6 +13,8 @@ import com.parse.ParseQuery;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
@@ -31,7 +34,7 @@ public class BussData {
 
     private List<String> parents;
     private List<String> children;
-    private List<JSONObject> destinations;
+    private List destinations;
 
 
     /*
@@ -65,14 +68,10 @@ public class BussData {
         @Override
         protected Void doInBackground(Void... params) {
             //ParseInstallation already initialized, can be used to fetch data
-            try {
-                ParseInstallation.getCurrentInstallation().fetch();
-                parents = ParseInstallation.getCurrentInstallation().getList(PARENTS_FIELD);
-                children = ParseInstallation.getCurrentInstallation().getList(CHILDREN_FIELD);
-                destinations = ParseInstallation.getCurrentInstallation().getList(DESTINATIONS_FIELD);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            Log.d(TAG, "Fetching task started");
+            ParseObject cloudDestinations = getOrMakeDestinationsObjectForID(getInstallationId());
+            destinations = cloudDestinations.getList(DESTINATIONS_FIELD);
+            Log.d(TAG, "doInBackground: Got destinations as: " + destinations);
             return null;
         }
 
@@ -81,6 +80,41 @@ public class BussData {
             if(callback != null)
                 callback.done();
         }
+    }
+
+    public void addDestinationToChild(BussDestination destination, String childId){
+        try {
+            ParseObject cloudDestinations = getOrMakeDestinationsObjectForID(childId);
+            cloudDestinations.getList(DESTINATIONS_FIELD).add(destination.getAsJSONObject());
+            cloudDestinations.saveInBackground();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private ParseObject getOrMakeDestinationsObjectForID(String installationId) {
+        ParseObject cloudDestinations = null;
+        ParseQuery query = ParseQuery.getQuery(DESTINATIONS_FIELD);
+        query.whereEqualTo(INSTALLATION_FIELD, installationId);
+        try {
+            Log.d(TAG, "Fetching... ");
+            cloudDestinations = query.getFirst();
+        } catch (ParseException e) {
+            if(e.getCode() == ParseException.OBJECT_NOT_FOUND){
+                cloudDestinations = new ParseObject(query.getClassName());
+                cloudDestinations.put(INSTALLATION_FIELD, getInstallationId());
+                cloudDestinations.put(DESTINATIONS_FIELD, new LinkedList<>());
+                try {
+                    cloudDestinations.save();
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            else{
+                e.printStackTrace();
+            }
+        }
+        return cloudDestinations;
     }
 
     private String getInstallationId() {
@@ -99,24 +133,11 @@ public class BussData {
         return BussDestination.getAsDestinationList(destinations);
     }
 
-    public void addDestinationToChild(BussDestination destination, String childId){
-        try {
-            ParseQuery query = ParseQuery.getQuery(INSTALLATION_CLASS);
-            ParseObject installation = query.whereEqualTo(INSTALLATION_FIELD,childId).getFirst();
-            installation.getList(DESTINATIONS_FIELD).add(destination.getAsJSONObject());
-            installation.saveInBackground();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void removeDestinationFromChild(String destinationName, String childId){
         try {
             ParseQuery query = ParseQuery.getQuery(INSTALLATION_CLASS);
             ParseObject installation = query.whereEqualTo(INSTALLATION_FIELD,childId).getFirst();
-            List<BussDestination> destinationList = BussDestination.getAsDestinationList(installation.<JSONObject>getList(DESTINATIONS_FIELD));
+            List<BussDestination> destinationList = BussDestination.getAsDestinationList(installation.<HashMap>getList(DESTINATIONS_FIELD));
             for (BussDestination destination :
                     destinationList) {
                 if (destination.getName().equals(destinationName)) {

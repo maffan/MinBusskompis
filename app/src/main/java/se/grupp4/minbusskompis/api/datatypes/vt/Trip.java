@@ -2,7 +2,6 @@ package se.grupp4.minbusskompis.api.datatypes.vt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Trip
 {
@@ -34,5 +33,22 @@ public class Trip
 	public ArrayList<Leg> getLegs()
 	{
 		return legs;
+	}
+
+	public Boolean hasElectricityInTrip()
+	{
+		for(int i = 0; i < legs.size(); i++)
+		{
+			if(legs.get(i).getValueOf("type").equals("BUS"))
+			{
+				if(legs.get(i).getValueOf("sname").equals("55"))
+				{
+					System.out.println(legs.get(i));
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 }

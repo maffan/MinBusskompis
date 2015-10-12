@@ -1,6 +1,5 @@
 package se.grupp4.minbusskompis.backgroundtasks;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -8,8 +7,8 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import se.grupp4.minbusskompis.bussparse.BussData;
-import se.grupp4.minbusskompis.bussparse.BussRelationMessenger;
+import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 
 /**
  * Created by Tobias on 2015-10-07.

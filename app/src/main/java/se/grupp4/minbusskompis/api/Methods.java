@@ -31,6 +31,11 @@ public class Methods
 		return VastTrafik.getTripList(from, to);
 	}
 	
+	public static ArrayList<Coord> getGeometry(String url) throws IOException, JSONException
+	{
+		return VastTrafik.getGeometry(url);
+	}
+	
 	// Innovation Platform
 	
 	public static String getNextStop(String dgw) throws IOException, JSONException

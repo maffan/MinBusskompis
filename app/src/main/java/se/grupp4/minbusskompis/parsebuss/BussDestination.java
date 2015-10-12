@@ -1,10 +1,11 @@
-package se.grupp4.minbusskompis.bussparse;
+package se.grupp4.minbusskompis.parsebuss;
 
 import com.parse.ParseGeoPoint;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,9 +34,14 @@ public class BussDestination {
         }
     }
 
-    public static List<BussDestination> getAsDestinationList(List<JSONObject> list){
+    public BussDestination(HashMap destination){
+        this.destination = (ParseGeoPoint) destination.get("destination");
+        this.name = (String) destination.get("name");
+    }
+
+    public static List<BussDestination> getAsDestinationList(List<HashMap> list){
         List<BussDestination> destinationList = new LinkedList<>();
-        for (JSONObject object :
+        for (HashMap object :
                 list) {
             destinationList.add(new BussDestination(object));
         }
@@ -72,5 +78,13 @@ public class BussDestination {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "BussDestination{" +
+                "destination=" + destination +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
