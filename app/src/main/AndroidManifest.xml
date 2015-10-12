@@ -89,17 +89,17 @@
         <activity
             android:name=".ui.ParentStart"
             android:label="@string/title_activity_parent_start"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ChildDestinations"
             android:label="@string/title_activity_child_destinations"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.StartActivity"
             android:label="Min BussKompis"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -109,57 +109,57 @@
         <activity
             android:name=".ui.ParentDestinations"
             android:label="@string/title_activity_parent_destinations"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ParentChildrenList"
             android:label="@string/title_activity_parent_children"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ParentDestinationsAdd"
             android:label="@string/title_activity_parent_destinations_add"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ChildBusStation"
             android:label="@string/title_activity_child_buss_station"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ChildWalkMode"
             android:label="@string/title_activity_child_walk_mode"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ChildOnBus"
             android:label="@string/title_activity_child_on_bus"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ChildBusStop"
             android:label="@string/title_activity_child_bus_stop"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ParentActiveChild"
             android:label="@string/title_activity_parent_active_child"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ParentChildrenAdd"
             android:label="@string/title_activity_parent_children_add"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ChildChildCode"
             android:label="@string/title_activity_child_child_code"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ParentSettings"
             android:label="@string/title_activity_parent_settings"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
 
         <service
@@ -167,6 +167,11 @@
             android:enabled="true"
             android:exported="false" >
         </service>
+
+        <activity
+            android:name=".ui.ChildSettings"
+            android:label="@string/title_activity_child_settings" >
+        </activity>
     </application>
 
 </manifest>
