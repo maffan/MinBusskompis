@@ -107,7 +107,7 @@ class VastTrafik
 		Iterator<String> keysIter = jsonData.getJSONObject("LocationList").keys();
 		while (keysIter.hasNext())
 		{
-			key = keysIter.next();
+			String key = keysIter.next();
 
 			if(key.equals("serverdate") || key.equals("servertime") || key.equals("noNamespaceSchemaLocation"))
 				continue;
@@ -174,7 +174,7 @@ class VastTrafik
 				Iterator<String> legOriginIter = legOrigin.keys();
 				while (legOriginIter.hasNext())
 				{
-					key = legOriginIter.next();
+					String key = legOriginIter.next();
 					orig.add(key, legOrigin.getString(key));
 				}
 				
@@ -184,7 +184,7 @@ class VastTrafik
 				Iterator<String> legDestinationIter = legDestination.keys();
 				while (legDestinationIter.hasNext())
 				{
-					key = legDestinationIter.next();
+					String key = legDestinationIter.next();
 					orig.add(key, legOrigin.getString(key));
 				}
 
