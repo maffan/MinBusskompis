@@ -1,4 +1,4 @@
-package se.grupp4.minbusskompis.bussparse;
+package se.grupp4.minbusskompis.parsebuss;
 
 import com.parse.ParseGeoPoint;
 

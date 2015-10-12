@@ -11,9 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
-import se.grupp4.minbusskompis.bussparse.BussParseSyncMessenger;
-import se.grupp4.minbusskompis.bussparse.BussSync;
-import se.grupp4.minbusskompis.bussparse.SyncTaskCompleteCallback;
+import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
+import se.grupp4.minbusskompis.parsebuss.BussSync;
+import se.grupp4.minbusskompis.parsebuss.SyncTaskCompleteCallback;
 
 public class ParentChildrenAdd extends AppCompatActivity {
 
