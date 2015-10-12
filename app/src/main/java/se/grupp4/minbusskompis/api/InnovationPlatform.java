@@ -39,7 +39,7 @@ class InnovationPlatform
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
-			return "";
+			return e.getMessage();
 		}
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
