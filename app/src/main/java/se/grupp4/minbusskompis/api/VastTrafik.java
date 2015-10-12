@@ -167,28 +167,42 @@ class VastTrafik
 			for(int j = 0; j < legArr.length(); j++)
 			{
 				JSONObject legJSON = (JSONObject)legArr.get(j);
-
-				JSONObject legOrigin = legJSON.getJSONObject("Origin");
-				Origin orig = new Origin();
-
-				Iterator<String> legOriginIter = legOrigin.keys();
-				while (legOriginIter.hasNext())
-				{
-					String key = legOriginIter.next();
-					orig.add(key, legOrigin.getString(key));
-				}
 				
-				JSONObject legDestination = legJSON.getJSONObject("Destination");
+				Leg leg = new Leg();
+				Origin orig = new Origin();
 				Destination dest = new Destination();
-
-				Iterator<String> legDestinationIter = legDestination.keys();
-				while (legDestinationIter.hasNext())
+				
+				Iterator<String> legJSONIter = legJSON.keys();
+				while (legJSONIter.hasNext())
 				{
-					String key = legDestinationIter.next();
-					orig.add(key, legDestination.getString(key));
+					String key = legJSONIter.next();
+					
+					if(key.equals("Origin") || key.equals("Destination"))
+					{
+						JSONObject arrJSON = legJSON.getJSONObject(key);
+						
+						Iterator<String> legArrIter = arrJSON.keys();
+						
+						while (legArrIter.hasNext())
+						{
+							String iKey = legArrIter.next();
+							
+							if(key.equals("Origin"))
+								orig.add(iKey, arrJSON.getString(iKey));
+							else if(key.equals("Destination"))
+								dest.add(iKey, arrJSON.getString(iKey));
+						}
+					}
+					else if(key.equals("JourneyDetailRef"))
+					{
+						String ref = legJSON.getJSONObject(key).getString("ref");
+						leg.setJourneyDetailRef(ref);
+					}
+					else
+						leg.add(key, legJSON.getString(key));
 				}
 
-				Leg leg = new Leg(orig, dest);
+				leg.addOriginAndDestination(orig, dest);
 				
 				trip.AddTrip(leg);
 			}

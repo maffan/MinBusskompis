@@ -2,6 +2,7 @@ package se.grupp4.minbusskompis.api.datatypes.vt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class Leg
 {
@@ -15,10 +16,23 @@ public class Leg
 	private String journeyDetailRef;
 	private String geometryRef;
 	
-	public Leg(Origin orig, Destination dest)
+	public Leg()
+	{
+		leg = new HashMap<String, String>();
+		orig = new Origin();
+		dest = new Destination();
+		journeyDetailRef = "";
+	}
+	
+	public void addOriginAndDestination(Origin orig, Destination dest)
 	{
 		this.orig = orig;
 		this.dest = dest;
+	}
+	
+	public void setJourneyDetailRef(String ref)
+	{
+		journeyDetailRef = ref;
 	}
 	
 	public void add(String key, String value)
@@ -39,5 +53,17 @@ public class Leg
 	public Destination getDestination()
 	{
 		return dest;
+	}
+	
+	public String toString()
+	{
+		String s = "";
+		
+		for(Entry<String, String> ks : leg.entrySet())
+		{
+			s += ks.getKey() + ": " + ks.getValue() + ", ";			
+		}
+		
+		return s;
 	}
 }
