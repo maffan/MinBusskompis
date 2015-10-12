@@ -13,6 +13,7 @@ import com.parse.ParseQuery;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class BussData {
 
     private List<String> parents;
     private List<String> children;
-    private List<JSONObject> destinations;
+    private List destinations;
 
 
     /*
@@ -70,6 +71,7 @@ public class BussData {
             Log.d(TAG, "Fetching task started");
             ParseObject cloudDestinations = getOrMakeDestinationsObjectForID(getInstallationId());
             destinations = cloudDestinations.getList(DESTINATIONS_FIELD);
+            Log.d(TAG, "doInBackground: Got destinations as: " + destinations);
             return null;
         }
 
@@ -95,7 +97,7 @@ public class BussData {
         ParseQuery query = ParseQuery.getQuery(DESTINATIONS_FIELD);
         query.whereEqualTo(INSTALLATION_FIELD, installationId);
         try {
-            Log.d(TAG, "Fetching... " + query.toString());
+            Log.d(TAG, "Fetching... ");
             cloudDestinations = query.getFirst();
         } catch (ParseException e) {
             if(e.getCode() == ParseException.OBJECT_NOT_FOUND){
@@ -135,7 +137,7 @@ public class BussData {
         try {
             ParseQuery query = ParseQuery.getQuery(INSTALLATION_CLASS);
             ParseObject installation = query.whereEqualTo(INSTALLATION_FIELD,childId).getFirst();
-            List<BussDestination> destinationList = BussDestination.getAsDestinationList(installation.<JSONObject>getList(DESTINATIONS_FIELD));
+            List<BussDestination> destinationList = BussDestination.getAsDestinationList(installation.<HashMap>getList(DESTINATIONS_FIELD));
             for (BussDestination destination :
                     destinationList) {
                 if (destination.getName().equals(destinationName)) {
