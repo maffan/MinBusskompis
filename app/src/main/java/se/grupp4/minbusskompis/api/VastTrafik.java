@@ -61,7 +61,6 @@ class VastTrafik
 //		uBuilder.AddParameter("maxDist", maxDist);	TODO Add as optional, default = 1000
 
 		String response = httpGet(uBuilder.getUrl() + "&format=json");
-		//String response = JsonTestResponses.getNearbyStops;
 		
 		JSONObject jsonData = new JSONObject(response);
 		JSONArray list = jsonData.getJSONObject("LocationList").getJSONArray("StopLocation");
@@ -71,19 +70,15 @@ class VastTrafik
 		for (int i = 0; i < list.length(); i++)
 		{
 			JSONObject jso = (JSONObject) list.get(i);
-
-			String name = jso.getString("name");
-			String id = jso.getString("id");
-			String latitude = jso.getString("lat");
-			String longitude = jso.getString("lon");
-			String track;
-			try {
-				track = jso.getString("track");
-			} catch (JSONException e) {
-				track = "";
-			}
 			
-			StopLocation loc = new StopLocation(name, id, latitude, longitude, track);
+			StopLocation loc = new StopLocation();
+
+			Iterator<String> jsoIter = jso.keys();
+			while (jsoIter.hasNext())
+			{
+				String key = jsoIter.next();
+				loc.add(key, jso.getString(key));
+			}
 
 			locationList.add(loc);
 		}

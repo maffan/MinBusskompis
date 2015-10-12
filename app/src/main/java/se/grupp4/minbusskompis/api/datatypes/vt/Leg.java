@@ -1,12 +1,9 @@
 package se.grupp4.minbusskompis.api.datatypes.vt;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
-public class Leg
+public class Leg extends KeyValueBase
 {
-	private HashMap<String, String> leg;
 	// name, sname, type, id, cancelled, reachable, direction, booking, night
 	// fgColor, bgColor, stroke, accessibility, kcal, percentBikeRoad
 	
@@ -18,7 +15,7 @@ public class Leg
 	
 	public Leg()
 	{
-		leg = new HashMap<String, String>();
+		super();
 		orig = new Origin();
 		dest = new Destination();
 		journeyDetailRef = "";
@@ -51,16 +48,6 @@ public class Leg
 		return geometryRef;
 	}
 	
-	public void add(String key, String value)
-	{
-		leg.put(key, value);
-	}
-	
-	public String getValueOf(String key)
-	{
-		return leg.get(key);
-	}
-	
 	public Origin getOrigin()
 	{
 		return orig;
@@ -69,17 +56,5 @@ public class Leg
 	public Destination getDestination()
 	{
 		return dest;
-	}
-	
-	public String toString()
-	{
-		String s = "";
-		
-		for(Entry<String, String> ks : leg.entrySet())
-		{
-			s += ks.getKey() + ": " + ks.getValue() + ", ";			
-		}
-		
-		return s;
 	}
 }

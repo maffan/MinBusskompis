@@ -39,9 +39,9 @@ public class Trip
 	{
 		for(int i = 0; i < legs.size(); i++)
 		{
-			if(legs.get(i).getValueOf("type").equals("BUS"))
+			if(legs.get(i).getValue("type").equals("BUS"))
 			{
-				if(legs.get(i).getValueOf("sname").equals("55"))
+				if(legs.get(i).getValue("sname").equals("55"))
 				{
 					System.out.println(legs.get(i));
 					return true;
