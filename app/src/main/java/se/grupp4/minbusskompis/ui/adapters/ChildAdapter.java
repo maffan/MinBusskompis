@@ -9,14 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.ui.ChildSettings;
-import se.grupp4.minbusskompis.ui.ParentChildrenAdd;
-import se.grupp4.minbusskompis.ui.ParentChildrenList;
 
 /**
  * Created by Tobias on 2015-10-12.
@@ -30,33 +26,34 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
         ImageView settingsButtonView;
     }
 
-    public ChildAdapter (Context context, ArrayList<ChildData> children){
-        super(context, 0, children);
+    public ChildAdapter (Context context, int layout, ArrayList<ChildData> children){
+        super(context, layout, children);
         this.context = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //Get current data
-        ChildData child = getItem(position);
+        final ChildData child = getItem(position);
+        View row;
 
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.fragment_parent_child_list_item, parent, false);
-            viewHolder.activityIconView = (ImageView) convertView.findViewById(R.id.parent_children_list_item_child_active_icon);
-            viewHolder.childNameView = (TextView) convertView.findViewById(R.id.parent_children_list_item_name);
-            viewHolder.settingsButtonView = (ImageView) convertView.findViewById(R.id.parent_children_list_item_settings_icon);
-            convertView.setTag(viewHolder);
+            row = inflater.inflate(R.layout.fragment_parent_child_list_item, parent, false);
+
+            viewHolder.activityIconView = (ImageView) row.findViewById(R.id.parent_children_list_item_child_active_icon);
+            viewHolder.childNameView = (TextView) row.findViewById(R.id.parent_children_list_item_name);
+            viewHolder.settingsButtonView = (ImageView) row.findViewById(R.id.parent_children_list_item_settings_icon);
+            row.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
+            row = convertView;
         }
 
         //if active set active icon otherwise inactive icon
         if(child.isActive()){
             viewHolder.activityIconView.setImageResource(R.drawable.active_child);
-            //make clickable status
         }else{
             viewHolder.activityIconView.setImageResource(R.drawable.inactive_child);
         }
@@ -64,15 +61,19 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
         //Set name
         viewHolder.childNameView.setText(child.getName());
 
-        //Add settings button listener
+        //Add settings img
+        viewHolder.settingsButtonView.setImageResource(R.drawable.settings);
+
+        //Add settings button listener, pass in id to settings to populate
         viewHolder.settingsButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ChildSettings.class);
+                intent.putExtra("child_id",child.getId());
                 context.startActivity(intent);
             }
         });
 
-        return convertView;
+        return row;
     }
 }
