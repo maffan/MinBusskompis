@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    >
+
+    <ScrollView
+        android:id="@+id/start_info_scoller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:fillViewport="true"
+        android:layout_above="@+id/startInfoDismissButton">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce in quam ac nisl tempus imperdiet. Quisque in odio pretium, pharetra nibh ut, pulvinar velit. Morbi a interdum velit. Maecenas libero dolor, finibus sed laoreet vestibulum, egestas at odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Integer vestibulum nisl id nulla luctus ultrices. Vivamus ipsum ipsum, malesuada eget ultricies vel, varius facilisis ex. Vestibulum tincidunt ipsum blandit, fringilla lectus et, convallis diam. Quisque vehicula, velit at mollis tempor, felis odio consectetur risus, quis aliquam leo diam ac risus. Vestibulum tincidunt accumsan mauris, eget facilisis ante gravida sed.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce in quam ac nisl tempus imperdiet. Quisque in odio pretium, pharetra nibh ut, pulvinar velit. Morbi a interdum velit. Maecenas libero dolor, finibus sed laoreet vestibulum, egestas at odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Integer vestibulum nisl id nulla luctus ultrices. Vivamus ipsum ipsum, malesuada eget ultricies vel, varius facilisis ex. Vestibulum tincidunt ipsum blandit, fringilla lectus et, convallis diam. Quisque vehicula, velit at mollis tempor, felis odio consectetur risus, quis aliquam leo diam ac risus. Vestibulum tincidunt accumsan mauris, eget facilisis ante gravida sed.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce in quam ac nisl tempus imperdiet. Quisque in odio pretium, pharetra nibh ut, pulvinar velit. Morbi a interdum velit. Maecenas libero dolor, finibus sed laoreet vestibulum, egestas at odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Integer vestibulum nisl id nulla luctus ultrices. Vivamus ipsum ipsum, malesuada eget ultricies vel, varius facilisis ex. Vestibulum tincidunt ipsum blandit, fringilla lectus et, convallis diam. Quisque vehicula, velit at mollis tempor, felis odio consectetur risus, quis aliquam leo diam ac risus. Vestibulum tincidunt accumsan mauris, eget facilisis ante gravida sed.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce in quam ac nisl tempus imperdiet. Quisque in odio pretium, pharetra nibh ut, pulvinar velit. Morbi a interdum velit. Maecenas libero dolor, finibus sed laoreet vestibulum, egestas at odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Integer vestibulum nisl id nulla luctus ultrices. Vivamus ipsum ipsum, malesuada eget ultricies vel, varius facilisis ex. Vestibulum tincidunt ipsum blandit, fringilla lectus et, convallis diam. Quisque vehicula, velit at mollis tempor, felis odio consectetur risus, quis aliquam leo diam ac risus. Vestibulum tincidunt accumsan mauris, eget facilisis ante gravida sed."
+            android:id="@+id/startInfoInstructions"
+            android:layout_below="@+id/startInfoTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+        </TextView>
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dismiss"
+        android:id="@+id/startInfoDismissButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

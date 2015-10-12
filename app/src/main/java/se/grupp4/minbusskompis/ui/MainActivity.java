@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.ui.fragments.StartPopupDialog;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -19,12 +20,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        StartPopupDialog startPopupDialog = new StartPopupDialog(this);
+        startPopupDialog.show();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_mode);
-        addListenerButton();
+        addButtonListeners();
     }
 
-    public void addListenerButton(){
+    public void addButtonListeners(){
 
         final Context context = this;
 
