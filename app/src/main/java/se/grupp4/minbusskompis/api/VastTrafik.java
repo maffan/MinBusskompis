@@ -185,7 +185,7 @@ class VastTrafik
 				while (legDestinationIter.hasNext())
 				{
 					String key = legDestinationIter.next();
-					orig.add(key, legOrigin.getString(key));
+					orig.add(key, legDestination.getString(key));
 				}
 
 				Leg leg = new Leg(orig, dest);
