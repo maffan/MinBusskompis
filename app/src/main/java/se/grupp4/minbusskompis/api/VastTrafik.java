@@ -146,7 +146,7 @@ class VastTrafik
 		uBuilder.AddParameter("destCoordLat", to.getLatitude());
 		uBuilder.AddParameter("destCoordLong", to.getLongitude());
 		uBuilder.AddParameter("destCoordName", "0");
-		// TODO needGeo=1
+		uBuilder.AddParameter("needGeo", "1");
 		
 		String response = httpGet(uBuilder.getUrl() + "&format=json");
 		//String response = JsonTestResponses.getTripList;
@@ -198,6 +198,11 @@ class VastTrafik
 						String ref = legJSON.getJSONObject(key).getString("ref");
 						leg.setJourneyDetailRef(ref);
 					}
+					else if(key.equals("GeometryRef"))
+					{
+						String ref = legJSON.getJSONObject(key).getString("ref");
+						leg.setGeometryRef(ref);
+					}
 					else
 						leg.add(key, legJSON.getString(key));
 				}
@@ -219,6 +224,25 @@ class VastTrafik
 		Coord coord = new Coord(location.getString("lat"),location.getString("lon"));
 		
 		return new VTLocation(name, coord);
+	}
+	
+	public static ArrayList<Coord> getGeometry(String url) throws IOException, JSONException
+	{
+		String response = httpGet(url);
+		
+		JSONArray pointsArr = (new JSONObject(response)).getJSONObject("Geometry").getJSONObject("Points").getJSONArray("Point");
+		
+		ArrayList<Coord> coords = new ArrayList<Coord>();
+		
+		for(int i = 0; i < pointsArr.length(); i++)
+		{
+			String lat = (String) ((JSONObject)pointsArr.get(i)).get("lat");
+			String lon = (String) ((JSONObject)pointsArr.get(i)).get("lon");
+			Coord coord = new Coord(lat,lon);
+			coords.add(coord);
+		}
+		
+		return coords;
 	}
 	
 	private static String getISO88591String(String input) throws UnsupportedEncodingException

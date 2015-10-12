@@ -22,6 +22,7 @@ public class Leg
 		orig = new Origin();
 		dest = new Destination();
 		journeyDetailRef = "";
+		geometryRef = "";
 	}
 	
 	public void addOriginAndDestination(Origin orig, Destination dest)
@@ -33,6 +34,21 @@ public class Leg
 	public void setJourneyDetailRef(String ref)
 	{
 		journeyDetailRef = ref;
+	}
+	
+	public String getJourneyDetailRef()
+	{
+		return journeyDetailRef;
+	}
+
+	public void setGeometryRef(String ref)
+	{
+		geometryRef = ref;
+	}
+	
+	public String getGeometryRef()
+	{
+		return geometryRef;
 	}
 	
 	public void add(String key, String value)
