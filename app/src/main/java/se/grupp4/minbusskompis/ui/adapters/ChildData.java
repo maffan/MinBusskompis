@@ -7,11 +7,13 @@ public class ChildData {
     private String name;
     private boolean active;
     private String id;
+    private int mode;
 
-    public ChildData(String name, boolean active, String id){
+    public ChildData(String name, boolean active, String id, int mode){
         this.name = name;
         this.active = active;
         this.id = id;
+        this.mode = mode;
     }
 
     public String getName() {
@@ -24,5 +26,9 @@ public class ChildData {
 
     public String getId() {
         return id;
+    }
+
+    public int getMode(){
+        return mode;
     }
 }
