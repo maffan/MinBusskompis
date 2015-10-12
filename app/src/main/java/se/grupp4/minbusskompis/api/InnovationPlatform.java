@@ -19,6 +19,7 @@ class InnovationPlatform
 {
 	private static String key = "Basic Z3JwMjE6dlJ0Q2xydE9tMg==";
 	private static String baseurl = "https://ece01.ericsson.net:4443/ecity?";
+	private static int INTERVAL_LENGTH = 5;
 
 	private static String httpGet(int sec, String params) throws IOException
 	{
@@ -100,8 +101,11 @@ class InnovationPlatform
 	public static String getNextStop(String dgw) throws IOException, JSONException
 	{
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Next_Stop";
-
-		String response = httpGet(50, params);
+		String response = "";
+		
+		int tries = 1;
+		while(response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2^(tries++-1), params);
 
 		JSONArray data = new JSONArray(response);
 
@@ -113,9 +117,11 @@ class InnovationPlatform
 	public static Coord getLatestCoordOf(String dgw) throws IOException, JSONException
 	{
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$GPS";
-
-		String response = httpGet(5, params);
-		//String response = JsonTestResponses.getLatestCoordOf;
+		String response = "";
+		
+		int tries = 1;
+		while(response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2^(tries++-1), params);
 
 		JSONArray data = new JSONArray(response);
 
@@ -128,9 +134,11 @@ class InnovationPlatform
 	public static JourneyInfo getJourneyInfo(String dgw) throws IOException, JSONException
 	{
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Journey_Info";
-
-		String response = httpGet(5, params);
-		//String response = JsonTestResponses.getJourneyInfo;
+		String response = "";
+		
+		int tries = 1;
+		while(response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2^(tries++-1), params);
 
 		JSONArray data = new JSONArray(response);
 
@@ -143,9 +151,11 @@ class InnovationPlatform
 	public static HashMap<String, String> getAllJourneyNames() throws IOException, JSONException
 	{
 		String params = "sensorSpec=Ericsson$Journey_Info";
-
-		String response = httpGet(50, params);
-		//String response = JsonTestResponses.getAllJourneyNames;
+		String response = "";
+		
+		int tries = 1;
+		while(response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2^(tries++-1), params);
 		
 		JSONArray data = new JSONArray(response);
 		HashMap<String, String> busses = new HashMap<String, String>();
@@ -170,9 +180,11 @@ class InnovationPlatform
 	public static String getOutsideTemperature(String dgw) throws IOException, JSONException
 	{
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Ambient_Temperature";
-
-		String response = httpGet(50, params);
-		//String response = JsonTestResponses.getOutsideTemperature;
+		String response = "";
+		
+		int tries = 1;
+		while(response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2^(tries++-1), params);
 		
 		JSONArray data = new JSONArray(response);
 
