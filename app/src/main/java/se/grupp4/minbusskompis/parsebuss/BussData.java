@@ -26,7 +26,7 @@ public class BussData {
     private static final String PARENTS_FIELD = "parents";
     private static final String CHILDREN_FIELD = "children";
     private static final BussData bussData = new BussData();
-    public static final String DESTINATIONS_FIELD = "destinations";
+    public static final String DESTINATIONS_FIELD = "Destinations";
     public static final String INSTALLATION_CLASS = "Installation";
     public static final String INSTALLATION_FIELD = "installationId";
     public static final String POSITION_FIELD = "position";
@@ -69,9 +69,12 @@ public class BussData {
         protected Void doInBackground(Void... params) {
             //ParseInstallation already initialized, can be used to fetch data
             Log.d(TAG, "Fetching task started");
+            Log.d(TAG, "doInBackground: Fetching destinations..");
             ParseObject cloudDestinations = getOrMakeDestinationsObjectForID(getInstallationId());
             destinations = cloudDestinations.getList(DESTINATIONS_FIELD);
             Log.d(TAG, "doInBackground: Got destinations as: " + destinations);
+            ParseQuery query = ParseQuery.getQuery("Relationships");
+            ParseObject cloudRelationships = getOrMakeRelationshipsObjectForId(query);
             return null;
         }
 
@@ -80,6 +83,23 @@ public class BussData {
             if(callback != null)
                 callback.done();
         }
+    }
+
+    private ParseObject getOrMakeRelationshipsObjectForId(ParseQuery query) {
+        query.whereEqualTo(INSTALLATION_FIELD,getInstallationId());
+        ParseObject cloudRelationships = null;
+        try {
+            cloudRelationships = query.getFirst();
+        } catch (ParseException e) {
+            if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
+                cloudRelationships = new ParseObject("Relationships");
+                cloudRelationships.put(PARENTS_FIELD,new LinkedList<>());
+                cloudRelationships.put(CHILDREN_FIELD,new LinkedList());
+            } else {
+                e.printStackTrace();
+            }
+        }
+        return cloudRelationships;
     }
 
     public void addDestinationToChild(BussDestination destination, String childId){
