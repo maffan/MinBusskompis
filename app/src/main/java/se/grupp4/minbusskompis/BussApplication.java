@@ -1,6 +1,7 @@
 package se.grupp4.minbusskompis;
 
 import android.app.Application;
+import android.location.Location;
 import android.util.Log;
 
 import com.parse.Parse;
@@ -9,6 +10,7 @@ import com.parse.ParseInstallation;
 
 import java.util.List;
 
+import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
@@ -24,11 +26,6 @@ public class BussApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Parse.initialize(this);
-        BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
-            @Override
-            public void done() {
-                BussData.getInstance().setNameForId("Greger",ParseInstallation.getCurrentInstallation().getInstallationId());
-            }
-        });
+        BussData.getInstance().fetchData(null);
     }
 }

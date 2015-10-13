@@ -1,5 +1,6 @@
 package se.grupp4.minbusskompis.parsebuss;
 
+import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -38,6 +39,7 @@ public class BussData {
     private ParseObject cloudRelationships;
     private ParseObject cloudName;
     private String name;
+    private ParseObject cloudPosition;
 
 
     /*
@@ -79,9 +81,10 @@ public class BussData {
             cloudRelationships = getOrMakeRelationshipsObjectForId(getInstallationId());
             parents = cloudRelationships.getList(PARENTS_FIELD);
             children = cloudRelationships.getList(CHILDREN_FIELD);
-
             cloudName = getOrMakeNameObjectForId(getInstallationId());
             name = cloudName.getString("name");
+
+            cloudPosition = getOrMakePositionObjectForId(getInstallationId());
             return null;
         }
 
@@ -90,6 +93,31 @@ public class BussData {
             if(callback != null)
                 callback.done();
         }
+    }
+
+    private ParseObject getOrMakePositionObjectForId(String id) {
+        ParseQuery query = ParseQuery.getQuery("Position");
+        query.whereEqualTo(INSTALLATION_FIELD, id);
+        ParseObject positionObject = null;
+        try {
+            positionObject = query.getFirst();
+        } catch (ParseException e) {
+            if (e.getCode() == ParseException.OBJECT_NOT_FOUND){
+                positionObject = new ParseObject("Position");
+                positionObject.put(INSTALLATION_FIELD,id);
+                positionObject.put("position",new ParseGeoPoint(0,0));
+                positionObject.put("status",0);
+                try {
+                    positionObject.save();
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }else{
+                e.printStackTrace();
+            }
+
+        }
+        return positionObject;
     }
 
     private ParseObject getOrMakeNameObjectForId(String id){
@@ -101,7 +129,7 @@ public class BussData {
         } catch (ParseException e) {
             if (e.getCode() == ParseException.OBJECT_NOT_FOUND){
                 cloudName = new ParseObject("Name");
-                cloudName.put(INSTALLATION_FIELD,getInstallationId());
+                cloudName.put(INSTALLATION_FIELD,id);
                 cloudName.put("name","default");
                 try {
                     cloudName.save();
@@ -125,7 +153,7 @@ public class BussData {
         } catch (ParseException e) {
             if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
                 cloudRelationships = new ParseObject("Relationships");
-                cloudRelationships.put(INSTALLATION_FIELD,getInstallationId());
+                cloudRelationships.put(INSTALLATION_FIELD,id);
                 cloudRelationships.put(PARENTS_FIELD,new LinkedList<>());
                 cloudRelationships.put(CHILDREN_FIELD,new LinkedList<>());
                 try {
@@ -243,9 +271,19 @@ public class BussData {
     public void updateLatestPosition(ChildLocationAndStatus location){
         ParseGeoPoint geoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
         int status = location.getTripStatus();
-        ParseInstallation.getCurrentInstallation().put(POSITION_FIELD,geoPoint);
-        ParseInstallation.getCurrentInstallation().put(STATUS_FIELD,status);
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+        cloudPosition.put("position",geoPoint);
+        cloudPosition.put("status",status);
+        cloudPosition.saveInBackground();
+    }
+
+    public ChildLocationAndStatus getChildLocationAndStatusForId(String id){
+        ParseObject positionObject = getOrMakePositionObjectForId(id);
+        ParseGeoPoint geoPoint = positionObject.getParseGeoPoint("position");
+        Location location = new Location("ParseCloud");
+        location.setLatitude(geoPoint.getLatitude());
+        location.setLongitude(geoPoint.getLongitude());
+        int status = positionObject.getInt("status");
+        return new ChildLocationAndStatus(location,status);
     }
 
     public String getNameFromId(String id){
@@ -265,4 +303,7 @@ public class BussData {
         nameObject.saveInBackground();
     }
 
+    public String getOwnName(){
+        return name;
+    }
 }
