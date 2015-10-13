@@ -3,7 +3,9 @@ package se.grupp4.minbusskompis.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,12 +20,20 @@ public class MainActivity extends Activity {
 
     Button button_parent;
     Button button_child;
+    SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        StartPopupDialog startPopupDialog = new StartPopupDialog(this);
-        startPopupDialog.show();
-
+        sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_APPEND);
+        if(!(sharedPreferences.contains("startpopupdialog"))) {
+            sharedPreferences.edit().putBoolean("startpopupdialog", true).apply();
+        }
+        if(sharedPreferences.getBoolean("startpopupdialog", true)) {
+            StartPopupDialog startPopupDialog = new StartPopupDialog(this);
+            startPopupDialog.show();
+            sharedPreferences.edit().putBoolean("startpopupdialog", false).apply();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_mode);
         addButtonListeners();
@@ -54,4 +64,6 @@ public class MainActivity extends Activity {
             }
         });
     }
+
+
 }
