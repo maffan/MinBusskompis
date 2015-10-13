@@ -17,4 +17,5 @@ public class ChildLocationAndStatus extends Location {
     public int getTripStatus(){
         return this.mode;
     }
+
 }
