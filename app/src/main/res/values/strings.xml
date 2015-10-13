@@ -17,21 +17,21 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
-    <string name="title_activity_parent_start">ParentStartActivity</string>
-    <string name="title_activity_child_destinations">Child_destinations</string>
-    <string name="title_activity_start">StartActivity</string>
-    <string name="title_activity_parent_destinations">ParentDestinations</string>
-    <string name="title_activity_parent_children">ParentChildren</string>
-    <string name="title_activity_parent_destinations_add">ParentDestinationsAdd</string>
-    <string name="title_activity_child_buss_station">ChildBussStation</string>
-    <string name="title_activity_child_walk_mode">ChildWalkMode</string>
-    <string name="title_activity_child_on_bus">ChildOnBus</string>
-    <string name="title_activity_child_bus_stop">ChildBusStop</string>
-    <string name="title_activity_parent_active_child">ParentActiveChild</string>
-    <string name="title_activity_parent_children_add">ParentChildrenAdd</string>
-    <string name="title_activity_child_child_code">ChildChildCode</string>
-    <string name="title_activity_parent_settings">ParentSettings</string>
-    <string name="title_activity_child_settings">ChildSettings</string>
+    <string name="title_activity_parent_start">Min BussKompis</string>
+    <string name="title_activity_child_destinations">Min BussKompis</string>
+    <string name="title_activity_start">Min BussKompis</string>
+    <string name="title_activity_parent_destinations">Min BussKompis</string>
+    <string name="title_activity_parent_children">Min BussKompis</string>
+    <string name="title_activity_parent_destinations_add">Min BussKompis</string>
+    <string name="title_activity_child_buss_station">Min BussKompis</string>
+    <string name="title_activity_child_walk_mode">Min BussKompis</string>
+    <string name="title_activity_child_on_bus">Min BussKompis</string>
+    <string name="title_activity_child_bus_stop">Min BussKompis</string>
+    <string name="title_activity_parent_active_child">Min BussKompis</string>
+    <string name="title_activity_parent_children_add">Min BussKompis</string>
+    <string name="title_activity_child_child_code">Min BussKompis</string>
+    <string name="title_activity_parent_settings">Min BussKompis</string>
+    <string name="title_activity_child_settings">Min BussKompis</string>
 
     <!-- Strings related to Settings -->
 
