@@ -2,6 +2,7 @@ package se.grupp4.minbusskompis.parsebuss;
 
 import android.os.AsyncTask;
 
+import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 
 /**

@@ -22,7 +22,15 @@
             android:id="@+id/parent_children_list"
             android:layout_gravity="center_horizontal"
             android:choiceMode="singleChoice"
-            android:background="@color/background_material_light" />
+            android:background="@color/background_material_light"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loading children.."
+            android:id="@+id/parent_children_loading_text"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 
     <Button

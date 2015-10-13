@@ -14,7 +14,7 @@ import org.json.JSONObject;
  * Created by Marcus on 10/4/2015.
  */
 public class BussParseSyncMessenger {
-    private static final int TRIES = 60*10;
+    private static final int TRIES_IN_SECONDS = 30;
     private static final String REQUEST_STRING = "SyncRequest";
     private static final String RESPONSE_STRING = "SyncResponse";
     public static final int REQUEST_TYPE = 0;
@@ -99,12 +99,13 @@ public class BussParseSyncMessenger {
     private boolean responseReceivedAndUnpacked() {
         if (noIncommingMessageAfterWait()) return false;
         unpackMessage();
+        Log.d(TAG, "responseReceivedAndUnpacked: GOT Response!");
         return true;
     }
 
     private boolean noIncommingMessageAfterWait() {
         if (this.incomingSync == null) {
-            if (responseQueueStillEmptyAfter(TRIES))
+            if (responseQueueStillEmptyAfter(TRIES_IN_SECONDS))
                 return true;
         }
         return false;

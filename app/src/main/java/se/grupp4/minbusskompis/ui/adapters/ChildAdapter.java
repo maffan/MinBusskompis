@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
-import se.grupp4.minbusskompis.ui.ChildSettings;
+import se.grupp4.minbusskompis.ui.ParentChildSettings;
 
 /**
  * Created by Tobias on 2015-10-12.
@@ -68,7 +68,7 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
         viewHolder.settingsButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ChildSettings.class);
+                Intent intent = new Intent(context, ParentChildSettings.class);
                 intent.putExtra("child_id",child.getId());
                 context.startActivity(intent);
             }

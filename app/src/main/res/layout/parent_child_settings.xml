@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#4fffc5">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/parent_child_settings_name"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="138dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save name"
+        android:id="@+id/parent_child_settings_savename_button"
+        android:layout_below="@+id/parent_child_settings_name"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Destinations"
+        android:id="@+id/parent_child_settings_destinations_button"
+        android:layout_below="@+id/parent_child_settings_savename_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="81dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Installation id:"
+        android:id="@+id/parent_child_settings_inst_title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="placeholder"
+        android:id="@+id/parent_child_settings_installationid"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/parent_child_settings_inst_title"
+        android:layout_toEndOf="@+id/parent_child_settings_inst_title" />
+</RelativeLayout>

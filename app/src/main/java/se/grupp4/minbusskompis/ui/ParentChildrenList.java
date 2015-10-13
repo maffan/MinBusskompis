@@ -2,6 +2,7 @@ package se.grupp4.minbusskompis.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,43 +12,69 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
+import se.grupp4.minbusskompis.parsebuss.BussData;
 import se.grupp4.minbusskompis.ui.adapters.ChildAdapter;
 import se.grupp4.minbusskompis.ui.adapters.ChildData;
 
 public class ParentChildrenList extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    protected Button buttonAddChild;
+    private static class ViewHolder {
+        ListView childrenListView;
+        TextView loadingTextView;
+        Button buttonAddChildView;
+    }
+
+    private static final String TAG = "PARENT_CHILDREN_LIST";
     private ChildAdapter childrenListAdapter;
+    private ArrayList<ChildData> childrenList;
+    private ViewHolder viewHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_children);
+        viewHolder = new ViewHolder();
+        //initate views
+        viewHolder.childrenListView = (ListView) findViewById(R.id.parent_children_list);
+        viewHolder.loadingTextView = (TextView) findViewById(R.id.parent_children_loading_text);
+        viewHolder.buttonAddChildView = (Button)findViewById(R.id.button_addchild);
+
+        //Initate listeners
         addButtonListeners();
 
+        //Initiate listadapter
+        childrenList = new ArrayList<>();
         childrenListAdapter =
                 new ChildAdapter(
                         this,
                         R.layout.fragment_parent_child_list_item,
-                        getChildrenList()
+                        childrenList
                 );
 
-        ListView childrenListView = (ListView) findViewById(R.id.parent_children_list);
-        childrenListView.setAdapter(childrenListAdapter);
-        childrenListView.setOnItemClickListener(this);
+        viewHolder.childrenListView.setAdapter(childrenListAdapter);
+        viewHolder.childrenListView.setOnItemClickListener(this);
+        new PopulateChildrenListTask().execute();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getChildrenList();
     }
 
     public void addButtonListeners(){
         //Add child button
-        buttonAddChild = (Button)findViewById(R.id.button_addchild);
-        buttonAddChild.setOnClickListener(new View.OnClickListener() {
+        viewHolder.buttonAddChildView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ParentChildrenList.this, ParentChildrenAdd.class);
@@ -79,13 +106,30 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
     }
 
     //hämta data från parse
-    public ArrayList<ChildData> getChildrenList() {
-        ArrayList<ChildData> data = new ArrayList<ChildData>();
-        data.add(new ChildData("Karl",false,"1-1",0));
-        data.add(new ChildData("Bert",false,"1-2",1));
-        data.add(new ChildData("Konny",true,"1-3",2));
-        data.add(new ChildData("Rikard",false,"1-4",3));
-        return data;
+    public void getChildrenList() {
+        BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+            @Override
+            public void done() {
+
+                Log.d(TAG, "done: Finnished fetching data");
+                childrenListAdapter.clear();
+                childrenListAdapter.addAll(BussData.getInstance().getChildren().getAsChildDataList());
+                childrenListAdapter.notifyDataSetChanged();
+                viewHolder.loadingTextView.setVisibility(View.GONE);
+                viewHolder.childrenListView.setVisibility(View.VISIBLE);
+                Log.d(TAG, "done: Added to adapter");
+            }
+        });
+    }
+
+    private class PopulateChildrenListTask extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            getChildrenList();
+
+            return null;
+        }
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.parse.Parse;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 
 import java.util.List;
 
@@ -27,5 +28,6 @@ public class BussApplication extends Application {
         super.onCreate();
         Parse.initialize(this);
         BussData.getInstance().fetchData(null);
+        ParsePush.subscribeInBackground("i"+ParseInstallation.getCurrentInstallation().getInstallationId());
     }
 }

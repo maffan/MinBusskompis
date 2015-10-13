@@ -1,8 +1,11 @@
 package se.grupp4.minbusskompis.ui;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.parsebuss.BussData;
 import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussSync;
 import se.grupp4.minbusskompis.parsebuss.SyncTaskCompleteCallback;
@@ -41,14 +45,27 @@ public class ParentChildrenAdd extends AppCompatActivity {
         addChildButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //Sending request
+                Toast.makeText(context,"Sending sync request...",Toast.LENGTH_LONG).show();
+
                 BussSync sync = new BussSync(new BussParseSyncMessenger());
                 sync.syncWithSyncCode(codeTextView.getText().toString(), new SyncTaskCompleteCallback() {
                     @Override
                     public void onSyncTaskComplete(boolean success, String installationId) {
                         if(success){
+                            Log.v("ParentChildrenAdd", "Successfully added");
+                            //Save child to parse data
+                            BussData.getInstance().addRelationship(installationId, BussData.CHILD);
                             Toast.makeText(context,"Succesfully synced with device with Installation ID: "+installationId,Toast.LENGTH_LONG).show();
+
+                            //Switch to ChildSettings, pass on installation id
+                            Intent intent = new Intent(context, ParentChildSettings.class);
+                            intent.putExtra("child_id",installationId);
+                            startActivity(intent);
                         }
                         else{
+                            Log.v("ParentChildrenAdd", "NOT Successfully added");
                             Toast.makeText(context,"Could not sync with device",Toast.LENGTH_LONG).show();
                         }
                     }

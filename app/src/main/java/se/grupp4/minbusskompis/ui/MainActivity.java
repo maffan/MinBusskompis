@@ -11,6 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.parse.ParseInstallation;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.ui.fragments.StartPopupDialog;
@@ -42,6 +45,9 @@ public class MainActivity extends Activity {
     public void addButtonListeners(){
 
         final Context context = this;
+
+        TextView installationId = (TextView) findViewById(R.id.installationId);
+        installationId.setText(ParseInstallation.getCurrentInstallation().getInstallationId());
 
         button_parent = (Button) findViewById(R.id.parent_selectbutton);
 
