@@ -57,6 +57,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //Ändrade startvy till listan på children då man är parent.
+                sharedPreferences.edit().putBoolean("setasparent", true).apply();
                 Intent intent = new Intent(MainActivity.this, ParentChildrenList.class);
                 startActivity(intent);
             }
@@ -65,6 +66,7 @@ public class MainActivity extends Activity {
         button_child.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
+                sharedPreferences.edit().putBoolean("setaschild", true).apply();
                 Intent intent = new Intent(MainActivity.this, ChildDestinations.class);
                 startActivity(intent);
             }
