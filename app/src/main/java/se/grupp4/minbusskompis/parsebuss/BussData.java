@@ -215,15 +215,11 @@ public class BussData {
         return new BussRelationships(children);
     }
 
-    public List<BussDestination> getDestinations(){
-        return BussDestination.getAsDestinationList(destinations);
-    }
-
     public void removeDestinationFromChild(String destinationName, String childId){
         try {
-            ParseQuery query = ParseQuery.getQuery(INSTALLATION_CLASS);
-            ParseObject installation = query.whereEqualTo(INSTALLATION_FIELD,childId).getFirst();
-            List<BussDestination> destinationList = BussDestination.getAsDestinationList(installation.<HashMap>getList(DESTINATIONS_FIELD));
+            ParseObject destinationsObject = getOrMakeDestinationsObjectForID(childId);
+
+            List<BussDestination> destinationList = BussDestination.getAsDestinationList(destinationsObject.<HashMap>getList(DESTINATIONS_FIELD));
             for (BussDestination destination :
                     destinationList) {
                 if (destination.getName().equals(destinationName)) {
@@ -231,13 +227,20 @@ public class BussData {
                     break;
                 }
             }
-            installation.put(DESTINATIONS_FIELD, BussDestination.getAsJSONList(destinationList));
-            installation.saveInBackground();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            destinationsObject.put(DESTINATIONS_FIELD, BussDestination.getAsJSONList(destinationList));
+            destinationsObject.saveInBackground();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<BussDestination> getDestinationsForChild(String id){
+        ParseObject destinationsObject = getOrMakeDestinationsObjectForID(id);
+        return destinationsObject.getList(DESTINATIONS_FIELD);
+    }
+
+    public List<BussDestination> getDestinations(){
+        return BussDestination.getAsDestinationList(destinations);
     }
 
     public void addRelationship(String id, int type){
