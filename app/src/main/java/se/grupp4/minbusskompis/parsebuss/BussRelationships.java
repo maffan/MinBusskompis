@@ -16,4 +16,11 @@ public class BussRelationships  {
     public List<String> getRelationships(){
         return new LinkedList<>(relations);
     }
+
+    @Override
+    public String toString() {
+        return "BussRelationships{" +
+                "relations=" + relations +
+                '}';
+    }
 }

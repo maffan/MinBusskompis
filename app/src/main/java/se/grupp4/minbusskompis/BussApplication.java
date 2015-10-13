@@ -12,6 +12,7 @@ import java.util.List;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
+import se.grupp4.minbusskompis.parsebuss.BussRelationships;
 
 /**
  * Created by Marcus on 9/29/2015.
@@ -26,8 +27,7 @@ public class BussApplication extends Application {
         BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
             @Override
             public void done() {
-                List destinations = BussData.getInstance().getDestinations();
-                Log.d(TAG, "done: destinations: "+destinations);
+                BussData.getInstance().setNameForId("Greger",ParseInstallation.getCurrentInstallation().getInstallationId());
             }
         });
     }

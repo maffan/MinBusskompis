@@ -11,7 +11,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -35,6 +34,10 @@ public class BussData {
     private List<String> parents;
     private List<String> children;
     private List destinations;
+    private ParseObject cloudDestinations;
+    private ParseObject cloudRelationships;
+    private ParseObject cloudName;
+    private String name;
 
 
     /*
@@ -70,11 +73,15 @@ public class BussData {
             //ParseInstallation already initialized, can be used to fetch data
             Log.d(TAG, "Fetching task started");
             Log.d(TAG, "doInBackground: Fetching destinations..");
-            ParseObject cloudDestinations = getOrMakeDestinationsObjectForID(getInstallationId());
+            cloudDestinations = getOrMakeDestinationsObjectForID(getInstallationId());
             destinations = cloudDestinations.getList(DESTINATIONS_FIELD);
             Log.d(TAG, "doInBackground: Got destinations as: " + destinations);
-            ParseQuery query = ParseQuery.getQuery("Relationships");
-            ParseObject cloudRelationships = getOrMakeRelationshipsObjectForId(query);
+            cloudRelationships = getOrMakeRelationshipsObjectForId(getInstallationId());
+            parents = cloudRelationships.getList(PARENTS_FIELD);
+            children = cloudRelationships.getList(CHILDREN_FIELD);
+
+            cloudName = getOrMakeNameObjectForId(getInstallationId());
+            name = cloudName.getString("name");
             return null;
         }
 
@@ -85,16 +92,47 @@ public class BussData {
         }
     }
 
-    private ParseObject getOrMakeRelationshipsObjectForId(ParseQuery query) {
-        query.whereEqualTo(INSTALLATION_FIELD,getInstallationId());
+    private ParseObject getOrMakeNameObjectForId(String id){
+        ParseQuery query = ParseQuery.getQuery("Name");
+        query.whereEqualTo(INSTALLATION_FIELD, id);
+        ParseObject cloudName = null;
+        try {
+            cloudName = query.getFirst();
+        } catch (ParseException e) {
+            if (e.getCode() == ParseException.OBJECT_NOT_FOUND){
+                cloudName = new ParseObject("Name");
+                cloudName.put(INSTALLATION_FIELD,getInstallationId());
+                cloudName.put("name","default");
+                try {
+                    cloudName.save();
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            else{
+                e.printStackTrace();
+            }
+        }
+        return cloudName;
+    }
+
+    private ParseObject getOrMakeRelationshipsObjectForId(String id) {
+        ParseQuery query = ParseQuery.getQuery("Relationships");
+        query.whereEqualTo(INSTALLATION_FIELD,id);
         ParseObject cloudRelationships = null;
         try {
             cloudRelationships = query.getFirst();
         } catch (ParseException e) {
             if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
                 cloudRelationships = new ParseObject("Relationships");
+                cloudRelationships.put(INSTALLATION_FIELD,getInstallationId());
                 cloudRelationships.put(PARENTS_FIELD,new LinkedList<>());
-                cloudRelationships.put(CHILDREN_FIELD,new LinkedList());
+                cloudRelationships.put(CHILDREN_FIELD,new LinkedList<>());
+                try {
+                    cloudRelationships.save();
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
             } else {
                 e.printStackTrace();
             }
@@ -178,28 +216,28 @@ public class BussData {
         switch (type){
             case PARENT:
                 parents.add(id);
-                ParseInstallation.getCurrentInstallation().addAllUnique(PARENTS_FIELD, parents);
+                cloudRelationships.addAllUnique(PARENTS_FIELD, parents);
                 break;
             case CHILD:
                 children.add(id);
-                ParseInstallation.getCurrentInstallation().addAllUnique(CHILDREN_FIELD, children);
+                cloudRelationships.addAllUnique(CHILDREN_FIELD, children);
                 break;
         }
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+        cloudRelationships.saveInBackground();
     }
 
     public void removeRelationship(String id, int type){
         switch (type){
             case PARENT:
                 parents.remove(id);
-                ParseInstallation.getCurrentInstallation().put(PARENTS_FIELD, parents);
+                cloudRelationships.put(PARENTS_FIELD, parents);
                 break;
             case CHILD:
                 children.remove(id);
-                ParseInstallation.getCurrentInstallation().put(CHILDREN_FIELD, children);
+                cloudRelationships.put(CHILDREN_FIELD, children);
                 break;
         }
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+        cloudRelationships.saveInBackground();
     }
 
     public void updateLatestPosition(ChildLocationAndStatus location){
@@ -211,15 +249,20 @@ public class BussData {
     }
 
     public String getNameFromId(String id){
-        ParseQuery query = ParseQuery.getQuery(INSTALLATION_CLASS);
+        ParseQuery query = ParseQuery.getQuery("Name");
         try {
-            ParseObject installation = query.whereEqualTo(INSTALLATION_FIELD,id).getFirst();
-            String name = installation.getString("name");
-            return name;
+            ParseObject cloudName = query.whereEqualTo(INSTALLATION_FIELD,id).getFirst();
+            return cloudName.getString("name");
         } catch (ParseException e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
+    }
+
+    public void setNameForId(String name, String id){
+        ParseObject nameObject = getOrMakeNameObjectForId(id);
+        nameObject.put("name",name);
+        nameObject.saveInBackground();
     }
 
 }
