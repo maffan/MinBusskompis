@@ -2,24 +2,45 @@ package se.grupp4.minbusskompis.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+
+import com.parse.ParseInstallation;
+
+import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.BussDestination;
+import se.grupp4.minbusskompis.ui.adapters.DestinationsAdapter;
 
 public class ParentDestinations extends AppCompatActivity {
 
-    Button buttonAddDestination;
+    private Button buttonAddDestination;
+    private ListView destinationListView;
+    private DestinationsAdapter destinationsAdapter;
+    private ArrayList<BussDestination> destinations;
+    private String childId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        childId = getIntent().getStringExtra("child_id");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_destinations);
         addButtonListener();
+        destinations = new ArrayList<>();
+        destinationsAdapter = new DestinationsAdapter(getApplicationContext(),
+                R.layout.fragment_parent_destinastions_list_item,destinations,
+                childId);
+        destinationListView = (ListView) findViewById(R.id.parent_destinations_list);
+        destinationListView.setAdapter(destinationsAdapter);
+
     }
 
     public void addButtonListener(){
@@ -59,5 +80,14 @@ public class ParentDestinations extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class PopulateDestinationListTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            destinationsAdapter.addAll(BussData.getInstance().getDestinationsForChild(childId));
+            return null;
+        }
     }
 }
