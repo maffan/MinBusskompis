@@ -3,6 +3,7 @@ package se.grupp4.minbusskompis.ui.map;
 import java.io.IOException;
 import java.util.List;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -24,27 +25,32 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseGeoPoint;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.BussDestination;
+import se.grupp4.minbusskompis.ui.ParentChildDestinations;
+import se.grupp4.minbusskompis.ui.ParentChildSettings;
 
 
-public class AddLocMapsActivity extends FragmentActivity implements OnMapReadyCallback, OnMarkerClickListener {
+public class addLocationOnMap extends FragmentActivity implements OnMapReadyCallback, OnMarkerClickListener {
 
     GoogleMap mMap;
     MarkerOptions markerOptions;
     LatLng latLng;
     LatLng loc;
+    private String childId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parent_destinationsadd);
+        setContentView(R.layout.activity_parent_child_destination_add);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        childId = getIntent().getStringExtra("child_id");
         mMap = mapFragment.getMap();
-
         Button btn_find = (Button) findViewById(R.id.btn_find);
 
         Button btn_addLoc = (Button) findViewById(R.id.btn_addLoc);
@@ -113,7 +119,15 @@ public class AddLocMapsActivity extends FragmentActivity implements OnMapReadyCa
     }
 
     public void saveLocation(String name){
-        loc = loc;
+        ParseGeoPoint geoPoint = new ParseGeoPoint(loc.latitude,loc.longitude);
+        BussDestination destination = new BussDestination(geoPoint,name);
+        BussData.getInstance().addDestinationToChild(destination, childId);
+
+        //Saveing, going back to childdestinations
+        Toast.makeText(addLocationOnMap.this, "Saving: "+name, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, ParentChildDestinations.class);
+        intent.putExtra("child_id", childId);
+        startActivity(intent);
     }
 
     // An AsyncTask class for accessing the GeoCoding Web Service

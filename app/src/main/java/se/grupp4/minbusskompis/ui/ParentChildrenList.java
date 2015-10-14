@@ -1,24 +1,18 @@
 package se.grupp4.minbusskompis.ui;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
@@ -110,16 +104,22 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
             @Override
             public void done() {
-
-                Log.d(TAG, "done: Finnished fetching data");
                 childrenListAdapter.clear();
-                childrenListAdapter.addAll(BussData.getInstance().getChildren().getAsChildDataList());
-                childrenListAdapter.notifyDataSetChanged();
-                viewHolder.loadingTextView.setVisibility(View.GONE);
-                viewHolder.childrenListView.setVisibility(View.VISIBLE);
-                Log.d(TAG, "done: Added to adapter");
+                ArrayList<ChildData> tempList = BussData.getInstance().getChildren().getAsChildDataList();
+                if(tempList.isEmpty()){
+                    viewHolder.loadingTextView.setText("No children added");
+                }else{
+                    childrenListAdapter.addAll(tempList);
+                    childrenListAdapter.notifyDataSetChanged();
+                    populateChildren();
+                }
             }
         });
+    }
+
+    private void populateChildren(){
+        viewHolder.loadingTextView.setVisibility(View.GONE);
+        viewHolder.childrenListView.setVisibility(View.VISIBLE);
     }
 
     private class PopulateChildrenListTask extends AsyncTask<Void, Void, Void>{

@@ -16,8 +16,8 @@ import se.grupp4.minbusskompis.R;
 public class ChildDestinations extends AppCompatActivity {
 
     protected Button childCodeButton;
-    protected Button dummyButton1;
-    protected Button dummyButton2;
+    protected Button walkmodeButton;
+    protected Button busStation;
 
 
     @Override
@@ -30,9 +30,9 @@ public class ChildDestinations extends AppCompatActivity {
     public void addButtonListener() {
         final Context context = this;
 
-        childCodeButton = (Button) findViewById(R.id.button_childcode);
-        dummyButton1 = (Button) findViewById(R.id.button_dummy1);
-        dummyButton2 = (Button) findViewById(R.id.button_dummy2);
+        childCodeButton = (Button) findViewById(R.id.child_destination_childcode_button);
+        walkmodeButton = (Button) findViewById(R.id.child_destination_walkmode_button);
+        busStation = (Button) findViewById(R.id.child_destination_busstation_button);
 
         childCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,7 +42,7 @@ public class ChildDestinations extends AppCompatActivity {
             }
         });
 
-        dummyButton1.setOnClickListener(new View.OnClickListener() {
+        walkmodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ChildDestinations.this, ChildWalkMode.class);
@@ -50,7 +50,7 @@ public class ChildDestinations extends AppCompatActivity {
             }
         });
 
-        dummyButton2.setOnClickListener(new View.OnClickListener() {
+        busStation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ChildDestinations.this, ChildBusStation.class);

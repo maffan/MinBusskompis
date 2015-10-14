@@ -32,6 +32,8 @@
     <string name="title_activity_child_child_code">Min BussKompis</string>
     <string name="title_activity_parent_settings">Min BussKompis</string>
     <string name="title_activity_child_settings">Min BussKompis</string>
+    <string name="title_activity_add_location_on_map">Min BussKompis</string>
+
 
     <!-- Strings related to Settings -->
 

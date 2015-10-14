@@ -181,6 +181,7 @@ public class BussData {
     }
 
     private ParseObject getOrMakeDestinationsObjectForID(String installationId) {
+        Log.d(TAG, "getOrMakePositionObjectForId: Getting destination object for id: "+installationId);
         ParseObject cloudDestinations = null;
         ParseQuery query = ParseQuery.getQuery(DESTINATIONS_FIELD);
         query.whereEqualTo(INSTALLATION_FIELD, installationId);
@@ -191,7 +192,7 @@ public class BussData {
             if(e.getCode() == ParseException.OBJECT_NOT_FOUND){
                 Log.d(TAG, "getOrMakeDestinationsObjectForID: No object exists. Creating new object for ID");
                 cloudDestinations = new ParseObject(query.getClassName());
-                cloudDestinations.put(INSTALLATION_FIELD, getInstallationId());
+                cloudDestinations.put(INSTALLATION_FIELD, installationId);
                 cloudDestinations.put(DESTINATIONS_FIELD, new LinkedList<>());
                 try {
                     cloudDestinations.save();
@@ -243,6 +244,7 @@ public class BussData {
         ParseObject destinationsObject = getOrMakeDestinationsObjectForID(id);
         Log.d(TAG, "getDestinationsForChild: Got destination object");
         List<HashMap> parseList = destinationsObject.getList(DESTINATIONS_FIELD);
+        Log.d(TAG, "addDestinationToChild: got destinations: "+parseList);
         list.addAll(BussDestination.getAsDestinationList(parseList));
         return list;
     }

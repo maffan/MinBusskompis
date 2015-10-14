@@ -19,8 +19,9 @@ import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
 import se.grupp4.minbusskompis.ui.adapters.DestinationsAdapter;
+import se.grupp4.minbusskompis.ui.map.addLocationOnMap;
 
-public class ParentDestinations extends AppCompatActivity {
+public class ParentChildDestinations extends AppCompatActivity {
     private DestinationsAdapter destinationsAdapter;
     private ArrayList<BussDestination> destinations;
     private String childId;
@@ -36,7 +37,7 @@ public class ParentDestinations extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parent_destinations);
+        setContentView(R.layout.activity_parent_child_destinations);
         this.context = this;
         //Initiate views
         viewHolder = new ViewHolder();
@@ -52,7 +53,7 @@ public class ParentDestinations extends AppCompatActivity {
         destinationsAdapter =
                 new DestinationsAdapter(
                     this,
-                    R.layout.fragment_parent_destinastions_list_item,
+                    R.layout.fragment_destinastion_list_item,
                     destinations,
                     childId);
         viewHolder.destinationsView.setAdapter(destinationsAdapter);
@@ -64,11 +65,18 @@ public class ParentDestinations extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ParentDestinations.this, ParentDestinationsAdd.class);
+                Intent intent = new Intent(ParentChildDestinations.this, addLocationOnMap.class);
+                intent.putExtra("child_id", childId);
                 startActivity(intent);
             }
 
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new PopulateDestinationListTask().execute();
     }
 
     @Override
@@ -111,11 +119,17 @@ public class ParentDestinations extends AppCompatActivity {
         ArrayList<BussDestination> destList = BussData.getInstance().getDestinationsForChild(childId);
         if(destList.isEmpty()){
             viewHolder.loadingTextView.setText("No destinations for child");
+            showMessage();
         }else{
             destinationsAdapter.addAll(destList);
             destinationsAdapter.notifyDataSetChanged();
             showContent();
         }
+    }
+
+    private void showMessage() {
+        viewHolder.loadingTextView.setVisibility(View.VISIBLE);
+        viewHolder.destinationsView.setVisibility(View.GONE);
     }
 
     private void showContent() {

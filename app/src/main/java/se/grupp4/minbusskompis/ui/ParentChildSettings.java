@@ -1,5 +1,8 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,11 +23,13 @@ public class ParentChildSettings extends AppCompatActivity{
 
     private EditText nameEdit;
     private String currentInstallationId;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_child_settings);
+        this.context = this;
 
         Intent intent = getIntent();
         currentInstallationId = intent.getStringExtra("child_id");
@@ -51,9 +56,33 @@ public class ParentChildSettings extends AppCompatActivity{
         destinationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ParentChildSettings.this,ParentDestinations.class);
+                Intent intent = new Intent(ParentChildSettings.this,ParentChildDestinations.class);
                 intent.putExtra("child_id", currentInstallationId);
                 startActivity(intent);
+            }
+        });
+
+        Button deleteChildButton = (Button) findViewById(R.id.parent_child_settings_delete_child_button);
+        deleteChildButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(context)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Remove child")
+                        .setMessage("Do you really want to remove this child?")
+                        .setPositiveButton("Hells yes!", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                BussData.getInstance().removeRelationship(currentInstallationId,BussData.CHILD);
+                                Intent intent = new Intent(getApplicationContext(),ParentChildrenList.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No way!", null)
+                        .show();
             }
         });
     }

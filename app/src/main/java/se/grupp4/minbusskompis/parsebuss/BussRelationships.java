@@ -24,9 +24,9 @@ public class BussRelationships  {
         return new LinkedList<>(relations);
     }
 
-    public List<ChildData> getAsChildDataList(){
+    public ArrayList<ChildData> getAsChildDataList(){
         Log.d(TAG, "getAsChildDataList: Entered");
-        List<ChildData> list = new ArrayList<>();
+        ArrayList<ChildData> list = new ArrayList<>();
         for (String id :
                 relations) {
             String name = BussData.getInstance().getNameFromId(id);

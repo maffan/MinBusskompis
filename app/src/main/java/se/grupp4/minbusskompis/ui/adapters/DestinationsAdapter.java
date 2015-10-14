@@ -1,7 +1,6 @@
 package se.grupp4.minbusskompis.ui.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
-import se.grupp4.minbusskompis.ui.ParentChildSettings;
 
 /**
  * Created by Tobias on 2015-10-12.
@@ -45,11 +43,11 @@ public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            row = inflater.inflate(R.layout.fragment_parent_destinastions_list_item, parent, false);
+            row = inflater.inflate(R.layout.fragment_destinastion_list_item, parent, false);
 
-            viewHolder.destinationIconView = (ImageView) row.findViewById(R.id.parent_destinations_list_item_icon);
-            viewHolder.destinationNameView = (TextView) row.findViewById(R.id.parent_destinations_list_item_destination_name);
-            viewHolder.deleteDestinationIconView = (ImageView) row.findViewById(R.id.parent_destinations_list_item_delete_icon);
+            viewHolder.destinationIconView = (ImageView) row.findViewById(R.id.destination_list_item_icon);
+            viewHolder.destinationNameView = (TextView) row.findViewById(R.id.destination_list_item_destination_name);
+            viewHolder.deleteDestinationIconView = (ImageView) row.findViewById(R.id.destination_list_item_delete_icon);
             row.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

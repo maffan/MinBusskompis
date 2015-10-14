@@ -2,7 +2,6 @@ package se.grupp4.minbusskompis.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +28,7 @@ public class ParentChildrenAdd extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
-        setContentView(R.layout.activity_parent_children_add);
+        setContentView(R.layout.activity_parent_child_add);
         findViews();
         addButtonListener();
     }

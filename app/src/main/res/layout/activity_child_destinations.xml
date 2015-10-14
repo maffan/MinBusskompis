@@ -7,39 +7,36 @@
     tools:context="se.grupp4.minbusskompis.ui.ChildDestinations"
     android:background="#4fffc5">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Destinations"
-        android:id="@+id/textView4"
-        android:layout_marginTop="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textView4"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginRight="20dp">
+        android:layout_above="@+id/parent_destinations_add_destination_button"
+        android:layout_below="@+id/child_destination_walkmode_button">
 
         <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/child_destinations_list"
+            android:layout_gravity="center_horizontal"
+            android:choiceMode="singleChoice"
+            android:background="@color/background_material_light"
+            android:visibility="gone" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/listView_destinations"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:background="@color/background_material_light"/>
-    </RelativeLayout>
+            android:text="Loading destinations.."
+            android:id="@+id/child_destinations_loading_text"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Walkmode"
-        android:id="@+id/button_dummy1"
+        android:id="@+id/child_destination_walkmode_button"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -48,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Buss Station"
-        android:id="@+id/button_dummy2"
+        android:id="@+id/child_destination_busstation_button"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -56,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Code"
-        android:id="@+id/button_childcode"
+        android:id="@+id/child_destination_childcode_button"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
