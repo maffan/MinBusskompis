@@ -1,0 +1,7 @@
+<resources>
+    <string name="google_key" translatable="false" templateMergeStrategy="preserve">
+        <!--AIzaSyCsgWklzZd324GmmxSRU4jCLMdG5iGdP_I Tobias stationära key -->
+        AIzaSyAIkTX64k962cJcu192iwvkYh1-kbLtJ7w
+    </string>
+
+</resources>

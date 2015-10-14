@@ -34,8 +34,7 @@
     <string name="title_activity_child_settings">Min BussKompis</string>
     <string name="title_activity_add_location_on_map">Min BussKompis</string>
 
-
-    <!-- Strings related to Settings -->
+    <string name="autocomplete_hint">Enter place name or address</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
@@ -95,7 +94,7 @@
 
     <string name="str_btn_find">Find</string>
     <string name="hnt_et_location">Enter location</string>
-    <string name="str_btn_addLoc">Add location</string>
-    <string name="hnt_et_locName">Name</string>
+    <string name="add_destination_save_button">Add location</string>
+    <string name="add_destination_name">Enter name</string>
 
 </resources>

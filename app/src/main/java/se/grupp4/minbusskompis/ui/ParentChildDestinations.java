@@ -53,7 +53,7 @@ public class ParentChildDestinations extends AppCompatActivity {
         destinationsAdapter =
                 new DestinationsAdapter(
                     this,
-                    R.layout.fragment_destinastion_list_item,
+                    R.layout.fragment_destinations_list_item,
                     destinations,
                     childId);
         viewHolder.destinationsView.setAdapter(destinationsAdapter);

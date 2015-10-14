@@ -43,7 +43,7 @@ public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            row = inflater.inflate(R.layout.fragment_destinastion_list_item, parent, false);
+            row = inflater.inflate(R.layout.fragment_destinations_list_item, parent, false);
 
             viewHolder.destinationIconView = (ImageView) row.findViewById(R.id.destination_list_item_icon);
             viewHolder.destinationNameView = (TextView) row.findViewById(R.id.destination_list_item_destination_name);

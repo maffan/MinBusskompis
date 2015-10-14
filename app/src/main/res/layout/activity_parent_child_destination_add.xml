@@ -5,65 +5,78 @@
     android:orientation="vertical"
     tools:context=".MapsActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout2">
 
-        <Button
-            android:id="@+id/btn_find"
-            android:layout_width="wrap_content"
+        <AutoCompleteTextView
+            android:id="@+id/destination_add_autocomplete"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/str_btn_find"
-            android:layout_alignParentRight="true" />
+            android:layout_gravity="center_horizontal"
+            android:hint="@string/autocomplete_hint"
+            android:singleLine="true"
+            android:layout_weight="1"
+            />
+        <FrameLayout
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:layout_weight="0">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_destination_clear_text"
+                android:src="@drawable/delete"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:minHeight="25dp"
+                android:maxWidth="25dp" />
+        </FrameLayout>
 
-        <EditText
-            android:id="@+id/et_location"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="@string/hnt_et_location"
-            android:layout_toLeftOf="@id/btn_find" />
+    </LinearLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23pt"
-        android:layout_marginBottom="23pt">
+    <FrameLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_above="@+id/linearLayout3">
 
         <fragment
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/map"
+            android:id="@+id/add_destination_map"
             android:name="com.google.android.gms.maps.SupportMapFragment" />
 
 
-    </RelativeLayout>
+    </FrameLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/btn_addLoc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/str_btn_addLoc"
-            android:layout_alignParentLeft="true" />
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout3">
 
         <EditText
-            android:id="@+id/et_locName"
-            android:layout_width="fill_parent"
+            android:id="@+id/destination_add_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/hnt_et_locName"
-            android:layout_toRightOf="@id/btn_addLoc" />
+            android:hint="@string/add_destination_name"
+            android:layout_weight="1" />
 
-    </RelativeLayout>
+        <Button
+            android:id="@+id/destination_add_save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_destination_save_button"
+            android:layout_weight="0" />
+
+    </LinearLayout>
 
 </RelativeLayout>
