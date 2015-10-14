@@ -11,7 +11,7 @@ import se.grupp4.minbusskompis.R;
 
 public class StartActivity extends Activity {
 
-    SharedPreferences sharedPreferences;
+    protected SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +27,12 @@ public class StartActivity extends Activity {
                 catch(InterruptedException e){
                     e.printStackTrace();
                 }finally {
-                    Intent intent;
-                 /*   if(sharedPreferences.contains("setaschild")){
+                    Intent intent;/*
+                    if(sharedPreferences.contains("setaschild") && sharedPreferences.contains("hasparent")){
                         intent = new Intent(StartActivity.this, ChildDestinations.class);
+                    }
+                    else if(sharedPreferences.contains("setaschild")){
+                        intent = new Intent(StartActivity.this, ChildChildCode.class);
                     }
                     else if(sharedPreferences.contains("setasparent")){
                         intent = new Intent(StartActivity.this, ParentChildrenList.class);

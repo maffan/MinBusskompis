@@ -2,6 +2,7 @@ package se.grupp4.minbusskompis.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,8 +26,11 @@ public class ChildChildCode extends AppCompatActivity {
 
     protected Context context;
 
+    protected SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_APPEND);
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         setContentView(R.layout.activity_child_child_code);
@@ -62,6 +66,7 @@ public class ChildChildCode extends AppCompatActivity {
         });
     }
 
+
     private void generateCode() {
         BussSyncCodeGenerator generator = new BussSyncCodeGenerator(4);
         generatedCode.setText(generator.getCode());
@@ -71,6 +76,9 @@ public class ChildChildCode extends AppCompatActivity {
             public void onSyncTaskComplete(boolean success, String installationId) {
                 if (success) {
                     Toast.makeText(context, "Received request from device with ID: " + installationId, Toast.LENGTH_LONG).show();
+                    sharedPreferences.edit().putBoolean("hasparent", true);
+                    Intent intent = new Intent(ChildChildCode.this, ChildDestinations.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(context, "No requests received", Toast.LENGTH_LONG).show();
                 }

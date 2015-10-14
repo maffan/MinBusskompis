@@ -21,9 +21,9 @@ import se.grupp4.minbusskompis.ui.fragments.StartPopupDialog;
 
 public class MainActivity extends Activity {
 
-    Button button_parent;
-    Button button_child;
-    SharedPreferences sharedPreferences;
+    protected Button button_parent;
+    protected Button button_child;
+    protected SharedPreferences sharedPreferences;
 
 
     @Override
