@@ -44,18 +44,17 @@ public class ChildOnBus extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Bustin makes me feel good")
-                .setMessage("Freaky ghostbed")
-                .setPositiveButton("JA", new DialogInterface.OnClickListener() {
+                .setTitle("Stop Trip")
+                .setMessage("Do you wish to go back to Destinations?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(getApplicationContext(), ChildDestinations.class);
                         startActivity(intent);
                         finish();
                     }})
-                .setNegativeButton("Jag har ätit pankaka", null)
+                .setNegativeButton("No", null)
                 .show();
-
     }
 
     @Override

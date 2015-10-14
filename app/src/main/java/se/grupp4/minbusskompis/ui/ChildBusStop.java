@@ -1,6 +1,8 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,12 +16,29 @@ import se.grupp4.minbusskompis.R;
 public class ChildBusStop extends AppCompatActivity {
 
     protected Button dummyButton1;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_bus_stop);
         addButtonListener();
+    }
+
+    @Override
+    public void onBackPressed(){
+        new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Stop Trip")
+                .setMessage("Do you wish to go back to Destinations?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), ChildDestinations.class);
+                        startActivity(intent);
+                        finish();
+                    }})
+                .setNegativeButton("No", null)
+                .show();
     }
 
     public void addButtonListener(){

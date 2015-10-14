@@ -93,6 +93,8 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), ParentSettings.class);
+            startActivity(intent);
             return true;
         }
 
