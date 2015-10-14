@@ -10,46 +10,57 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-
-import com.parse.ParseInstallation;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
 import se.grupp4.minbusskompis.ui.adapters.DestinationsAdapter;
 
 public class ParentDestinations extends AppCompatActivity {
-
-    private Button buttonAddDestination;
-    private ListView destinationListView;
     private DestinationsAdapter destinationsAdapter;
     private ArrayList<BussDestination> destinations;
     private String childId;
+    private Context context;
+    private ViewHolder viewHolder;
+
+    private static class ViewHolder {
+        ListView destinationsView;
+        TextView loadingTextView;
+        Button addDestinationButtonView;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        childId = getIntent().getStringExtra("child_id");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_destinations);
+        this.context = this;
+        //Initiate views
+        viewHolder = new ViewHolder();
+        viewHolder.destinationsView = (ListView) findViewById(R.id.parent_destinations_list);
+        viewHolder.loadingTextView = (TextView) findViewById(R.id.parent_destinations_loading_text);
+        viewHolder.addDestinationButtonView = (Button) findViewById(R.id.parent_destinations_add_destination_button);
+        //Get child id
+        childId = getIntent().getStringExtra("child_id");
+        //Add button listeners
         addButtonListener();
+        //Add destinations adapter
         destinations = new ArrayList<>();
-        destinationsAdapter = new DestinationsAdapter(getApplicationContext(),
-                R.layout.fragment_parent_destinastions_list_item,destinations,
-                childId);
-        destinationListView = (ListView) findViewById(R.id.parent_destinations_list);
-        destinationListView.setAdapter(destinationsAdapter);
-
+        destinationsAdapter =
+                new DestinationsAdapter(
+                    this,
+                    R.layout.fragment_parent_destinastions_list_item,
+                    destinations,
+                    childId);
+        viewHolder.destinationsView.setAdapter(destinationsAdapter);
+        new PopulateDestinationListTask().execute();
     }
 
     public void addButtonListener(){
-
-        final Context context = this;
-
-        buttonAddDestination = (Button) findViewById(R.id.Button_AddDestination);
-
-        buttonAddDestination.setOnClickListener(new View.OnClickListener() {
+        viewHolder.addDestinationButtonView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -78,7 +89,6 @@ public class ParentDestinations extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -86,8 +96,30 @@ public class ParentDestinations extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            destinationsAdapter.addAll(BussData.getInstance().getDestinationsForChild(childId));
+            BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+                @Override
+                public void done() {
+                    populateDestinations();
+                }
+            });
             return null;
         }
+    }
+
+    private void populateDestinations() {
+        destinationsAdapter.clear();
+        ArrayList<BussDestination> destList = BussData.getInstance().getDestinationsForChild(childId);
+        if(destList.isEmpty()){
+            viewHolder.loadingTextView.setText("No destinations for child");
+        }else{
+            destinationsAdapter.addAll(destList);
+            destinationsAdapter.notifyDataSetChanged();
+            showContent();
+        }
+    }
+
+    private void showContent() {
+        viewHolder.loadingTextView.setVisibility(View.GONE);
+        viewHolder.destinationsView.setVisibility(View.VISIBLE);
     }
 }

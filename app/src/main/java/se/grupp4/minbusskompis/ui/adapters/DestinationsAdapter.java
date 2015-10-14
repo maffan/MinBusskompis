@@ -45,7 +45,7 @@ public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            row = inflater.inflate(R.layout.fragment_parent_child_list_item, parent, false);
+            row = inflater.inflate(R.layout.fragment_parent_destinastions_list_item, parent, false);
 
             viewHolder.destinationIconView = (ImageView) row.findViewById(R.id.parent_destinations_list_item_icon);
             viewHolder.destinationNameView = (TextView) row.findViewById(R.id.parent_destinations_list_item_destination_name);
@@ -63,7 +63,7 @@ public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
         viewHolder.destinationNameView.setText(currentDestination.getName());
 
         //Add settings img
-        viewHolder.deleteDestinationIconView.setImageResource(R.drawable.settings);
+        viewHolder.deleteDestinationIconView.setImageResource(R.drawable.delete);
 
         //Add settings button listener, pass in id to settings to populate
         viewHolder.deleteDestinationIconView.setOnClickListener(new View.OnClickListener() {

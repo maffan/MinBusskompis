@@ -28,6 +28,6 @@ public class BussApplication extends Application {
         super.onCreate();
         Parse.initialize(this);
         BussData.getInstance().fetchData(null);
-        ParsePush.subscribeInBackground("i"+ParseInstallation.getCurrentInstallation().getInstallationId());
+        ParsePush.subscribeInBackground("i" + ParseInstallation.getCurrentInstallation().getInstallationId());
     }
 }

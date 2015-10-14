@@ -38,7 +38,7 @@ public class AddLocMapsActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.parent_destinationsadd);
+        setContentView(R.layout.activity_parent_destinationsadd);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

@@ -13,6 +13,8 @@ import com.parse.ParseQuery;
 
 import org.json.JSONException;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -187,6 +189,7 @@ public class BussData {
             cloudDestinations = query.getFirst();
         } catch (ParseException e) {
             if(e.getCode() == ParseException.OBJECT_NOT_FOUND){
+                Log.d(TAG, "getOrMakeDestinationsObjectForID: No object exists. Creating new object for ID");
                 cloudDestinations = new ParseObject(query.getClassName());
                 cloudDestinations.put(INSTALLATION_FIELD, getInstallationId());
                 cloudDestinations.put(DESTINATIONS_FIELD, new LinkedList<>());
@@ -200,6 +203,7 @@ public class BussData {
                 e.printStackTrace();
             }
         }
+        Log.d(TAG, "getOrMakeDestinationsObjectForID: Found destinations object for ID");
         return cloudDestinations;
     }
 
@@ -234,9 +238,13 @@ public class BussData {
         }
     }
 
-    public List<BussDestination> getDestinationsForChild(String id){
+    public ArrayList<BussDestination> getDestinationsForChild(String id){
+        ArrayList<BussDestination> list = new ArrayList<>();
         ParseObject destinationsObject = getOrMakeDestinationsObjectForID(id);
-        return destinationsObject.getList(DESTINATIONS_FIELD);
+        Log.d(TAG, "getDestinationsForChild: Got destination object");
+        List<HashMap> parseList = destinationsObject.getList(DESTINATIONS_FIELD);
+        list.addAll(BussDestination.getAsDestinationList(parseList));
+        return list;
     }
 
     public List<BussDestination> getDestinations(){

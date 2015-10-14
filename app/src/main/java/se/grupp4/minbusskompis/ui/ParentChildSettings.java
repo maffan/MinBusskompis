@@ -3,7 +3,6 @@ package se.grupp4.minbusskompis.ui;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +24,7 @@ public class ParentChildSettings extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.parent_child_settings);
+        setContentView(R.layout.activity_parent_child_settings);
 
         Intent intent = getIntent();
         currentInstallationId = intent.getStringExtra("child_id");
