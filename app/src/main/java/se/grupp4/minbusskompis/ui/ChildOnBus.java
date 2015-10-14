@@ -1,6 +1,10 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +18,7 @@ import se.grupp4.minbusskompis.R;
 public class ChildOnBus extends AppCompatActivity {
 
     protected Button dummyButtonOnBus;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,18 @@ public class ChildOnBus extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
+        new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Bustin makes me feel good")
+                .setMessage("Freaky ghostbed")
+                .setPositiveButton("JA", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), ChildDestinations.class);
+                        startActivity(intent);
+                        finish();
+                    }})
+                .setNegativeButton("Jag har ätit pankaka", null)
+                .show();
 
     }
 
