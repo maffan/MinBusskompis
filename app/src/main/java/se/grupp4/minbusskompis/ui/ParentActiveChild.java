@@ -1,5 +1,6 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -87,6 +88,8 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), ParentSettings.class);
+            startActivity(intent);
             return true;
         }
 

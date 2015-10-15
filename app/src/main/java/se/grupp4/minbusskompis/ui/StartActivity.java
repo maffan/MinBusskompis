@@ -29,16 +29,16 @@ public class StartActivity extends Activity {
                 }finally {
                     Intent intent;/*
                     if(sharedPreferences.contains("setaschild") && sharedPreferences.contains("hasparent")){
-                        intent = new Intent(StartActivity.this, ChildDestinations.class);
+                        intent = new Intent(getApplicationContext(), ChildDestinations.class);
                     }
                     else if(sharedPreferences.contains("setaschild")){
-                        intent = new Intent(StartActivity.this, ChildChildCode.class);
+                        intent = new Intent(getApplicationContext(), ChildChildCode.class);
                     }
                     else if(sharedPreferences.contains("setasparent")){
-                        intent = new Intent(StartActivity.this, ParentChildrenList.class);
+                        intent = new Intent(getApplicationContext(), ParentChildrenList.class);
                     }
                     else*/
-                        intent = new Intent(StartActivity.this, MainActivity.class);
+                        intent = new Intent(getApplicationContext(), MainActivity.class);
 
                     startActivity(intent);
                 }

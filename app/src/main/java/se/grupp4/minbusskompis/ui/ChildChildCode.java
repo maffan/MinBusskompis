@@ -44,7 +44,7 @@ public class ChildChildCode extends AppCompatActivity {
     }
 
     public void addButtonListeners(){
-        final Context context = this;
+
 
         nextButton=(Button)findViewById(R.id.button_next);
         resetButton=(Button)findViewById(R.id.button_resetMode);
@@ -52,7 +52,7 @@ public class ChildChildCode extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChildChildCode.this, ChildDestinations.class);
+                Intent intent = new Intent(getApplicationContext(), ChildDestinations.class);
                 startActivity(intent);
             }
         });
@@ -60,7 +60,7 @@ public class ChildChildCode extends AppCompatActivity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChildChildCode.this, MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });

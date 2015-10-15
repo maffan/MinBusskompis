@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 //Ändrade startvy till listan på children då man är parent.
                 sharedPreferences.edit().putBoolean("setasparent", true).apply();
-                Intent intent = new Intent(MainActivity.this, ParentChildrenList.class);
+                Intent intent = new Intent(getApplicationContext(), ParentChildrenList.class);
                 startActivity(intent);
             }
         });
@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 
             public void onClick(View v) {
                 sharedPreferences.edit().putBoolean("setaschild", true).apply();
-                Intent intent = new Intent(MainActivity.this, ChildDestinations.class);
+                Intent intent = new Intent(getApplicationContext(), ChildDestinations.class);
                 startActivity(intent);
             }
         });

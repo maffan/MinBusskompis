@@ -1,58 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="se.grupp4.minbusskompis.ui.ParentSettings"
+    android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="#4fffc5">
-
-    <Switch
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Notifications"
-        android:id="@+id/notifications_switch"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:typeface="monospace"
-        android:textColor="#000000"
-        android:textOn="ON"
-        android:textOff="OFF"
-        android:background="#ffffff"
-        android:backgroundTint="#ff688c"
-        android:textStyle="bold" />
 
     <Switch
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Sound"
         android:id="@+id/sound_switch"
-        android:layout_below="@+id/notifications_switch"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="150dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:typeface="monospace"
-        android:textColor="#000000"
-        android:textOn="ON"
-        android:textOff="OFF"
-        android:background="#ffffff"
-        android:backgroundTint="#ff688c"
-        android:textStyle="bold"/>
-
-    <Switch
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Dummy"
-        android:id="@+id/dummy_switch"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/sound_switch"
-        android:layout_marginLeft="20dp"
-        android:layout_alignRight="@+id/sound_switch"
-        android:layout_alignEnd="@+id/sound_switch"
         android:typeface="monospace"
         android:textColor="#000000"
         android:textOn="ON"
@@ -70,9 +29,18 @@
         android:textColor="#ffffff"
         android:background="#000000"
         android:id="@+id/parent_reset_button"
-        android:layout_marginTop="90dp"
-        android:layout_below="@+id/dummy_switch"
+        android:layout_marginTop="150dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_below="@+id/sound_switch" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Settings"
+        android:id="@+id/textView4"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" />
 
 </RelativeLayout>
