@@ -1,8 +1,8 @@
 package se.grupp4.minbusskompis.ui;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +19,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -131,11 +130,11 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
         switch (status){
             case 0:
                 childStatus.setText("Child not active");
-                childStatusImage.setImageResource(R.drawable.busstop);
+                childStatusImage.setImageResource(R.drawable.inactive);
                 break;
             case 1:
                 childStatus.setText("Going to bus stop");
-                childStatusImage.setImageResource(R.drawable.busstop);
+                childStatusImage.setImageResource(R.drawable.walking);
                 break;
             case 2:
                 childStatus.setText("At bus stop");
@@ -143,7 +142,7 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
                 break;
             case 3:
                 childStatus.setText("Traveling by bus");
-                childStatusImage.setImageResource(R.drawable.busstop);
+                childStatusImage.setImageResource(R.drawable.bus);
                 break;
             case 4:
                 childStatus.setText("Leaving bus");
@@ -151,10 +150,11 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
                 break;
             case 5:
                 childStatus.setText("Going to destination");
-                childStatusImage.setImageResource(R.drawable.busstop);
+                childStatusImage.setImageResource(R.drawable.walking);
                 break;
             default:
                 childStatus.setText("Child is active");
+                childStatusImage.setImageResource(R.drawable.inactive);
         }
     }
 

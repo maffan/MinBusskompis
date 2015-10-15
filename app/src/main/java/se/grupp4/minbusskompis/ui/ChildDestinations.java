@@ -2,7 +2,6 @@ package se.grupp4.minbusskompis.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,13 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.parse.LocationCallback;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
 
 import java.util.ArrayList;
@@ -100,7 +94,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         walkmodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChildDestinations.this, ChildWalkMode.class);
+                Intent intent = new Intent(ChildDestinations.this, ChildGoingToBus.class);
                 startActivity(intent);
             }
         });
@@ -127,7 +121,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         travelingData.bussStopCoordinates = busStopCordinates;
         travelingData.destinationName = destination.getName();
 
-        Intent intent = new Intent(context,ChildWalkMode.class);
+        Intent intent = new Intent(context,ChildGoingToBus.class);
         intent.putExtra("data",travelingData);
         startActivity(intent);
         Toast.makeText(ChildDestinations.this, "Starting journey...", Toast.LENGTH_LONG).show();

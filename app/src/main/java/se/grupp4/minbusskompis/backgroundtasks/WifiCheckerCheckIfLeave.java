@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.MediaPlayer;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -13,17 +12,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-
-import se.grupp4.minbusskompis.ui.StartActivity;
 
 /**
  * Created by Tobias on 2015-10-07.
  */
-public class WifiChecker implements Runnable {
+public class WifiCheckerCheckIfLeave implements Runnable {
 
-    private static final String TAG = "WifiChecker";
+    private static final String TAG = "WifiCheckerLookForWifi";
     private WifiManager wifiManager;
     private WifiCheckerReceiver wifiReceiver;
     private ArrayList<String> macAdresses;
@@ -31,7 +26,7 @@ public class WifiChecker implements Runnable {
     private static final int MATCH_LIMIT = 2;
 
 
-    public WifiChecker (Context currentContext, Intent nextIntent, ArrayList<String> macAdresses){
+    public WifiCheckerCheckIfLeave(Context currentContext, Intent nextIntent, ArrayList<String> macAdresses){
         this.wifiManager = (WifiManager) currentContext.getSystemService(Context.WIFI_SERVICE);
         //Initera receiver som triggas då scanresults finns, dvs då sökningen är klar.
         wifiReceiver = new WifiCheckerReceiver(nextIntent);
@@ -54,8 +49,6 @@ public class WifiChecker implements Runnable {
         private final Intent nextIntent;
         private HashMap<String,Integer> localWifis;
 
-
-
         public WifiCheckerReceiver(Intent nextIntent) {
             this.nextIntent = nextIntent;
         }
@@ -64,15 +57,15 @@ public class WifiChecker implements Runnable {
         public void onReceive(Context context, Intent intent) {
             //Scan is complete, get list from scan.
             if(checkIfClose(macAdresses,getWifiList())){
-                Log.d(TAG, "Mac matches, wifi is close, increasing counter");
-                wifiMatchCounter++;
+                Log.d(TAG, "Mac matches, still on bus");
             }
             else{
-                Log.d(TAG, "No MAC match");
+                Log.d(TAG, "No MAC present, increasing counter");
+                wifiMatchCounter++;
             }
 
             if(wifiMatchCounter >= MATCH_LIMIT){
-                Log.d(TAG, "Wifi match counter reached, child on bus");
+                Log.d(TAG, "Wifi match counter reached, child leaving bus");
                 context.startActivity(nextIntent);
             }
         }

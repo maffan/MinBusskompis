@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +27,7 @@ import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 
-public class ChildWalkMode extends AppCompatActivity implements ServiceConnection {
+public class ChildGoingFromBus extends AppCompatActivity implements ServiceConnection {
 
     private static final String TAG = "WALKMODE";
     private static final int TIMEOUT = 60*1000;
@@ -43,7 +43,7 @@ public class ChildWalkMode extends AppCompatActivity implements ServiceConnectio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child_walk_mode);
+        setContentView(R.layout.activity_child_going_from_bus);
 
         //Get target destination
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");
@@ -124,7 +124,7 @@ public class ChildWalkMode extends AppCompatActivity implements ServiceConnectio
                     ChildLocationAndStatus locationAndStatus = new ChildLocationAndStatus(location,MODE,destinationName);
                     BussData.getInstance().updateLatestPosition(locationAndStatus);
                     Intent intent =
-                            new Intent(android.content.Intent.ACTION_VIEW,
+                            new Intent(Intent.ACTION_VIEW,
                                     Uri.parse("google.navigation:q=" + latitude + "," + longitude + "&mode=w"));
 
                     startActivityForResult(intent, 1);
@@ -132,7 +132,7 @@ public class ChildWalkMode extends AppCompatActivity implements ServiceConnectio
                     Toast.makeText(context, "Could not get a clear signal. Please go outside and try again!", Toast.LENGTH_SHORT).show();
 
                     Intent intent =
-                            new Intent(android.content.Intent.ACTION_VIEW,
+                            new Intent(Intent.ACTION_VIEW,
                                     Uri.parse("google.navigation:q=" + latitude + "," + longitude + "&mode=w"));
 
                     startActivityForResult(intent, 1);

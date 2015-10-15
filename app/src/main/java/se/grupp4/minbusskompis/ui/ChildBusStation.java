@@ -15,8 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
@@ -41,6 +39,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
     private String destinationName;
     private ArrayList<String> wifiList;
     private TravelingData travelingData;
+    WifiCheckerStart wifiCheckerStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,14 +123,21 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        wifiCheckerStart.shutdown();
+        unbindService(this);
+    }
+
+    @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
         parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().resetLocationListener();
         parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(2, destinationName);
         Intent nextIntent = new Intent(context,ChildOnBus.class);
         nextIntent.putExtra("data",travelingData);
-        WifiCheckerStart wifiCheckerStart = new WifiCheckerStart(context,nextIntent,wifiList,30);
-        wifiCheckerStart.start();
+        wifiCheckerStart = new WifiCheckerStart();
+        wifiCheckerStart.startLookForWifi(context,nextIntent,wifiList,30);
     }
 
     @Override

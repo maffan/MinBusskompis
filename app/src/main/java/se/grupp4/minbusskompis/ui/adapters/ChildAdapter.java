@@ -51,11 +51,30 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
             row = convertView;
         }
 
-        //if active set active icon otherwise inactive icon
-        if(child.isActive()){
-            viewHolder.activityIconView.setImageResource(R.drawable.active_child);
-        }else{
-            viewHolder.activityIconView.setImageResource(R.drawable.inactive_child);
+
+        //Set icon by mode
+        switch (child.getMode()){
+            case 0:
+                viewHolder.activityIconView.setImageResource(R.drawable.inactive);
+                break;
+            case 1:
+                viewHolder.activityIconView.setImageResource(R.drawable.walking);
+                break;
+            case 2:
+                viewHolder.activityIconView.setImageResource(R.drawable.busstop);
+                break;
+            case 3:
+                viewHolder.activityIconView.setImageResource(R.drawable.bus);
+                break;
+            case 4:
+                viewHolder.activityIconView.setImageResource(R.drawable.busstop);
+                break;
+            case 5:
+                viewHolder.activityIconView.setImageResource(R.drawable.walking);
+                break;
+            default:
+                viewHolder.activityIconView.setImageResource(R.drawable.inactive);
+                break;
         }
 
         //Set name

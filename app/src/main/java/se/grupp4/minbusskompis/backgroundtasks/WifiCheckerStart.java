@@ -15,18 +15,27 @@ import java.util.concurrent.TimeUnit;
 //Create service with macAdress that should be polled against, pass in delay and what activity that should be switched to if matched
 public class WifiCheckerStart {
     ScheduledThreadPoolExecutor poolExecutor;
-    WifiChecker wifiChecker;
-    int delay;
+    WifiCheckerLookForWifi wifiCheckerLookForWifi;
+    WifiCheckerCheckIfLeave wifiCheckerCheckIfLeave;
 
-    public WifiCheckerStart(Context currentContext, Intent nextIntent, ArrayList<String> macAdresses, int delay){
-        wifiChecker = new WifiChecker(currentContext, nextIntent, macAdresses);
-        this.delay = delay;
+    public WifiCheckerStart(){
         poolExecutor = new ScheduledThreadPoolExecutor(1);
     }
 
-    public boolean start(){
-        poolExecutor.scheduleWithFixedDelay(wifiChecker,0,delay, TimeUnit.SECONDS);
+    public boolean startLookForWifi(Context currentContext, Intent nextIntent, ArrayList<String> macAdresses, int delay){
+        wifiCheckerLookForWifi = new WifiCheckerLookForWifi(currentContext, nextIntent, macAdresses);
+        poolExecutor.scheduleWithFixedDelay(wifiCheckerLookForWifi,0,delay, TimeUnit.SECONDS);
         return true;
+    }
+
+    public boolean startCheckIfLeave(Context currentContext, Intent nextIntent, ArrayList<String> macAdresses, int delay){
+        wifiCheckerCheckIfLeave = new WifiCheckerCheckIfLeave(currentContext, nextIntent, macAdresses);
+        poolExecutor.scheduleWithFixedDelay(wifiCheckerCheckIfLeave,0,delay, TimeUnit.SECONDS);
+        return true;
+    }
+
+    public void shutdown(){
+        poolExecutor.shutdown();
     }
 
 }

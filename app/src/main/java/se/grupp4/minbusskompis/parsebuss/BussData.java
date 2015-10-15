@@ -45,7 +45,7 @@ public class BussData {
 
 
     /*
-        1, Vid start av app initeras de alla ParseObject, dvs skapar en koppling mot parse
+        1, Vid startLookForWifi av app initeras de alla ParseObject, dvs skapar en koppling mot parse
             * Vid en query begränsas urvalet, normalt en rad i tabellen i fråga, detta blir ett objekt
             * Vid hämting av flera rader skapas en lista med objekt, dvs man hämtar då ett objekt för att nå den radens data
         2, För att hämta data, kallar man på ParseObjektet i fråga, ex position.fetch().

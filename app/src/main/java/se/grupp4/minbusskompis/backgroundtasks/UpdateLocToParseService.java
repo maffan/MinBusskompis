@@ -18,7 +18,7 @@ public class UpdateLocToParseService extends Service {
 
     @Override
     public void onCreate() {
-        //Vid service start skapas location managern.
+        //Vid service startLookForWifi skapas location managern.
         Toast.makeText(UpdateLocToParseService.this, "Service started", Toast.LENGTH_SHORT).show();
         updateLocGpsAndSettings = new UpdateLocGpsAndSettings(getBaseContext(), SEND_DELAY);
     }
