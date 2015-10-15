@@ -109,6 +109,7 @@ public class BussData {
                 positionObject.put(INSTALLATION_FIELD,id);
                 positionObject.put("position",new ParseGeoPoint(0,0));
                 positionObject.put("status",0);
+                positionObject.put("destination","");
                 try {
                     positionObject.save();
                 } catch (ParseException e1) {
@@ -286,6 +287,7 @@ public class BussData {
         int status = location.getTripStatus();
         cloudPosition.put("position",geoPoint);
         cloudPosition.put("status",status);
+        cloudPosition.put("destination",location.getDestination());
         cloudPosition.saveInBackground();
     }
 
@@ -296,7 +298,8 @@ public class BussData {
         location.setLatitude(geoPoint.getLatitude());
         location.setLongitude(geoPoint.getLongitude());
         int status = positionObject.getInt("status");
-        return new ChildLocationAndStatus(location,status);
+        String destination = positionObject.getString("destination");
+        return new ChildLocationAndStatus(location,status,destination);
     }
 
     public String getNameFromId(String id){

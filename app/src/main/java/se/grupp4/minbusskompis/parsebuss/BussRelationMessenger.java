@@ -2,6 +2,7 @@ package se.grupp4.minbusskompis.parsebuss;
 
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
@@ -9,6 +10,7 @@ import com.parse.ParsePush;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Queue;
@@ -25,6 +27,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class BussRelationMessenger extends Observable {
 
+    private static final String TAG = "RELATION_MESSENGER";
     private static BussRelationMessenger bussRelationMessenger = new BussRelationMessenger();
 
     private Queue<JSONObject> incomingData;
@@ -44,10 +47,16 @@ public class BussRelationMessenger extends Observable {
     private void clearOldAndSetNewChannels(BussRelationships relationships) {
         ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
         List channels = parseInstallation.getList("channels");
-        channels.clear();
-        channels.addAll(relationships.getRelationships());
+        List<String> newChannels = new ArrayList<>();
+        for(String channel:relationships.getRelationships()){
+            if(channels.contains("i"+channel))
+                continue;
+            newChannels.add("i"+channel);
+        }
+        channels.addAll(newChannels);
         parseInstallation.put("channels", channels);
         parseInstallation.saveInBackground();
+        Log.d(TAG,"Lade till "+channels+" till installationen");
     }
 
     public void sendMessage(String data){
@@ -94,7 +103,7 @@ public class BussRelationMessenger extends Observable {
     }
 
     private void tryNotifyPositionUpdate() throws JSONException {
-        ParsePush push = getParsePushWithChannel(getInstallationId());
+        ParsePush push = getParsePushWithChannel("i"+getInstallationId());
         JSONObject object = getPositionObjectWithData("");
         sendPushWithObject(push,object);
     }

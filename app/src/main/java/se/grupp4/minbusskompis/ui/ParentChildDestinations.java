@@ -60,6 +60,8 @@ public class ParentChildDestinations extends AppCompatActivity {
         new PopulateDestinationListTask().execute();
     }
 
+
+
     public void addButtonListener(){
         viewHolder.addDestinationButtonView.setOnClickListener(new View.OnClickListener() {
 

@@ -5,6 +5,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import se.grupp4.minbusskompis.parsebuss.BussData;
@@ -14,19 +15,23 @@ import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
  * Created by Tobias on 2015-10-07.
  */
 public class UpdateLocListener implements LocationListener {
+        private static final String TAG = "UpdateLocListener";
         private int tripStatus;
         private Context context;
+        private String destination;
 
-        public UpdateLocListener(int tripStatus, Context context){
+        public UpdateLocListener(int tripStatus, Context context, String destination){
             this.tripStatus = tripStatus;
             this.context = context;
+            this.destination = destination;
         }
 
         //Skicka data till parse vid ändring av position
         @Override
         public void onLocationChanged(Location loc) {
+            Log.d(TAG, "Updated location to Parse");
             //Spara location
-            ChildLocationAndStatus childLocationAndStatus = new ChildLocationAndStatus(loc,tripStatus);
+            ChildLocationAndStatus childLocationAndStatus = new ChildLocationAndStatus(loc,tripStatus,destination);
             BussData.getInstance().updateLatestPosition(childLocationAndStatus);
 
             //Skicka push till alla föräldrar att nu finns ny position.

@@ -7,79 +7,97 @@
     tools:context="se.grupp4.minbusskompis.ui.ParentActiveChild"
     android:background="#4fffc5">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="300dp"
-        android:layout_marginRight="50dp">
-
-        <fragment
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:name="com.google.android.gms.maps.MapFragment"
-            android:id="@+id/fragment"
-            android:layout_gravity="center" />
-    </FrameLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="200dp"
-        android:layout_marginRight="50dp"
-        android:id="@+id/RelativeLayout">
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:id="@+id/parent_active_child_name_linearlayout"
+        android:background="#fff">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Current Status"
-            android:id="@+id/textView6"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
+            android:id="@+id/parent_active_child_name_textview"
+            android:text="Name placeholder"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:layout_weight="1"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Bus ID placeholder"
-            android:id="@+id/textView_busID"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:text="Going to placeholder"
+            android:gravity="center"
+            android:id="@+id/parent_active_child_destination_textview"
+            android:background="#ccc" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/parent_active_child_name_linearlayout"
+            android:layout_height="60dp"
+            android:id="@+id/parent_active_child_status_field"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current status" />
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:text="Current status placeholder"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:id="@+id/parent_active_child_current_status" />
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView_activeChild"
-            android:layout_alignParentTop="true"
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/parent_active_child_status_icon"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:minHeight="30dp"
+                            android:maxWidth="30dp"
+                            android:src="@drawable/delete"
+                            />
+
+                    </FrameLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_below="@+id/parent_active_child_status_field"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="380dp"
-            android:background="@color/background_material_light"/>
+            >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Est time left placeholder"
-            android:id="@+id/textView_estTime"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-    </RelativeLayout>
+            <fragment
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:id="@+id/parent_active_child_map"
+                android:layout_gravity="center" />
+        </FrameLayout>
 
 </RelativeLayout>

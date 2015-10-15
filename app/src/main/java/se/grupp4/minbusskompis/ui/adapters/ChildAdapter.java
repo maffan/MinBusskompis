@@ -61,18 +61,21 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
         //Set name
         viewHolder.childNameView.setText(child.getName());
 
-        //Add settings img
-        viewHolder.settingsButtonView.setImageResource(R.drawable.settings);
+        //Check if parent
+        if(true){
+            //Add settings img
+            viewHolder.settingsButtonView.setImageResource(R.drawable.settings);
 
-        //Add settings button listener, pass in id to settings to populate
-        viewHolder.settingsButtonView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ParentChildSettings.class);
-                intent.putExtra("child_id",child.getId());
-                context.startActivity(intent);
-            }
-        });
+            //Add settings button listener, pass in id to settings to populate
+            viewHolder.settingsButtonView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ParentChildSettings.class);
+                    intent.putExtra("child_id",child.getId());
+                    context.startActivity(intent);
+                }
+            });
+        }
 
         return row;
     }

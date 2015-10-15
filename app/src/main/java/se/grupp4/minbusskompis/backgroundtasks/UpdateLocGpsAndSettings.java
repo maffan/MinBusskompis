@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.util.Log;
 
 /**
  * Created by Tobias on 2015-10-07.
  */
 public class UpdateLocGpsAndSettings {
+    private static final String TAG = "UpdateLocGpsAndSettings";
+    private static final float METER_UPDATE = 30;
     private int tripStatus = 0;
     private int updateRate;
     private Context context;
@@ -24,14 +27,16 @@ public class UpdateLocGpsAndSettings {
     }
 
     //Lyssnaren skapas vid denna metod, detta för att kunna ändra "mode"
-    public boolean startLocationListener(int tripStatus){
+    public boolean startLocationListener(int tripStatus, String destination){
         //Init location listener with trip status
-        locationListener = new UpdateLocListener(tripStatus, context);
+        locationListener = new UpdateLocListener(tripStatus, context, destination);
+        Log.d(TAG, "Starting Locationlistener");
 
         //Enable location updates to locationlistener
         try {
             //GPS, tid mellan uppdateringar, distans per uppdatering, locationlistener att uppdatera till
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateRate, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateRate, METER_UPDATE, locationListener);
+            Log.d(TAG, "Locationlistener successfully added");
             return true;
         }catch(SecurityException e){
             e.printStackTrace();

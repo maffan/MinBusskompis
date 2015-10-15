@@ -71,6 +71,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
                 sendDataByTypeToSyncMessenger(messageData, BussParseSyncMessenger.RESPONSE_TYPE);
                 break;
             case "PositionUpdate":
+                BussRelationMessenger.getInstance().dataReceived(messageData);
                 break;
             default:
                 Log.d(TAG,type+" is not a valid message type");
