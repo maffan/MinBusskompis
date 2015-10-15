@@ -27,6 +27,7 @@ import com.parse.ParseInstallation;
 import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.BussData;
@@ -118,9 +119,16 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         //Send information to next intent
         BussDestination destination = (BussDestination) parent.getAdapter().getItem(position);
         LatLng targetDestination = new LatLng(destination.getDestination().getLatitude(),destination.getDestination().getLongitude());
+        LatLng busStopCordinates = new LatLng(destination.getDestination().getLatitude(),destination.getDestination().getLongitude());
+
+        //Pass data forward
+        TravelingData travelingData = new TravelingData();
+        travelingData.destinationCoordinates = targetDestination;
+        travelingData.bussStopCoordinates = busStopCordinates;
+        travelingData.destinationName = destination.getName();
+
         Intent intent = new Intent(context,ChildWalkMode.class);
-        intent.putExtra("destination",targetDestination);
-        intent.putExtra("destinationName",destination.getName());
+        intent.putExtra("data",travelingData);
         startActivity(intent);
         Toast.makeText(ChildDestinations.this, "Starting journey...", Toast.LENGTH_LONG).show();
     }

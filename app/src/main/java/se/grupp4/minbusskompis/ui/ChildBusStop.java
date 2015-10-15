@@ -21,7 +21,7 @@ public class ChildBusStop extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child_bus_stop);
+        setContentView(R.layout.activity_child_leave_bus);
         addButtonListener();
     }
 

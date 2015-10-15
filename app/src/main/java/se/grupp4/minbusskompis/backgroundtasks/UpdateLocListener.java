@@ -29,13 +29,17 @@ public class UpdateLocListener implements LocationListener {
         //Skicka data till parse vid ändring av position
         @Override
         public void onLocationChanged(Location loc) {
-            Log.d(TAG, "Updated location to Parse");
-            //Spara location
-            ChildLocationAndStatus childLocationAndStatus = new ChildLocationAndStatus(loc,tripStatus,destination);
-            BussData.getInstance().updateLatestPosition(childLocationAndStatus);
+            if (loc != null) {
+                Log.d(TAG, "Updated location to Parse");
+                //Spara location
+                ChildLocationAndStatus childLocationAndStatus = new ChildLocationAndStatus(loc,tripStatus,destination);
+                BussData.getInstance().updateLatestPosition(childLocationAndStatus);
 
-            //Skicka push till alla föräldrar att nu finns ny position.
-            BussRelationMessenger.getInstance().notifyPositionUpdate();
+                //Skicka push till alla föräldrar att nu finns ny position.
+                BussRelationMessenger.getInstance().notifyPositionUpdate();
+            }else {
+                Log.d(TAG, "Got null location");
+            }
         }
 
         @Override

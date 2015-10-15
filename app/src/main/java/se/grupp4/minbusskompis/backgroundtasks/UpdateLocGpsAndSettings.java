@@ -12,7 +12,6 @@ import android.util.Log;
 public class UpdateLocGpsAndSettings {
     private static final String TAG = "UpdateLocGpsAndSettings";
     private static final float METER_UPDATE = 30;
-    private int tripStatus = 0;
     private int updateRate;
     private Context context;
     private LocationManager locationManager;
@@ -52,6 +51,7 @@ public class UpdateLocGpsAndSettings {
     public boolean resetLocationListener(){
         try {
             //GPS, tid mellan uppdateringar, distans per uppdatering, locationlistener att uppdatera till
+            Log.d(TAG, "Locationlistener successfully REMOVED");
             locationManager.removeUpdates(locationListener);
             return true;
         }catch(SecurityException e){

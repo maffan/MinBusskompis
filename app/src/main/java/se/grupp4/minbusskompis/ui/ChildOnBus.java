@@ -14,16 +14,20 @@ import android.view.View;
 import android.widget.Button;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.TravelingData;
 
 public class ChildOnBus extends AppCompatActivity {
 
     protected Button dummyButtonOnBus;
     private Context context = this;
+    private TravelingData travelingData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_on_bus);
+        //Get data from intent
+        travelingData = (TravelingData) getIntent().getParcelableExtra("data");
         addButtonListener();
     }
 

@@ -1,29 +1,75 @@
 package se.grupp4.minbusskompis.ui;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.TravelingData;
+import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
+import se.grupp4.minbusskompis.backgroundtasks.WifiCheckerStart;
 
 //Note that dummybuttons are temporary for debugging
-public class ChildBusStation extends AppCompatActivity {
+public class ChildBusStation extends AppCompatActivity implements ServiceConnection {
+
+    private static class ViewHolder {
+        TextView busStopName;
+        TextView timeToBus;
+        TextView nextBusName;
+    }
+
+    private ViewHolder viewHolder;
 
     protected Button dummyButton;
     private Context context = this;
+    private UpdateLocToParseService.UpdateLocBinder parseUpdateLocBinder;
+    private String destinationName;
+    private ArrayList<String> wifiList;
+    private TravelingData travelingData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_buss_station);
+        viewHolder = new ViewHolder();
+
+        //Init views.
+        viewHolder.busStopName = (TextView) findViewById(R.id.child_bus_stop_bsname_char);
+        viewHolder.timeToBus = (TextView) findViewById(R.id.child_bus_station_time_to_bus);
+        viewHolder.nextBusName = (TextView) findViewById(R.id.child_bus_station_next_bus_name);
+
+        //Get extras
+        travelingData = (TravelingData) getIntent().getParcelableExtra("data");
+        destinationName = travelingData.destinationName;
+
+        //Set texts
+        viewHolder.busStopName.setText(travelingData.bussStationName);
+        viewHolder.nextBusName.setText(travelingData.bussName);
+        viewHolder.timeToBus.setText(String.valueOf(travelingData.time));
+
+        wifiList = new ArrayList<>();
+        //eduroam i biblioteket
+        wifiList.add("881dfc44578f");
         addButtonListener();
+
+        //Bind and update service
+        Intent serviceIntent = new Intent(this,UpdateLocToParseService.class);
+        bindService(serviceIntent, this, 0);
     }
 
     @Override
@@ -76,5 +122,21 @@ public class ChildBusStation extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
+        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().resetLocationListener();
+        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(2, destinationName);
+        Intent nextIntent = new Intent(context,ChildOnBus.class);
+        nextIntent.putExtra("data",travelingData);
+        WifiCheckerStart wifiCheckerStart = new WifiCheckerStart(context,nextIntent,wifiList,30);
+        wifiCheckerStart.start();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+
     }
 }

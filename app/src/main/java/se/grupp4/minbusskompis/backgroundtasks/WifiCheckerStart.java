@@ -1,7 +1,9 @@
 package se.grupp4.minbusskompis.backgroundtasks;
 
 import android.content.Context;
+import android.content.Intent;
 
+import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -13,13 +15,11 @@ import java.util.concurrent.TimeUnit;
 //Create service with macAdress that should be polled against, pass in delay and what activity that should be switched to if matched
 public class WifiCheckerStart {
     ScheduledThreadPoolExecutor poolExecutor;
-    Context context;
-    String macAdress;
     WifiChecker wifiChecker;
     int delay;
 
-    public WifiCheckerStart(Context currentContext, Context newContext, String macAdress, int delay){
-        wifiChecker = new WifiChecker(currentContext, newContext, macAdress);
+    public WifiCheckerStart(Context currentContext, Intent nextIntent, ArrayList<String> macAdresses, int delay){
+        wifiChecker = new WifiChecker(currentContext, nextIntent, macAdresses);
         this.delay = delay;
         poolExecutor = new ScheduledThreadPoolExecutor(1);
     }

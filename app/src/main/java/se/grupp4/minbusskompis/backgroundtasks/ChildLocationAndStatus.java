@@ -8,7 +8,7 @@ import android.location.Location;
  */
 public class ChildLocationAndStatus extends Location {
     private int mode;
-    private String destination;
+    private String destination = "";
 
     public ChildLocationAndStatus(Location l, int tripStatus, String destination) {
     	super(l);
