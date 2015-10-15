@@ -89,14 +89,13 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
     }
 
     public void addButtonListener(){
-        final Context context = this;
         dummyButton = (Button) findViewById(R.id.button_dummystation);
 
         dummyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(ChildBusStation.this, ChildOnBus.class);
+                Intent intent = new Intent(getApplicationContext(), ChildOnBus.class);
                 startActivity(intent);
             }
         });

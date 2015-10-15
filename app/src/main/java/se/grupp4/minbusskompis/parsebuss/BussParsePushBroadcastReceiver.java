@@ -3,6 +3,8 @@ package se.grupp4.minbusskompis.parsebuss;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -11,6 +13,10 @@ import com.parse.ParsePushBroadcastReceiver;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.PriorityQueue;
+
+import se.grupp4.minbusskompis.R;
 
 /**
  * Created by Marcus on 9/21/2015.
@@ -24,9 +30,11 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
 
     private static final String TAG = "RECEIVER";
     private BussSyncMessengerProvider provider;
+    private Context context;
 
     @Override
     protected void onPushReceive(Context context, Intent intent) {
+        this.context = context;
         try {
             Log.d(TAG,"Data received!");
             tryReceive(intent);
@@ -62,6 +70,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     private void dispatchDataByType(JSONObject messageData, String type) {
         switch (type) {
             case "Message":
+                notificationSound(context);
                 sendToRelationMessenger(messageData);
                 break;
             case "SyncRequest":
@@ -113,5 +122,21 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
         } else if (type == BussParseSyncMessenger.RESPONSE_TYPE) {
             provider.getSyncMessenger().setSyncMessage(messageData);
         }
+    }
+
+    private static void notificationSound(Context context){
+
+        MediaPlayer mediaPlayer;
+
+        mediaPlayer = MediaPlayer.create(context, R.raw.notification);
+
+        mediaPlayer.start();
+        //When sound is done it releases system resources
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.release();
+            }
+        });
     }
 }
