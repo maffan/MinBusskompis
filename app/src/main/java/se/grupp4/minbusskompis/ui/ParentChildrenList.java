@@ -30,40 +30,23 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
 
     private static final String TAG = "PARENT_CHILDREN_LIST";
     private ChildAdapter childrenListAdapter;
-    private ArrayList<ChildData> childrenList;
     private ViewHolder viewHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_children);
+        initViews();
+        addButtonListeners();
+        initList();
+        populateList();
+    }
+
+    private void initViews() {
         viewHolder = new ViewHolder();
-        //initate views
         viewHolder.childrenListView = (ListView) findViewById(R.id.parent_children_list);
         viewHolder.loadingTextView = (TextView) findViewById(R.id.parent_children_loading_text);
         viewHolder.buttonAddChildView = (Button)findViewById(R.id.button_addchild);
-
-        //Initate listeners
-        addButtonListeners();
-
-        //Initiate listadapter
-        childrenList = new ArrayList<>();
-        childrenListAdapter =
-                new ChildAdapter(
-                        this,
-                        R.layout.fragment_parent_child_list_item,
-                        childrenList
-                );
-
-        viewHolder.childrenListView.setAdapter(childrenListAdapter);
-        viewHolder.childrenListView.setOnItemClickListener(this);
-        new PopulateChildrenListTask().execute();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getChildrenList();
     }
 
     public void addButtonListeners(){
@@ -75,6 +58,29 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
                 startActivity(intent);
             }
         });
+    }
+
+    private void initList() {
+        ArrayList<ChildData> childrenList = new ArrayList<>();
+        childrenListAdapter =
+                new ChildAdapter(
+                        this,
+                        R.layout.fragment_parent_child_list_item,
+                        childrenList
+                );
+
+        viewHolder.childrenListView.setAdapter(childrenListAdapter);
+        viewHolder.childrenListView.setOnItemClickListener(this);
+    }
+
+    private void populateList() {
+        new PopulateChildrenListTask().execute();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateList();
     }
 
     @Override
@@ -101,37 +107,45 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         return super.onOptionsItemSelected(item);
     }
 
-    //hämta data från parse
-    public void getChildrenList() {
-        BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
-            @Override
-            public void done() {
-                childrenListAdapter.clear();
-                ArrayList<ChildData> tempList = BussData.getInstance().getChildren().getAsChildDataList();
-                if(tempList.isEmpty()){
-                    viewHolder.loadingTextView.setText("No children added");
-                }else{
-                    childrenListAdapter.addAll(tempList);
-                    childrenListAdapter.notifyDataSetChanged();
-                    populateChildren();
-                }
-            }
-        });
-    }
-
-    private void populateChildren(){
-        viewHolder.loadingTextView.setVisibility(View.GONE);
-        viewHolder.childrenListView.setVisibility(View.VISIBLE);
-    }
-
     private class PopulateChildrenListTask extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... params) {
-            getChildrenList();
-
+            getAndShowChildrenListOrMessage();
             return null;
         }
+
+    }
+
+    //hämta data från parse
+    public void getAndShowChildrenListOrMessage() {
+        BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+            @Override
+            public void done() {
+                ArrayList<ChildData> tempList = getChildrenListFromParse();
+                showContentOrMessage(tempList);
+            }
+        });
+    }
+
+    private ArrayList<ChildData> getChildrenListFromParse() {
+        return BussData.getInstance().getChildren().getAsChildDataList();
+    }
+
+    private void showContentOrMessage(ArrayList<ChildData> tempList) {
+        if(tempList.isEmpty()){
+            viewHolder.loadingTextView.setText(R.string.no_children_added);
+        }else{
+            childrenListAdapter.clear();
+            childrenListAdapter.addAll(tempList);
+            childrenListAdapter.notifyDataSetChanged();
+            showChildrenList();
+        }
+    }
+
+    private void showChildrenList(){
+        viewHolder.loadingTextView.setVisibility(View.GONE);
+        viewHolder.childrenListView.setVisibility(View.VISIBLE);
     }
 
     @Override

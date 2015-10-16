@@ -33,12 +33,14 @@ public class BussApplication extends Application {
         BussData.getInstance().fetchData(null);
         ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
         List channels = parseInstallation.getList("channels");
-        channels.clear();
-        parseInstallation.put("channels", channels);
-        try {
-            parseInstallation.save();
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (channels != null) {
+            channels.clear();
+            parseInstallation.put("channels", channels);
+            try {
+                parseInstallation.save();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         ParsePush.subscribeInBackground("i" + ParseInstallation.getCurrentInstallation().getInstallationId());
     }

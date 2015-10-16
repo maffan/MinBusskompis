@@ -96,5 +96,6 @@
     <string name="hnt_et_location">Enter location</string>
     <string name="add_destination_save_button">Add location</string>
     <string name="add_destination_name">Enter name</string>
+    <string name="no_children_added">No children added</string>
 
 </resources>
