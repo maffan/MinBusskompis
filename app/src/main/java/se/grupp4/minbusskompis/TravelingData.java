@@ -17,6 +17,7 @@ public class TravelingData implements Parcelable {
     public String busArrivingAt = "13:30:00";
     public String currentBusMacAdress = "00";
     public boolean isAtStop = false;
+    public boolean stopButtonPressed = false;
 
     public static final int INACTIVE = 0;
     public static final int WALKING = 1;
@@ -40,6 +41,7 @@ public class TravelingData implements Parcelable {
         busArrivingAt = in.readString();
         currentBusMacAdress = in.readString();
         isAtStop = in.readByte() != 0x00;
+        stopButtonPressed = in.readByte() != 0x00;
     }
 
     @Override
@@ -61,6 +63,7 @@ public class TravelingData implements Parcelable {
         dest.writeString(busArrivingAt);
         dest.writeString(currentBusMacAdress);
         dest.writeByte((byte) (isAtStop ? 0x01 : 0x00));
+        dest.writeByte((byte) (stopButtonPressed ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")
@@ -90,7 +93,8 @@ public class TravelingData implements Parcelable {
                 ", busLeavingAt=" + busLeavingAt + '\'' +
                 ", busArrivingAt=" + busArrivingAt + '\'' +
                 ", currentBusMacAdress=" + currentBusMacAdress + '\'' +
-                ", isAtStop=" + isAtStop +
+                ", isAtStop=" + isAtStop + '\'' +
+                ", stopButtonPressed=" + stopButtonPressed +
                 '}';
     }
 }
