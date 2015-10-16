@@ -114,7 +114,8 @@
         <activity
             android:name=".ui.ParentChildrenList"
             android:label="@string/title_activity_parent_children"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:parentActivityName=".ui.MainActivity">
         </activity>
         <activity
             android:name=".ui.ChildBusStation"
