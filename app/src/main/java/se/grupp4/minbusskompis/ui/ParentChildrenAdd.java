@@ -46,29 +46,31 @@ public class ParentChildrenAdd extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Sending request
-                Toast.makeText(context,"Sending sync request...",Toast.LENGTH_LONG).show();
-
                 BussSync sync = new BussSync(new BussParseSyncMessenger());
-                sync.syncWithSyncCode(codeTextView.getText().toString(), new SyncTaskCompleteCallback() {
-                    @Override
-                    public void onSyncTaskComplete(boolean success, String installationId) {
-                        if(success){
-                            Log.v("ParentChildrenAdd", "Successfully added");
-                            //Save child to parse data
-                            BussData.getInstance().addRelationship(installationId, BussData.CHILD);
-                            Toast.makeText(context,"Succesfully synced with device with Installation ID: "+installationId,Toast.LENGTH_LONG).show();
+                if (!(codeTextView.getText().toString().equals(""))) {
+                    Toast.makeText(context, "Sending sync request...", Toast.LENGTH_LONG).show();
+                    sync.syncWithSyncCode(codeTextView.getText().toString(), new SyncTaskCompleteCallback() {
+                        @Override
+                        public void onSyncTaskComplete(boolean success, String installationId) {
+                            if (success) {
+                                Log.v("ParentChildrenAdd", "Successfully added");
+                                //Save child to parse data
+                                BussData.getInstance().addRelationship(installationId, BussData.CHILD);
+                                Toast.makeText(context, "Succesfully synced with device with Installation ID: " + installationId, Toast.LENGTH_LONG).show();
 
-                            //Switch to ChildSettings, pass on installation id
-                            Intent intent = new Intent(context, ParentChildSettings.class);
-                            intent.putExtra("child_id",installationId);
-                            startActivity(intent);
+                                //Switch to ChildSettings, pass on installation id
+                                Intent intent = new Intent(context, ParentChildSettings.class);
+                                intent.putExtra("child_id", installationId);
+                                startActivity(intent);
+                            } else {
+                                Log.v("ParentChildrenAdd", "NOT Successfully added");
+                                Toast.makeText(context, "Could not sync with device", Toast.LENGTH_LONG).show();
+                            }
                         }
-                        else{
-                            Log.v("ParentChildrenAdd", "NOT Successfully added");
-                            Toast.makeText(context,"Could not sync with device",Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                    });
+                }else{
+                    Toast.makeText(context, "No code has been entered...", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

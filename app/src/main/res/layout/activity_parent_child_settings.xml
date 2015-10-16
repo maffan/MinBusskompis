@@ -10,15 +10,17 @@
         android:text="Name"
         android:ems="10"
         android:id="@+id/parent_child_settings_name"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="138dp" />
+        android:layout_marginTop="100dp"
+        android:layout_below="@+id/parent_child_settings_inst_title"
+        android:layout_centerHorizontal="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save name"
+        android:text="  Save name  "
+        android:textColor="#ffffff"
+        android:background="#000000"
         android:id="@+id/parent_child_settings_savename_button"
         android:layout_below="@+id/parent_child_settings_name"
         android:layout_centerHorizontal="true" />
@@ -28,8 +30,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Destinations"
+        android:textColor="#ffffff"
+        android:background="#000000"
         android:id="@+id/parent_child_settings_destinations_button"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_below="@+id/parent_child_settings_savename_button"
         android:layout_centerHorizontal="true" />
 
@@ -56,9 +60,24 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete child"
+        android:text=" Delete child "
+        android:textColor="#ffffff"
+        android:background="#000000"
         android:id="@+id/parent_child_settings_delete_child_button"
         android:layout_below="@+id/parent_child_settings_destinations_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp" />
+        android:layout_marginTop="40dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        android:id="@+id/parent_child_settings_exit_child_button"
+        android:textColor="#ffffff"
+        android:background="#000000"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="39dp" />
+
+
 </RelativeLayout>

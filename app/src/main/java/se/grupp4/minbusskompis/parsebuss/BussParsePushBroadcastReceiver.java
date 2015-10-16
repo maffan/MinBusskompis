@@ -86,7 +86,6 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
                 sendDataByTypeToSyncMessenger(messageData, BussParseSyncMessenger.RESPONSE_TYPE);
                 break;
             case "PositionUpdate":
-                notificationSound(context);
                 BussRelationMessenger.getInstance().dataReceived(messageData);
                 break;
             default:

@@ -85,6 +85,15 @@ public class ParentChildSettings extends AppCompatActivity{
                         .show();
             }
         });
+
+        Button saveAndExitButton = (Button) findViewById(R.id.parent_child_settings_exit_child_button);
+        saveAndExitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ParentChildrenList.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void changeName() {
