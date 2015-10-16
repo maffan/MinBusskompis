@@ -46,7 +46,7 @@ public class ParentSettings extends AppCompatActivity {
                 new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle("Reset")
                         .setMessage("This will reset your app, and you will lose all connections" +
-                                "do you wish to continue?")
+                                " do you wish to continue?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
