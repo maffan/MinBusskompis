@@ -114,7 +114,6 @@ public class BussData {
             } catch (ParseException e1) {
                 e1.printStackTrace();
             }
-
         }
         return positionObject;
     }
@@ -317,5 +316,22 @@ public class BussData {
 
     public String getOwnName(){
         return name;
+    }
+
+    public void clearParseData(){
+        this.fetchData(new AsyncTaskCompleteCallback() {
+            @Override
+            public void done() {
+                try {
+                    cloudPosition.delete();
+                    cloudRelationships.delete();
+                    cloudDestinations.delete();
+                    cloudName.delete();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    Log.e(TAG,"Could not clear data");
+                }
+            }
+        });
     }
 }
