@@ -102,7 +102,6 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
                 Intent intent = new Intent(context, ChildOnBus.class);
                 intent.putExtra("data",travelingData);
                 startActivity(intent);
-                wifiCheckerStart.shutdown();
                 finish();
             }
         });

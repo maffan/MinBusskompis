@@ -130,6 +130,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".ui.ChildGoingFromBus"
+            android:label="@string/title_activity_child_walk_mode"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".ui.ChildOnBus"
             android:label="@string/title_activity_child_on_bus"
             android:screenOrientation="portrait" >

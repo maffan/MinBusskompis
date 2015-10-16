@@ -46,6 +46,7 @@ public class WifiCheckerStart {
        if(wifiChecker != null){
            Log.d(TAG,"WifiChecker not null, removing receiver");
            wifiChecker.unregReceiver();
+           wifiChecker = null;
        }
     }
 

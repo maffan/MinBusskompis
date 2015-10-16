@@ -148,7 +148,7 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         dummyButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ChildGoingToBus.class);
+                Intent intent = new Intent(context, ChildGoingFromBus.class);
                 intent.putExtra("data",travelingData);
                 startActivity(intent);
                 finish();
