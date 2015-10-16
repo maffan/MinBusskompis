@@ -7,11 +7,19 @@ package se.grupp4.minbusskompis;
 public class TravelingData implements Parcelable {
     public LatLng bussStopCoordinates;
     public LatLng destinationCoordinates;
-    public String destinationName = "null";
-    public String bussStationName = "null";
-    public String bussStationChar = "null";
-    public String bussName = "null";
-    public long time = 0;
+    public String destinationName = "Defaultstorp";
+    public String bussStationName = "Defaultsgatan";
+    public String busStopName = "Defaultsvägen";
+    public String bussStationChar = "D";
+    public String bussName = "666";
+    public String busLeavingAt = "12:00:00";
+    public String busArrivingAt = "13:30:00";
+
+    public static final int INACTIVE = 0;
+    public static final int WALKING = 1;
+    public static final int AT_BUS_STATION = 2;
+    public static final int ON_BUS = 3;
+    public static final int LEAVING_BUS = 4;
 
     public TravelingData() {
     }
@@ -21,9 +29,11 @@ public class TravelingData implements Parcelable {
         destinationCoordinates = (LatLng) in.readValue(LatLng.class.getClassLoader());
         destinationName = in.readString();
         bussStationName = in.readString();
+        busStopName = in.readString();
         bussStationChar = in.readString();
         bussName = in.readString();
-        time = in.readLong();
+        busLeavingAt = in.readString();
+        busArrivingAt = in.readString();
     }
 
     @Override
@@ -37,9 +47,11 @@ public class TravelingData implements Parcelable {
         dest.writeValue(destinationCoordinates);
         dest.writeString(destinationName);
         dest.writeString(bussStationName);
+        dest.writeString(busStopName);
         dest.writeString(bussStationChar);
         dest.writeString(bussName);
-        dest.writeLong(time);
+        dest.writeString(busLeavingAt);
+        dest.writeString(busArrivingAt);
     }
 
     @SuppressWarnings("unused")
@@ -62,9 +74,11 @@ public class TravelingData implements Parcelable {
                 ", destinationCoordinates=" + destinationCoordinates +
                 ", destinationName='" + destinationName + '\'' +
                 ", bussStationName='" + bussStationName + '\'' +
+                ", bussStopName='" + busStopName + '\'' +
                 ", bussStationChar='" + bussStationChar + '\'' +
                 ", bussName='" + bussName + '\'' +
-                ", time=" + time +
+                ", busLeavingAt=" + busLeavingAt + '\'' +
+                ", busArrivingAt=" + busArrivingAt +
                 '}';
     }
 }
