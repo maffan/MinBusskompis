@@ -86,12 +86,12 @@
         </activity>
         <activity
             android:name=".ui.ParentStart"
-            android:label="@string/title_activity_parent_start"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ChildDestinations"
-            android:label="@string/title_activity_child_destinations"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.MainActivity">
         </activity>
@@ -107,72 +107,72 @@
         </activity>
         <activity
             android:name=".ui.ParentChildDestinations"
-            android:label="@string/title_activity_parent_destinations"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ParentChildrenList">
         </activity>
         <activity
             android:name=".ui.ParentChildrenList"
-            android:label="@string/title_activity_parent_children"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.MainActivity">
         </activity>
         <activity
             android:name=".ui.ChildBusStation"
-            android:label="@string/title_activity_child_buss_station"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ChildDestinations">
         </activity>
         <activity
             android:name=".ui.map.addLocationOnMap"
-            android:label="@string/title_activity_add_location_on_map"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.ChildGoingToBus"
-            android:label="@string/title_activity_child_walk_mode"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ChildDestinations">
         </activity>
         <activity
             android:name=".ui.ChildGoingFromBus"
-            android:label="@string/title_activity_child_walk_mode"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ChildDestinations">
         </activity>
         <activity
             android:name=".ui.ChildOnBus"
-            android:label="@string/title_activity_child_on_bus"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ChildDestinations">
         </activity>
         <activity
             android:name=".ui.ChildLeavingBus"
-            android:label="@string/title_activity_child_bus_stop"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ChildDestinations">
         </activity>
         <activity
             android:name=".ui.ParentActiveChild"
-            android:label="@string/title_activity_parent_active_child"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ParentChildrenList">
         </activity>
         <activity
             android:name=".ui.ParentChildrenAdd"
-            android:label="@string/title_activity_parent_children_add"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ParentChildrenList">
         </activity>
         <activity
             android:name=".ui.ChildChildCode"
-            android:label="@string/title_activity_child_child_code"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ChildDestinations">
         </activity>
         <activity
             android:name=".ui.ParentSettings"
-            android:label="@string/title_activity_parent_settings"
+            android:label="@string/title_activity"
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ParentChildrenList">
         </activity>
@@ -185,7 +185,7 @@
 
         <activity
             android:name=".ui.ParentChildSettings"
-            android:label="@string/title_activity_child_settings"
+            android:label="@string/title_activity"
             android:parentActivityName=".ui.ParentChildrenList">
         </activity>
     </application>
