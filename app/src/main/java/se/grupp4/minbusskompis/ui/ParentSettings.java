@@ -48,10 +48,10 @@ public class ParentSettings extends AppCompatActivity {
     public void addSwitchListener(){
 
         soundSwitch = (Switch)findViewById(R.id.sound_switch);
+        soundSwitch.setChecked(sharedPreferences.getBoolean("soundsetting", true));
         soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 if(isChecked){
                     sharedPreferences.edit().putBoolean("soundsetting", true).apply();
                     Toast.makeText(getApplicationContext(), "Sound is ON", Toast.LENGTH_SHORT).show();
