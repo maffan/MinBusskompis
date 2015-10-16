@@ -15,14 +15,12 @@ import org.json.JSONObject;
 import se.grupp4.minbusskompis.api.datatypes.ip.JourneyInfo;
 import se.grupp4.minbusskompis.api.datatypes.vt.Coord;
 
-class InnovationPlatform
-{
+class InnovationPlatform {
 	private static String key = "Basic Z3JwMjE6dlJ0Q2xydE9tMg==";
 	private static String baseurl = "https://ece01.ericsson.net:4443/ecity?";
 	private static int INTERVAL_LENGTH = 5;
 
-	private static String httpGet(int sec, String params) throws IOException
-	{
+	private static String httpGet(int sec, String params) throws IOException {
 		long t2 = System.currentTimeMillis() - 5000;
 		long t1 = t2 - (1000 * sec);
 
@@ -55,57 +53,50 @@ class InnovationPlatform
 		return response.toString();
 	}
 
-	private static String getLatestStringValueOf(String parameter, JSONArray data) throws JSONException
-	{
+	private static String getLatestStringValueOf(String parameter, JSONArray data) throws JSONException {
 		TimedValue timedValue = new TimedValue("", 0);
 
-		for(int i = 0; i < data.length(); i++)
-		{
+		for (int i = 0; i < data.length(); i++) {
 			Object jso = data.get(i);
 
-			int time = ((JSONObject)jso).getInt("timestamp");
-			String key = ((JSONObject)jso).getString("resourceSpec");
-			String value = ((JSONObject)jso).getString("value");
+			int time = ((JSONObject) jso).getInt("timestamp");
+			String key = ((JSONObject) jso).getString("resourceSpec");
+			String value = ((JSONObject) jso).getString("value");
 
-			if(key.equals(parameter))
-				if(time > timedValue.getTime())
+			if (key.equals(parameter))
+				if (time > timedValue.getTime())
 					timedValue.setValue(value, time);
 		}
 
 		return timedValue.value;
 	}
 
-	private static class TimedValue
-	{
+	private static class TimedValue {
 		private String value;
 		private int time;
 
-		TimedValue(String value, int time)
-		{
+		TimedValue(String value, int time) {
 			this.value = value;
 			this.time = time;
 		}
 
-		public int getTime()
-		{
+		public int getTime() {
 			return this.time;
 		}
 
-		public void setValue(String value, int time)
-		{
+		public void setValue(String value, int time) {
 			this.value = value;
 			this.time = time;
 		}
 	}
 
-	public static String getNextStop(String dgw) throws IOException, JSONException
-	{
+	public static String getNextStop(String dgw) throws IOException, JSONException {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Next_Stop";
 		String response = "";
-		
+
 		int tries = 1;
-		while(response.equals(""))
-			response = httpGet(INTERVAL_LENGTH * 2^(tries++-1), params);
+		while (response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
 
 		JSONArray data = new JSONArray(response);
 
@@ -114,14 +105,13 @@ class InnovationPlatform
 		return name;
 	}
 
-	public static Coord getLatestCoordOf(String dgw) throws IOException, JSONException
-	{
+	public static Coord getLatestCoordOf(String dgw) throws IOException, JSONException {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$GPS";
 		String response = "";
-		
+
 		int tries = 1;
-		while(response.equals(""))
-			response = httpGet(INTERVAL_LENGTH * 2^(tries++-1), params);
+		while (response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
 
 		JSONArray data = new JSONArray(response);
 
@@ -131,14 +121,13 @@ class InnovationPlatform
 		return new Coord(lat, lon);
 	}
 
-	public static JourneyInfo getJourneyInfo(String dgw) throws IOException, JSONException
-	{
+	public static JourneyInfo getJourneyInfo(String dgw) throws IOException, JSONException {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Journey_Info";
 		String response = "";
-		
+
 		int tries = 1;
-		while(response.equals(""))
-			response = httpGet(INTERVAL_LENGTH * 2^(tries++-1), params);
+		while (response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
 
 		JSONArray data = new JSONArray(response);
 
@@ -147,49 +136,77 @@ class InnovationPlatform
 
 		return new JourneyInfo(name, dest);
 	}
-	
-	public static HashMap<String, String> getAllJourneyNames() throws IOException, JSONException
-	{
+
+	public static HashMap<String, String> getAllJourneyNames() throws IOException, JSONException {
 		String params = "sensorSpec=Ericsson$Journey_Info";
 		String response = "";
-		
+
 		int tries = 1;
-		while(response.equals(""))
-			response = httpGet(INTERVAL_LENGTH * 2^(tries++-1), params);
-		
+		while (response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+
 		JSONArray data = new JSONArray(response);
 		HashMap<String, String> busses = new HashMap<String, String>();
-		
-		for(int i = 0; i < data.length(); i++)
-		{
+
+		for (int i = 0; i < data.length(); i++) {
 			Object jso = data.get(i);
 
-			String resourceSpec = ((JSONObject)jso).getString("resourceSpec");
-			
-			if(resourceSpec.equals("Journey_Name_Value"))
-			{
-				String gatewayId = ((JSONObject)jso).getString("gatewayId");
-				String journeyNameValue = ((JSONObject)jso).getString("value");
+			String resourceSpec = ((JSONObject) jso).getString("resourceSpec");
+
+			if (resourceSpec.equals("Journey_Name_Value")) {
+				String gatewayId = ((JSONObject) jso).getString("gatewayId");
+				String journeyNameValue = ((JSONObject) jso).getString("value");
 				busses.put(gatewayId, journeyNameValue);
 			}
 		}
 
 		return busses;
 	}
-	
-	public static String getOutsideTemperature(String dgw) throws IOException, JSONException
-	{
+
+	public static String getOutsideTemperature(String dgw) throws IOException, JSONException {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Ambient_Temperature";
 		String response = "";
-		
+
 		int tries = 1;
-		while(response.equals(""))
-			response = httpGet(INTERVAL_LENGTH * 2^(tries++-1), params);
-		
+		while (response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+
 		JSONArray data = new JSONArray(response);
 
 		String temp = getLatestStringValueOf("Ambient_Temperature_Value", data);
 
 		return temp;
+	}
+
+	public static boolean isAtStop(String dgw) throws IOException, JSONException
+	{
+		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$At_Stop";
+		String response = "";
+
+		int tries = 1;
+		while (response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+
+		JSONArray data = new JSONArray(response);
+
+		String value = getLatestStringValueOf("At_Stop_Value", data);
+
+		return Boolean.parseBoolean(value);
+	}
+
+	public static boolean isStopPressed(String dgw) throws IOException, JSONException
+	{
+		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Stop_Pressed";
+		String response = "";
+
+		int tries = 1;
+		while (response.equals(""))
+			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+
+		JSONArray data = new JSONArray(response);
+
+		String value = getLatestStringValueOf("Stop_Pressed_Value", data);
+
+		return Boolean.parseBoolean(value);
 	}
 }
