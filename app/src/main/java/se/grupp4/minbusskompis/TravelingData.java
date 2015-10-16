@@ -10,10 +10,13 @@ public class TravelingData implements Parcelable {
     public String destinationName = "Defaultstorp";
     public String bussStationName = "Defaultsgatan";
     public String busStopName = "Defaultsvägen";
+    public String nextBusStop = "NextDefault";
     public String bussStationChar = "D";
     public String bussName = "666";
     public String busLeavingAt = "12:00:00";
     public String busArrivingAt = "13:30:00";
+    public String currentBusMacAdress = "00";
+    public boolean isAtStop = false;
 
     public static final int INACTIVE = 0;
     public static final int WALKING = 1;
@@ -30,10 +33,13 @@ public class TravelingData implements Parcelable {
         destinationName = in.readString();
         bussStationName = in.readString();
         busStopName = in.readString();
+        nextBusStop = in.readString();
         bussStationChar = in.readString();
         bussName = in.readString();
         busLeavingAt = in.readString();
         busArrivingAt = in.readString();
+        currentBusMacAdress = in.readString();
+        isAtStop = in.readByte() != 0x00;
     }
 
     @Override
@@ -48,10 +54,13 @@ public class TravelingData implements Parcelable {
         dest.writeString(destinationName);
         dest.writeString(bussStationName);
         dest.writeString(busStopName);
+        dest.writeString(nextBusStop);
         dest.writeString(bussStationChar);
         dest.writeString(bussName);
         dest.writeString(busLeavingAt);
         dest.writeString(busArrivingAt);
+        dest.writeString(currentBusMacAdress);
+        dest.writeByte((byte) (isAtStop ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")
@@ -75,10 +84,13 @@ public class TravelingData implements Parcelable {
                 ", destinationName='" + destinationName + '\'' +
                 ", bussStationName='" + bussStationName + '\'' +
                 ", bussStopName='" + busStopName + '\'' +
+                ", nextBusStop='" + nextBusStop + '\'' +
                 ", bussStationChar='" + bussStationChar + '\'' +
                 ", bussName='" + bussName + '\'' +
                 ", busLeavingAt=" + busLeavingAt + '\'' +
-                ", busArrivingAt=" + busArrivingAt +
+                ", busArrivingAt=" + busArrivingAt + '\'' +
+                ", currentBusMacAdress=" + currentBusMacAdress + '\'' +
+                ", isAtStop=" + isAtStop +
                 '}';
     }
 }
