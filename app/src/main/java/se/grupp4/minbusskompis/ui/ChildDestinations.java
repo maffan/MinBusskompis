@@ -162,14 +162,12 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), ChildChildCode.class);
+            startActivity(intent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void settingsItem(){
-        Intent intent = new Intent(this, ChildChildCode.class);
-        startActivity(intent);
-    }
 }

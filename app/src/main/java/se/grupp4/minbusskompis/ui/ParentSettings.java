@@ -1,6 +1,8 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -14,11 +16,15 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.api.BusData;
+import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
+import se.grupp4.minbusskompis.parsebuss.BussData;
 
 public class ParentSettings extends AppCompatActivity {
 
     private Button resetButton;
     private Switch soundSwitch;
+    private Context context = this;
     protected SharedPreferences sharedPreferences;
 
     @Override
@@ -37,10 +43,30 @@ public class ParentSettings extends AppCompatActivity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                sharedPreferences.edit().clear().apply();
+                new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Reset")
+                        .setMessage("This will reset your app, and you will lose all connections" +
+                                "do you wish to continue?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                sharedPreferences.edit().clear().apply();
+                                if (!(BussData.getInstance() == null)) {
+                                    BussData.getInstance().clearParseData();
+                                }
+                                BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+                                    @Override
+                                    public void done() {
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
 
-                startActivity(intent);
             }
         });
     }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.parse.ParseInstallation;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.parsebuss.BussData;
 import se.grupp4.minbusskompis.ui.fragments.StartPopupDialog;
 
 
