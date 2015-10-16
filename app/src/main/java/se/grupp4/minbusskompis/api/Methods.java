@@ -1,5 +1,7 @@
 package se.grupp4.minbusskompis.api;
 
+import android.util.Log;
+
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -14,7 +16,7 @@ import se.grupp4.minbusskompis.api.datatypes.vt.Trip;
 
 public class Methods 
 {
-	// V�sttrafik
+	// Västtrafik
 	
 	public static ArrayList<StopLocation> getNearbyStops(String lat, String lng) throws IOException, JSONException
 	{
@@ -26,9 +28,22 @@ public class Methods
 		return VastTrafik.getLocationNamesByString(input);
 	}
 	
-	public static ArrayList<Trip> getTriplist(Coord from, Coord to) throws IOException, JSONException
+	public static ArrayList<Trip> getTriplist(Coord from, Coord to)
 	{
-		return VastTrafik.getTripList(from, to);
+		ArrayList<Trip> tripList = null;
+
+		try{
+			tripList = VastTrafik.getTripList(from, to);
+		} catch(JSONException e)		{
+			Log.e("API", "getTriplist(): " + e.getStackTrace().toString());
+		}
+
+		return tripList;
+	}
+
+	public static Trip getClosestTrip(Coord from, Coord to)
+	{
+		return getTriplist(from, to).get(0);
 	}
 	
 	public static ArrayList<Coord> getGeometry(String url) throws IOException, JSONException
@@ -58,8 +73,30 @@ public class Methods
 		return InnovationPlatform.getOutsideTemperature(dgw);
 	}
 
-	public static HashMap<String, String> getAllJourneyNamesIP() throws IOException, JSONException
+	public static HashMap<String, String> getAllJourneyNames() throws IOException, JSONException
 	{
 		return InnovationPlatform.getAllJourneyNames();
+	}
+
+	public static boolean isAtStop(String dgw)
+	{
+		boolean value = false;
+		try{
+			value = InnovationPlatform.isAtStop(dgw);
+		}catch(JSONException|IOException e){
+			Log.e("API", "isAtStop(): " + e.getStackTrace().toString());
+		}
+		return value;
+	}
+
+	public static boolean isStopPressed(String dgw)
+	{
+		boolean value = false;
+		try{
+			value = InnovationPlatform.isStopPressed(dgw);
+		}catch(JSONException|IOException e){
+			Log.e("API", "isStopPressed(): " + e.getStackTrace().toString());
+		}
+		return value;
 	}
 }

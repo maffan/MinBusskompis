@@ -1,5 +1,7 @@
 package se.grupp4.minbusskompis.api;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -131,7 +133,7 @@ class VastTrafik
 		return locationList;
 	}
 	
-	public static ArrayList<Trip> getTripList(Coord from, Coord to) throws IOException, JSONException
+	public static ArrayList<Trip> getTripList(Coord from, Coord to) throws JSONException
 	{
 		UrlCallBuilder uBuilder = new UrlCallBuilder(baseurl, "trip");
 
@@ -142,9 +144,14 @@ class VastTrafik
 		uBuilder.AddParameter("destCoordLong", to.getLongitude());
 		uBuilder.AddParameter("destCoordName", "0");
 		uBuilder.AddParameter("needGeo", "1");
-		
-		String response = httpGet(uBuilder.getUrl() + "&format=json");
-		//String response = JsonTestResponses.getTripList;
+
+		String response = "";
+		try{
+			response = httpGet(uBuilder.getUrl() + "&format=json");
+		}catch(IOException e){
+			Log.e("API", e.getStackTrace().toString());
+			return null;
+		}
 
 		JSONObject jsonData = new JSONObject(response);
 		JSONArray tripList = jsonData.getJSONObject("TripList").getJSONArray("Trip");
