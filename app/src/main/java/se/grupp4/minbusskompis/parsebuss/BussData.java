@@ -104,19 +104,15 @@ public class BussData {
         try {
             positionObject = query.getFirst();
         } catch (ParseException e) {
-            if (e.getCode() == ParseException.OBJECT_NOT_FOUND){
-                positionObject = new ParseObject("Position");
-                positionObject.put(INSTALLATION_FIELD,id);
-                positionObject.put("position",new ParseGeoPoint(0,0));
-                positionObject.put("status",0);
-                positionObject.put("destination","");
-                try {
-                    positionObject.save();
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-            }else{
-                e.printStackTrace();
+            positionObject = new ParseObject("Position");
+            positionObject.put(INSTALLATION_FIELD,id);
+            positionObject.put("position",new ParseGeoPoint(0,0));
+            positionObject.put("status",0);
+            positionObject.put("destination","");
+            try {
+                positionObject.save();
+            } catch (ParseException e1) {
+                e1.printStackTrace();
             }
 
         }
