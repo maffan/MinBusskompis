@@ -1,15 +1,26 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="se.grupp4.minbusskompis.ui.ChildGoingToBus"
-    android:background="#4fffc5">
+    android:background="#4fffc5"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:weightSum="1">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Going to bus, navigation in Google Maps"
-        android:gravity="center"/>
-</RelativeLayout>
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:text="Jag är på busshållplatsen"
+        android:id="@+id/child_going_to_bus_im_on_bs"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:text="Hjälp mig hitta hållplatsen"
+        android:id="@+id/child_going_to_bus_help_to_bs"
+        android:layout_below="@+id/button" />
+</LinearLayout>

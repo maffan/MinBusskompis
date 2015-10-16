@@ -64,6 +64,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         wifiList = new ArrayList<>();
         //eduroam i biblioteket
         wifiList.add("881dfc44578f");
+        wifiList.add("881dfc2c8f60");
         addButtonListener();
 
         //Bind and update service

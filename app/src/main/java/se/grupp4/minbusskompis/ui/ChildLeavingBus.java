@@ -13,7 +13,7 @@ import android.widget.Button;
 
 import se.grupp4.minbusskompis.R;
 
-public class ChildBusStop extends AppCompatActivity {
+public class ChildLeavingBus extends AppCompatActivity {
 
     protected Button dummyButton1;
     private Context context = this;
@@ -49,7 +49,7 @@ public class ChildBusStop extends AppCompatActivity {
         dummyButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChildBusStop.this, ChildGoingToBus.class);
+                Intent intent = new Intent(ChildLeavingBus.this, ChildGoingToBus.class);
                 startActivity(intent);
             }
         });
