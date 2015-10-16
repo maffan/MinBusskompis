@@ -136,7 +136,7 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
     public void onServiceConnected(ComponentName name, IBinder service) {
         Log.d(TAG,"Received binder, start location listener");
         parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
-        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(MODE, destinationName);
+        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.WALKING, destinationName);
 
         if (neededHelp) {
             ParseGeoPoint.getCurrentLocationInBackground(TIMEOUT, new LocationCallback() {

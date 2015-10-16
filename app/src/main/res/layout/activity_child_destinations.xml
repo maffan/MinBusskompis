@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/parent_destinations_add_destination_button"
-        android:layout_below="@+id/child_destination_walkmode_button">
+        android:layout_below="@+id/child_destination_childcode_button">
 
         <ListView
             android:layout_width="match_parent"
@@ -31,23 +31,6 @@
             android:id="@+id/child_destinations_loading_text"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Walkmode"
-        android:id="@+id/child_destination_walkmode_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Buss Station"
-        android:id="@+id/child_destination_busstation_button"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"

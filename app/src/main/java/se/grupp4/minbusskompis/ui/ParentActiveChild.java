@@ -23,6 +23,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
@@ -128,23 +129,23 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
 
     private void updateStatusText() {
         switch (status){
-            case 0:
+            case TravelingData.INACTIVE:
                 childStatus.setText("Child not active");
                 childStatusImage.setImageResource(R.drawable.inactive);
                 break;
-            case 1:
+            case TravelingData.WALKING:
                 childStatus.setText("Going to bus stop");
                 childStatusImage.setImageResource(R.drawable.walking);
                 break;
-            case 2:
+            case TravelingData.AT_BUS_STATION:
                 childStatus.setText("At bus stop");
                 childStatusImage.setImageResource(R.drawable.busstop);
                 break;
-            case 3:
+            case TravelingData.ON_BUS:
                 childStatus.setText("Traveling by bus");
                 childStatusImage.setImageResource(R.drawable.bus);
                 break;
-            case 4:
+            case TravelingData.LEAVING_BUS:
                 childStatus.setText("Leaving bus");
                 childStatusImage.setImageResource(R.drawable.busstop);
                 break;

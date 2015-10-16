@@ -10,7 +10,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bus Stop"
+        android:text="Leave bus"
         android:id="@+id/button_dummy_busonbus" />
 
     <LinearLayout
@@ -41,7 +41,7 @@
             android:layout_height="25dp"
             android:paddingLeft="10dp"
             android:gravity="center_vertical"
-            android:text="Time to your bus stop:"
+            android:text="Arriving at:"
             android:background="#ccc"/>
         <TextView
             android:layout_width="match_parent"

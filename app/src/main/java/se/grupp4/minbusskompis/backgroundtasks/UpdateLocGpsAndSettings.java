@@ -35,7 +35,7 @@ public class UpdateLocGpsAndSettings {
         try {
             //GPS, tid mellan uppdateringar, distans per uppdatering, locationlistener att uppdatera till
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateRate, METER_UPDATE, locationListener);
-            Log.d(TAG, "Locationlistener successfully added");
+            Log.d(TAG, "Locationlistener successfully ADDED");
             return true;
         }catch(SecurityException e){
             e.printStackTrace();

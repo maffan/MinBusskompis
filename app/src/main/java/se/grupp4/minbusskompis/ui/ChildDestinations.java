@@ -46,8 +46,6 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
     private ArrayList<BussDestination> destinations;
 
     protected Button childCodeButton;
-    protected Button walkmodeButton;
-    protected Button busStation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +55,6 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         viewHolder = new ViewHolder();
 
         childCodeButton = (Button) findViewById(R.id.child_destination_childcode_button);
-        walkmodeButton = (Button) findViewById(R.id.child_destination_walkmode_button);
-        busStation = (Button) findViewById(R.id.child_destination_busstation_button);
 
         //Initiate views
         viewHolder.destinationsListView = (ListView) findViewById(R.id.child_destinations_list);
@@ -87,22 +83,6 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ChildDestinations.this, ChildChildCode.class);
-                startActivity(intent);
-            }
-        });
-
-        walkmodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChildDestinations.this, ChildGoingToBus.class);
-                startActivity(intent);
-            }
-        });
-
-        busStation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChildDestinations.this, ChildBusStation.class);
                 startActivity(intent);
             }
         });

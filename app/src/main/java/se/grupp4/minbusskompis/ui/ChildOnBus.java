@@ -1,11 +1,13 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,11 +20,47 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 
-public class ChildOnBus extends AppCompatActivity implements ServiceConnection {
+public class ChildOnBus extends AppCompatActivity implements ServiceConnection,Runnable {
+    @Override
+    public void run() {
+        new UpdateViewsTask(travelingData).execute();
+    }
+
+    private class UpdateViewsTask extends AsyncTask<Void, Void, TravelingData>{
+        private TravelingData parentTravelingData;
+
+        public UpdateViewsTask(TravelingData parentTravelingData) {
+            this.parentTravelingData = parentTravelingData;
+        }
+
+        @Override
+        protected TravelingData doInBackground(Void... params) {
+            //Get data from api
+            TravelingData travelingData = new TravelingData();
+            return travelingData;
+        }
+
+        @Override
+        protected void onPostExecute(TravelingData travelingData) {
+            super.onPostExecute(travelingData);
+            viewHolder.nextBusStop.setText(travelingData.busStopName);
+
+            if(travelingData.nextBusStop.equals(this.parentTravelingData.busStopName) && !travelingData.isAtStop){
+                //Next stop is same as wwe want to go, ok. to. this case. ok.
+                Intent intent = new Intent(context, ChildLeavingBus.class);
+                startActivity(intent);
+                ((Activity)context).finish();
+            }
+        }
+    }
+
     private static class ViewHolder {
         TextView busStopName;
         TextView timeToStop;
@@ -34,7 +72,15 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection {
     private Context context = this;
     private TravelingData travelingData;
     private ViewHolder viewHolder;
-    UpdateLocToParseService.UpdateLocBinder updateLocBinder;
+    private UpdateLocToParseService.UpdateLocBinder updateLocBinder;
+    private ScheduledThreadPoolExecutor poolExecutor;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        poolExecutor.shutdown();
+        unbindService(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +97,19 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection {
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");
 
         //Set data
-        viewHolder.busStopName.setText(travelingData.destinationName);
-        viewHolder.timeToStop.setText(String.valueOf(travelingData.time));
+        viewHolder.busStopName.setText(travelingData.busStopName);
+        viewHolder.timeToStop.setText(travelingData.busArrivingAt);
         viewHolder.nextBusStop.setText(travelingData.bussStationName);
 
-        //Init service
-        Intent serviceIntent = new Intent(context, UpdateLocToParseService.class);
-        bindService(serviceIntent,this,0);
+        //Update next busstop
+        poolExecutor = new ScheduledThreadPoolExecutor(1);
+        poolExecutor.scheduleWithFixedDelay(this,0,20, TimeUnit.SECONDS);
 
         //Dummy buttons, pass forward
         addButtonListener();
+        //Init service
+        Intent serviceIntent = new Intent(context, UpdateLocToParseService.class);
+        bindService(serviceIntent, this, 0);
     }
 
     public void addButtonListener(){
@@ -69,8 +118,10 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection {
         dummyButtonOnBus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ChildLeavingBus.class);
+                Intent intent = new Intent(context, ChildLeavingBus.class);
+                intent.putExtra("data",travelingData);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -116,7 +167,9 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         updateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
-        updateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(3, travelingData.destinationName);
+        updateLocBinder.getService().getUpdateLocGpsAndSettings().resetLocationListener();
+        updateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.ON_BUS, travelingData.destinationName);
+
     }
 
     @Override

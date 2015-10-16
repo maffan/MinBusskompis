@@ -33,10 +33,12 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     private static final String TAG = "RECEIVER";
     private BussSyncMessengerProvider provider;
     private Context context;
+    private Intent intent;
 
 
     @Override
     protected void onPushReceive(Context context, Intent intent) {
+        this.intent = intent;
         this.context = context;
         try {
             Log.d(TAG,"Data received!");
@@ -75,6 +77,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
             case "Message":
                 notificationSound(context);
                 sendToRelationMessenger(messageData);
+                super.onPushReceive(context,intent);
                 break;
             case "SyncRequest":
                 sendDataByTypeToSyncMessenger(messageData, BussParseSyncMessenger.REQUEST_TYPE);

@@ -1,5 +1,6 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +26,8 @@ import se.grupp4.minbusskompis.backgroundtasks.WifiCheckerStart;
 
 //Note that dummybuttons are temporary for debugging
 public class ChildBusStation extends AppCompatActivity implements ServiceConnection {
+
+    private static final String TAG = "ChildBusStation";
 
     private static class ViewHolder {
         TextView busStopName;
@@ -59,7 +63,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         //Set texts
         viewHolder.busStopName.setText(travelingData.bussStationName);
         viewHolder.nextBusName.setText(travelingData.bussName);
-        viewHolder.timeToBus.setText(String.valueOf(travelingData.time));
+        viewHolder.timeToBus.setText(travelingData.busLeavingAt);
 
         wifiList = new ArrayList<>();
         //eduroam i biblioteket
@@ -95,8 +99,11 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), ChildOnBus.class);
+                Intent intent = new Intent(context, ChildOnBus.class);
+                intent.putExtra("data",travelingData);
                 startActivity(intent);
+                wifiCheckerStart.shutdown();
+                finish();
             }
         });
     }
@@ -125,6 +132,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "Calling onDestroy");
         super.onDestroy();
         wifiCheckerStart.shutdown();
         unbindService(this);
@@ -134,7 +142,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
     public void onServiceConnected(ComponentName name, IBinder service) {
         parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
         parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().resetLocationListener();
-        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(2, destinationName);
+        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.AT_BUS_STATION, destinationName);
         Intent nextIntent = new Intent(context,ChildOnBus.class);
         nextIntent.putExtra("data",travelingData);
         wifiCheckerStart = new WifiCheckerStart();

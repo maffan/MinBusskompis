@@ -14,6 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -28,6 +32,15 @@ import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 
 public class ChildGoingFromBus extends AppCompatActivity implements ServiceConnection {
+
+    private ViewHolder viewHolder;
+    private boolean neededHelp;
+    private Intent serviceIntent;
+
+    private static class ViewHolder {
+        Button atDestinationButton;
+        Button helpToFindDestinationButton;
+    }
 
     private static final String TAG = "WALKMODE";
     private static final int TIMEOUT = 60*1000;
@@ -44,6 +57,13 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_going_from_bus);
+        viewHolder = new ViewHolder();
+
+        //Initiate views
+        viewHolder.atDestinationButton = (Button) findViewById(R.id.child_going_from_bus_on_location);
+        viewHolder.helpToFindDestinationButton = (Button) findViewById(R.id.child_going_from_bus_help_to_loc);
+
+
 
         //Get target destination
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");
@@ -55,18 +75,48 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
         Log.d(TAG,"Latitude: "+ latitude);
         Log.d(TAG, "Longitude: " + longitude);
 
+
         //Start sending updates to parent
-        Intent serviceIntent = new Intent(this, UpdateLocToParseService.class);
-        bindService(serviceIntent, this, 0);
+        serviceIntent = new Intent(this, UpdateLocToParseService.class);
+        viewHolder.helpToFindDestinationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                neededHelp = true;
+                bindService(serviceIntent, (ServiceConnection) context, 0);
+            }
+        });
+
+        viewHolder.atDestinationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                neededHelp = false;
+                bindService(serviceIntent, (ServiceConnection) context, 0);
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(context, "Made it back to BussKompis!!!", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, ChildBusStation.class);
-        intent.putExtra("data",travelingData);
-        startActivity(intent);
-        finish();
+        new AlertDialog.Builder(context)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("You have arrived!")
+                .setMessage("Are you at your destination?")
+                .setPositiveButton("Hells yes!", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(),ParentChildrenList.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton("No way!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((ServiceConnection) context).onServiceConnected(null,parseUpdateLocBinder);
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -111,39 +161,22 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
     public void onServiceConnected(ComponentName name, IBinder service) {
         Log.d(TAG,"Received binder, start location listener");
         parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
-        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(MODE, destinationName);
+        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().resetLocationListener();
+        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.WALKING, destinationName);
 
-        ParseGeoPoint.getCurrentLocationInBackground(TIMEOUT, new LocationCallback() {
-            @Override
-            public void done(ParseGeoPoint parseGeoPoint, ParseException e) {
+        if (neededHelp) {
+            Intent intent =
+                    new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("google.navigation:q=" + latitude + "," + longitude + "&mode=w"));
 
-                if (parseGeoPoint != null) {
-                    Location location = new Location("Nanana");
-                    location.setLatitude(parseGeoPoint.getLatitude());
-                    location.setLongitude(parseGeoPoint.getLongitude());
-                    ChildLocationAndStatus locationAndStatus = new ChildLocationAndStatus(location,MODE,destinationName);
-                    BussData.getInstance().updateLatestPosition(locationAndStatus);
-                    Intent intent =
-                            new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("google.navigation:q=" + latitude + "," + longitude + "&mode=w"));
-
-                    startActivityForResult(intent, 1);
-                } else {
-                    Toast.makeText(context, "Could not get a clear signal. Please go outside and try again!", Toast.LENGTH_SHORT).show();
-
-                    Intent intent =
-                            new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("google.navigation:q=" + latitude + "," + longitude + "&mode=w"));
-
-                    startActivityForResult(intent, 1);
-
-                    //Send back to destinations
-                   //Intent nintent = new Intent(context, ChildDestinations.class);
-                   //startActivity(nintent);
-                   //finish();
-                }
-            }
-        });
+            startActivityForResult(intent, 1);
+        }
+        else{
+            Intent intent = new Intent(this, ChildDestinations.class);
+            intent.putExtra("data",travelingData);
+            startActivity(intent);
+            finish();
+        }
 
     }
 
@@ -156,5 +189,6 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
     protected void onDestroy() {
         super.onDestroy();
         unbindService(this);
+        stopService(serviceIntent);
     }
 }
