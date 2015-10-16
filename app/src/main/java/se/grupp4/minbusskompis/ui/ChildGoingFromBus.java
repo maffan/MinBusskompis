@@ -113,6 +113,7 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
                 .setNegativeButton("No way!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         ((ServiceConnection) context).onServiceConnected(null,parseUpdateLocBinder);
                     }
                 })

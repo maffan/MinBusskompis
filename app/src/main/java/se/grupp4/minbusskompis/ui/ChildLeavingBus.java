@@ -1,6 +1,5 @@
 package se.grupp4.minbusskompis.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;

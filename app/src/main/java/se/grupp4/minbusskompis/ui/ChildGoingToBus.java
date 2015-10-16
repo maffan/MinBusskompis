@@ -1,5 +1,6 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -50,6 +51,13 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_going_to_bus);
+
+        //Check if service running, error when completing travels and trying to start again
+        if(!isMyServiceRunning(UpdateLocToParseService.class)){
+            Log.d(TAG,"Update to parse service not started, starting service");
+            Intent serviceIntent = new Intent(this, UpdateLocToParseService.class);
+            startService(serviceIntent);
+        }
 
         //Get target destination
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");
@@ -135,6 +143,7 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         Log.d(TAG,"Received binder, start location listener");
+
         parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
         parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.WALKING, destinationName);
 
@@ -174,6 +183,7 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
+        Log.d(TAG, "Service disconnected");
 
     }
 
@@ -181,5 +191,15 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
     protected void onDestroy() {
         super.onDestroy();
         unbindService(this);
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
