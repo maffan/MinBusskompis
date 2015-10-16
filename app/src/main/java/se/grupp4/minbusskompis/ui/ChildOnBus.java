@@ -52,7 +52,7 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection {
 
         //Set data
         viewHolder.busStopName.setText(travelingData.destinationName);
-        viewHolder.timeToStop.setText(String.valueOf(travelingData.time));
+        viewHolder.timeToStop.setText(String.valueOf(travelingData.busLeavingAt));
         viewHolder.nextBusStop.setText(travelingData.bussStationName);
 
         //Init service

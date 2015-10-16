@@ -59,7 +59,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         //Set texts
         viewHolder.busStopName.setText(travelingData.bussStationName);
         viewHolder.nextBusName.setText(travelingData.bussName);
-        viewHolder.timeToBus.setText(String.valueOf(travelingData.time));
+        viewHolder.timeToBus.setText(String.valueOf(travelingData.busLeavingAt));
 
         wifiList = new ArrayList<>();
         //eduroam i biblioteket
