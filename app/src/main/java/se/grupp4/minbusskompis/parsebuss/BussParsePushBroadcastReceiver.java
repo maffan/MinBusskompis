@@ -3,10 +3,12 @@ package se.grupp4.minbusskompis.parsebuss;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.util.Log;
 
 import com.parse.ParsePushBroadcastReceiver;
@@ -31,6 +33,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     private static final String TAG = "RECEIVER";
     private BussSyncMessengerProvider provider;
     private Context context;
+
 
     @Override
     protected void onPushReceive(Context context, Intent intent) {
@@ -80,6 +83,7 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
                 sendDataByTypeToSyncMessenger(messageData, BussParseSyncMessenger.RESPONSE_TYPE);
                 break;
             case "PositionUpdate":
+                notificationSound(context);
                 BussRelationMessenger.getInstance().dataReceived(messageData);
                 break;
             default:
@@ -125,18 +129,19 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     }
 
     private static void notificationSound(Context context){
-
         MediaPlayer mediaPlayer;
-
-        mediaPlayer = MediaPlayer.create(context, R.raw.notification);
-
-        mediaPlayer.start();
-        //When sound is done it releases system resources
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                mediaPlayer.release();
-            }
-        });
+        SharedPreferences sharedPreferences;
+        sharedPreferences =  context.getSharedPreferences("MyPreferences", Context.MODE_APPEND);
+        if(!(sharedPreferences.getBoolean("soundsetting", false))){
+            mediaPlayer = MediaPlayer.create(context, R.raw.notification);
+            mediaPlayer.start();
+            //When sound is done it releases system resources
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    mediaPlayer.release();
+                }
+            });
+        }
     }
 }
