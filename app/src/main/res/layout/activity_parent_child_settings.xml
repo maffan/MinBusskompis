@@ -1,83 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#4fffc5">
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inst id placeholder"
+        android:id="@+id/parent_child_settings_installationid"
+        android:layout_gravity="center_horizontal" />
 
     <EditText
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="Name placeholder"
         android:ems="10"
         android:id="@+id/parent_child_settings_name"
-        android:layout_marginTop="100dp"
         android:layout_below="@+id/parent_child_settings_inst_title"
-        android:layout_centerHorizontal="true" />
+        />
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text="  Save name  "
-        android:textColor="#ffffff"
-        android:background="#000000"
+        android:text="Save name"
+        android:textColor="@color/button_text"
+        android:background="@color/button_background"
+        android:layout_marginTop="@dimen/button_top_margin"
         android:id="@+id/parent_child_settings_savename_button"
-        android:layout_below="@+id/parent_child_settings_name"
-        android:layout_centerHorizontal="true" />
+        />
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text="Destinations"
-        android:textColor="#ffffff"
-        android:background="#000000"
+        android:text="@string/parent_child_settings_destinations_button"
+        android:textColor="@color/button_text"
+        android:background="@color/button_background"
+        android:layout_marginTop="@dimen/button_top_margin"
         android:id="@+id/parent_child_settings_destinations_button"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/parent_child_settings_savename_button"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Installation id:"
-        android:id="@+id/parent_child_settings_inst_title"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginRight="5dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="placeholder"
-        android:id="@+id/parent_child_settings_installationid"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/parent_child_settings_inst_title"
-        android:layout_toEndOf="@+id/parent_child_settings_inst_title" />
+        />
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text=" Delete child "
-        android:textColor="#ffffff"
-        android:background="#000000"
+        android:text="Delete child"
+        android:textColor="@color/button_text"
+        android:background="@color/button_background"
+        android:layout_marginTop="@dimen/button_top_margin"
         android:id="@+id/parent_child_settings_delete_child_button"
-        android:layout_below="@+id/parent_child_settings_destinations_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+        />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text="Exit"
+        android:text="@string/parent_child_settings_exit_child_button"
         android:id="@+id/parent_child_settings_exit_child_button"
-        android:textColor="#ffffff"
-        android:background="#000000"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="39dp" />
+        android:textColor="@color/button_text"
+        android:background="@color/button_background"
+        android:layout_marginTop="@dimen/button_top_margin" />
 
 
-</RelativeLayout>
+</LinearLayout>

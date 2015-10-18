@@ -18,7 +18,7 @@ public class StartPopupDialog extends Dialog {
         this.setTitle("Min Busskompis");
         this.setContentView(R.layout.fragment_start_info_dialog);
 
-        dismissButton = (Button) this.findViewById(R.id.startInfoDismissButton);
+        dismissButton = (Button) this.findViewById(R.id.startup_dialog_dismiss_button);
         dismissButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

@@ -34,12 +34,12 @@ public class ParentChildrenAdd extends AppCompatActivity {
     }
 
     private void findViews() {
-        codeTextView = (TextView) findViewById(R.id.childCodeEditText);
+        codeTextView = (TextView) findViewById(R.id.parent_add_child_hint_text);
     }
 
     public void addButtonListener(){
 
-        addChildButton=(Button)findViewById(R.id.button_addchildcode);
+        addChildButton=(Button)findViewById(R.id.parent_add_child_add_child_button);
 
         addChildButton.setOnClickListener(new View.OnClickListener() {
             @Override

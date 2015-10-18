@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Color scheme -->
+    <color name="background">#4fffc5</color>
+    <color name="layout">#fff</color>
+    <color name="layout_title">#ccc</color>
+    <color name="button_background">#000</color>
+    <color name="button_text">#fff</color>
+    <color name="font_standard">#000</color>
+
+</resources>

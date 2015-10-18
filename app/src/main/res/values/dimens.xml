@@ -2,4 +2,16 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- MB styles -->
+    <dimen name="button_width">150dp</dimen>
+    <dimen name="button_top_margin">20dp</dimen>
+
+    <dimen name="standard_width">150dp</dimen>
+    <dimen name="standard_top_margin">20dp</dimen>
+
+    <dimen name="font_title">20sp</dimen>
+    <dimen name="font_header">16sp</dimen>
+    <dimen name="font_standard">10sp</dimen>
+
 </resources>

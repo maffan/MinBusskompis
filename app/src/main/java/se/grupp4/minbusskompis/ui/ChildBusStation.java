@@ -1,6 +1,5 @@
 package se.grupp4.minbusskompis.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -49,7 +48,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child_buss_station);
+        setContentView(R.layout.activity_child_bus_station);
         viewHolder = new ViewHolder();
 
         //Set bus station status

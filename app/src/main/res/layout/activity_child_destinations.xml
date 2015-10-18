@@ -5,15 +5,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="se.grupp4.minbusskompis.ui.ChildDestinations"
-    android:background="#4fffc5">
+    android:background="@color/background">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/parent_destinations_add_destination_button"
-        android:layout_below="@+id/child_destination_childcode_button">
+        android:layout_above="@+id/parent_destinations_add_destination_button">
 
         <ListView
             android:layout_width="match_parent"
@@ -27,19 +26,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Loading destinations.."
+            android:text="@string/child_destinations_loading_text"
             android:id="@+id/child_destinations_loading_text"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Code"
-        android:id="@+id/child_destination_childcode_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
 

@@ -24,6 +24,7 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
         ImageView activityIconView;
         TextView childNameView;
         ImageView settingsButtonView;
+        TextView activeChildText;
     }
 
     public ChildAdapter (Context context, int layout, ArrayList<ChildData> children){
@@ -45,6 +46,7 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
             viewHolder.activityIconView = (ImageView) row.findViewById(R.id.parent_children_list_item_child_active_icon);
             viewHolder.childNameView = (TextView) row.findViewById(R.id.parent_children_list_item_name);
             viewHolder.settingsButtonView = (ImageView) row.findViewById(R.id.parent_children_list_item_settings_icon);
+            viewHolder.activeChildText = (TextView) row.findViewById(R.id.parent_children_list_item_active_text);
             row.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -80,20 +82,21 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
         //Set name
         viewHolder.childNameView.setText(child.getName());
 
-        //Check if parent
-        if(true){
-            //Add settings img
-            viewHolder.settingsButtonView.setImageResource(R.drawable.settings);
+        //Add settings img
+        viewHolder.settingsButtonView.setImageResource(R.drawable.settings);
 
-            //Add settings button listener, pass in id to settings to populate
-            viewHolder.settingsButtonView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, ParentChildSettings.class);
-                    intent.putExtra("child_id",child.getId());
-                    context.startActivity(intent);
-                }
-            });
+        //Add settings button listener, pass in id to settings to populate
+        viewHolder.settingsButtonView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ParentChildSettings.class);
+                intent.putExtra("child_id",child.getId());
+                context.startActivity(intent);
+            }
+        });
+
+        if(child.isActive()){
+            viewHolder.activeChildText.setVisibility(View.VISIBLE);
         }
 
         return row;

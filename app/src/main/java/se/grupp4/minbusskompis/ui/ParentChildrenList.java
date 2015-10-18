@@ -134,7 +134,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
 
     private void showContentOrMessage(ArrayList<ChildData> tempList) {
         if(tempList.isEmpty()){
-            viewHolder.loadingTextView.setText(R.string.no_children_added);
+            viewHolder.loadingTextView.setText(R.string.parent_children_list_no_children_text);
         }else{
             childrenListAdapter.clear();
             childrenListAdapter.addAll(tempList);

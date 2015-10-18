@@ -1,46 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#4fffc5">
-
-    <Switch
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Sound"
-        android:id="@+id/sound_switch"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:typeface="monospace"
-        android:textColor="#000000"
-        android:textOn="ON"
-        android:textOff="OFF"
-        android:background="#ffffff"
-        android:backgroundTint="#ff688c"
-        android:textStyle="bold"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:height="100dp"
-        android:width="300dp"
-        android:text="Reset"
-        android:textColor="#ffffff"
-        android:background="#000000"
-        android:id="@+id/parent_reset_button"
-        android:layout_marginTop="150dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/sound_switch" />
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:gravity="center">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Settings"
-        android:id="@+id/textView4"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+        android:id="@+id/textView4" />
 
-</RelativeLayout>
+    <Switch
+        android:layout_marginTop="@dimen/standard_top_margin"
+        android:layout_width="@dimen/standard_width"
+        android:layout_height="wrap_content"
+        android:text="Sound"
+        android:id="@+id/sound_switch"
+        android:textOn="ON"
+        android:textOff="OFF"
+        />
+
+    <Button
+        android:layout_marginTop="@dimen/button_top_margin"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:textColor="@color/button_text"
+        android:background="@color/button_background"
+        android:id="@+id/parent_reset_button" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/parent_settings_install_id_textview"
+        android:text="Placeholder"
+        android:layout_marginTop="@dimen/standard_top_margin"/>
+
+</LinearLayout>

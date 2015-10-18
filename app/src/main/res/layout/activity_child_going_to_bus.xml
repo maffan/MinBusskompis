@@ -11,16 +11,20 @@
     android:weightSum="1">
 
     <Button
+        android:background="@color/button_background"
+        android:textColor="@color/button_text"
         android:layout_width="300dp"
         android:layout_height="150dp"
-        android:text="Jag är på busshållplatsen"
-        android:id="@+id/child_going_to_bus_im_on_bs"
-        android:layout_marginBottom="20dp" />
+        android:text="@string/child_going_to_bus_im_on_bs"
+        android:id="@+id/child_going_to_bus_im_on_bs"/>
 
     <Button
+        android:layout_marginTop="@dimen/button_top_margin"
+        android:background="@color/button_background"
+        android:textColor="@color/button_text"
         android:layout_width="300dp"
         android:layout_height="150dp"
-        android:text="Hjälp mig hitta hållplatsen"
+        android:text="@string/child_going_to_bus_help_to_bs"
         android:id="@+id/child_going_to_bus_help_to_bs"
         android:layout_below="@+id/button" />
 </LinearLayout>

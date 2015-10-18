@@ -3,13 +3,12 @@ package se.grupp4.minbusskompis.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,8 +44,6 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
     private DestinationsAdapter destinationsAdapter;
     private ArrayList<BussDestination> destinations;
 
-    protected Button childCodeButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +53,6 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         BussData.getInstance().setStatusForSelf(TravelingData.INACTIVE);
 
         viewHolder = new ViewHolder();
-
-        childCodeButton = (Button) findViewById(R.id.child_destination_childcode_button);
 
         //Initiate views
         viewHolder.destinationsListView = (ListView) findViewById(R.id.child_destinations_list);
@@ -81,14 +76,6 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         viewHolder.destinationsListView.setAdapter(destinationsAdapter);
 
         new PopulateDestinationListTask().execute();
-
-        childCodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChildDestinations.this, ChildChildCode.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override

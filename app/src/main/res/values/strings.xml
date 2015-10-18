@@ -1,93 +1,68 @@
 <resources>
-    <string name="app_name">MinBusskompis</string>
-
-    <string name="start_info_dialog"><b>Min Busskompis V 0.1</b>\n
-Min busskompis är utvecklad av Grupp4 för ElectriCity Innovation Challange 2015. Målet med appen är att underlätta för barn att åka buss och vagn själv genom att tillhandahålla ledning och tillsyn utan att behöva följa med barnet i person.\n\n
-För att komma igång med appen klickar du lägga till knappen i parentvyn och matar sedan in den unika kod som genereras på din barns mobil i barnvyn. Efter ni har kopplat mobilerna till varandra kan du lägga till platser till ditt barn som den sedan kan använda som destination för sin resa.\n\n\n
-<b>Min Busskompis V 0.1</b>\n
-Min busskompis is developed by Grupp4 for ElectriCity Innovation Challenge 2015. The goal of the app is to make it easier for children to use buses and trams alone by providing management and supervision without the need to accompany the child in person\n\n
-To start using the app, press the add button in the parents menu and enter the unique code generated on your child\'s phone in the child section of the app. Once paired you can add locations to your child which it can then view and set as destination for its trip.\n\n\n
-grupp4contact@gmail.com
-</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <!-- Parse -->
     <string name="parse_client_key" translatable="false">He9LcKvRl8pYLjhOBNfaja8bH08gZ5HX76SnIPDF</string>
     <string name="parse_app_id" translatable="false">D7kI64caRSnhaF6ijs3z0DWeU334e2AdXejN7b06</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_parse_test">ParseTest</string>
-    <string name="sending_channel">Sending channel:</string>
-    <string name="listen_channel">Listening channel:</string>
-    <string name="received_messages">Received messages:</string>
-    <string name="send_button">Send</string>
-    <string name="message_text">message</string>
 
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-
+    <!-- Top -->
+    <string name="app_name">MinBusskompis</string>
     <string name="title_activity">Min BussKompis</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="action_settings">Settings</string>
 
-    <string name="autocomplete_hint">Enter place name or address</string>
-
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
+    <string name="startup_dialog_info_text"><b>Min Busskompis V 0.1</b>\n
+    Min busskompis är utvecklad av Grupp4 för ElectriCity Innovation Challange 2015. Målet med appen är att underlätta för barn att åka buss och vagn själv genom att tillhandahålla ledning och tillsyn utan att behöva följa med barnet i person.\n\n
+    För att komma igång med appen klickar du lägga till knappen i parentvyn och matar sedan in den unika kod som genereras på din barns mobil i barnvyn. Efter ni har kopplat mobilerna till varandra kan du lägga till platser till ditt barn som den sedan kan använda som destination för sin resa.\n\n\n
+    <b>Min Busskompis V 0.1</b>\n
+    Min busskompis is developed by Grupp4 for ElectriCity Innovation Challenge 2015. The goal of the app is to make it easier for children to use buses and trams alone by providing management and supervision without the need to accompany the child in person\n\n
+    To start using the app, press the add button in the parents menu and enter the unique code generated on your child\'s phone in the child section of the app. Once paired you can add locations to your child which it can then view and set as destination for its trip.\n\n\n
+    grupp4contact@gmail.com
     </string>
 
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
+    <!-- Parent views -->
+    <string name="parent_children_loading_text">Loading children...</string>
+    <string name="parent_active_child_current_status">Current Status</string>
+    <string name="parent_children_list_item_active_text">Click for more info</string>
+    <string name="parent_add_child_hint_text">Enter child code</string>
+    <string name="parent_children_list_no_children_text">No children added</string>
 
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
+    <string name="parent_add_destination_ac_hint">Enter place name or address</string>
+    <string name="parent_add_destination_save_as_name">Enter name</string>
+    <string name="parent_add_destination_save_button">Add location</string>
 
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
+    <string name="parent_destinations_loading_text">Loading destinations...</string>
 
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
+    <string name="parent_child_settings_destinations_button">Destinations</string>
+    <string name="parent_child_settings_delete_child_button">Delete child</string>
+    <string name="parent_child_settings_exit_child_button">Save and exit</string>
 
-    <string name="pref_title_system_sync_settings">System sync settings</string>
+    <string name="startup_child_button">Child</string>
+    <string name="startup_parent_button">Parent</string>
+    <string name="startup_info_text">Select if the device should be used as child or as parent</string>
 
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <!-- Child views -->
+    <string name="child_bus_station_title">On bus station</string>
+    <string name="child_bus_station_leaving_from_title">Leaving from</string>
+    <string name="child_bus_station_bus_coming_in">Bus coming in</string>
+    <string name="child_bus_station_bus_name">Your bus name</string>
 
-    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="child_code_title">Code:</string>
+    <string name="child_code_next_button">Next</string>
+    <string name="child_code_reset_button">Reset</string>
 
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
+    <string name="child_destinations_loading_text">Loading destinations...</string>
 
-    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="child_going_from_bus_on_location">Im there, end trip</string>
+    <string name="child_going_from_bus_help_to_loc">Help me find my destination</string>
 
-    <string name="add_destination_save_button">Add location</string>
-    <string name="add_destination_name">Enter name</string>
-    <string name="no_children_added">No children added</string>
+    <string name="child_going_to_bus_im_on_bs">Im at the bus stop</string>
+    <string name="child_going_to_bus_help_to_bs">Help me find the bus stop</string>
+
+    <string name="child_leave_bus_exit_at_next_stop">Exit at next bus stop</string>
+    <string name="child_leave_bus_stop_button_text">Stop button not pressed</string>
+
+    <string name="child_on_bus_title">On bus</string>
+    <string name="child_on_bus_your_bus_stop">Your bus stop</string>
+    <string name="child_on_bus_arriving_at">Arriving at</string>
+    <string name="child_on_bus_next_bus_stop">Next bus stop</string>
 
 </resources>

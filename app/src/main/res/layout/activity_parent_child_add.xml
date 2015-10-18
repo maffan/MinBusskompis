@@ -1,44 +1,34 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="se.grupp4.minbusskompis.ui.ParentChildrenAdd"
-    android:background="#4fffc5">
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:gravity="center">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="100dp"
-        android:id="@+id/linearLayout">
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:hint="Enter child code"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:allowUndo="true"
+        android:id="@+id/parent_add_child_hint_text"/>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:hint="Enter child code"
-            android:textColorHint="#000000"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
-            android:allowUndo="true"
-            android:textColor="#000000"
-            android:id="@+id/childCodeEditText"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Add child"
-            android:id="@+id/button_addchildcode"
-            android:textColor="#ffffff"
-            android:background="#000000"/>
-    </LinearLayout>
+    <Button
+        android:layout_marginTop="@dimen/button_top_margin"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Add child"
+        android:id="@+id/parent_add_child_add_child_button"
+        android:textColor="#ffffff"
+        android:background="#000000"/>
 
 
-</RelativeLayout>
+</LinearLayout>

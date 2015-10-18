@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MapsActivity">
+    tools:context=".MapsActivity"
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -16,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:hint="@string/autocomplete_hint"
+            android:hint="@string/parent_add_destination_ac_hint"
             android:singleLine="true"
             android:layout_weight="1"
             />
@@ -50,7 +51,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/add_destination_map"
-            android:name="com.google.android.gms.maps.SupportMapFragment" />
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_margin="5dp"
+            />
 
 
     </FrameLayout>
@@ -67,15 +70,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="@string/add_destination_name"
-            android:layout_weight="1" />
+            android:hint="@string/parent_add_destination_save_as_name"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"/>
 
         <Button
             android:id="@+id/destination_add_save_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_destination_save_button"
-            android:layout_weight="0" />
+            android:text="@string/parent_add_destination_save_button"
+            android:layout_weight="0"
+            android:background="@color/button_background"
+            android:textColor="@color/button_text"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_margin="2dp"
+            />
 
     </LinearLayout>
 

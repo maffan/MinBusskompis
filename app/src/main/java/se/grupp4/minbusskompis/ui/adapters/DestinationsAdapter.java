@@ -60,18 +60,21 @@ public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
         //Set destination name
         viewHolder.destinationNameView.setText(currentDestination.getName());
 
-        //Add settings img
-        viewHolder.deleteDestinationIconView.setImageResource(R.drawable.delete);
+        //Kolla om parent
+        if (true) {
+            //Add settings img
+            viewHolder.deleteDestinationIconView.setImageResource(R.drawable.delete);
 
-        //Add settings button listener, pass in id to settings to populate
-        viewHolder.deleteDestinationIconView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BussData.getInstance().removeDestinationFromChild(currentDestination.getName(),currentInstallId);
-                currentAdapter.remove(currentDestination);
-                currentAdapter.notifyDataSetChanged();
-            }
-        });
+            //Add settings button listener, pass in id to settings to populate
+            viewHolder.deleteDestinationIconView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BussData.getInstance().removeDestinationFromChild(currentDestination.getName(),currentInstallId);
+                    currentAdapter.remove(currentDestination);
+                    currentAdapter.notifyDataSetChanged();
+                }
+            });
+        }
 
         return row;
     }

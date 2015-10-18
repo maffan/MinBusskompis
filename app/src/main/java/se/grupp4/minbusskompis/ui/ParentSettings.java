@@ -6,13 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.ParseInstallation;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
@@ -20,15 +23,29 @@ import se.grupp4.minbusskompis.parsebuss.BussData;
 
 public class ParentSettings extends AppCompatActivity {
 
+    private static class ViewHolder {
+        TextView installId;
+    }
+
     private Button resetButton;
     private Switch soundSwitch;
     private Context context = this;
     protected SharedPreferences sharedPreferences;
+    private ViewHolder viewHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_settings);
+        viewHolder = new ViewHolder();
+
+        //Init views
+        viewHolder.installId = (TextView) findViewById(R.id.parent_settings_install_id_textview);
+
+        //Set install id
+        viewHolder.installId.setText(ParseInstallation.getCurrentInstallation().getInstallationId());
+
+
         sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_APPEND);
         addButtonListener();
         addSwitchListener();
@@ -48,7 +65,7 @@ public class ParentSettings extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                final Intent intent = new Intent(getApplicationContext(), StartSelectMode.class);
                                 new ResetAppTask().doInBackground();
                                 BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
                                     @Override

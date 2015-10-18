@@ -5,7 +5,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="se.grupp4.minbusskompis.ui.ChildLeavingBus"
-    android:background="#4fffc5"
+    android:background="@color/background"
     android:orientation="vertical">
 
     <Button
@@ -18,11 +18,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Exit at next stop"
+        android:text="@string/child_leave_bus_exit_at_next_stop"
         android:id="@+id/child_leave_bus_exit_at_next_stop"
         android:gravity="center" />
 
     <LinearLayout
+        android:layout_marginTop="@dimen/standard_top_margin"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,7 +45,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Stop button not pressed"
+            android:text="@string/child_leave_bus_stop_button_text"
             android:id="@+id/child_leave_bus_stop_button_text"
             android:gravity="center"/>
     </LinearLayout>
