@@ -6,11 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import se.grupp4.minbusskompis.TravelingData;
@@ -19,72 +19,114 @@ import se.grupp4.minbusskompis.TravelingData;
  * Created by Tobias on 2015-10-16.
  */
 public class WifiCheckerLookReceiver extends BroadcastReceiver {
+    private static final int MATCH_LIMIT = 2;
+    public static final int WIFI_STRENGTH_THRESHOLD = 70;
+    public static final int NUM_WIFI_STRENGTH_LEVELS = 100;
     private static final String TAG = "WifiCheckIfLeaveReceiver";
-    private final Intent nextIntent;
-    private HashMap<String,Integer> localWifis;
-    private int wifiMatchCounter = 0;
-    private int MATCH_LIMIT = 2;
-    ArrayList<String> macAdresses;
+    public static final String TRAVELING_DATA_FIELD = "data";
+    public static final String ALPHA_NUM_ONLY_REGEX = "[^A-Za-z0-9]";
+    private final Intent intentForNextActivity;
+    private HashMap<String,Integer> wifiHits;
+    private ArrayList<String> validMacAddresses;
     private WifiManager wifiManager;
+    private String bussMacMatch;
 
-    public WifiCheckerLookReceiver(Intent nextIntent, int MATCH_LIMIT, ArrayList<String> macAdresses, WifiManager wifiManager) {
-        this.nextIntent = nextIntent;
-        this.MATCH_LIMIT = MATCH_LIMIT;
-        this.macAdresses = macAdresses;
+    public WifiCheckerLookReceiver(Intent intentForNextActivity, ArrayList<String> validMacAddresses, WifiManager wifiManager) {
+        this.intentForNextActivity = intentForNextActivity;
+        this.validMacAddresses = validMacAddresses;
         this.wifiManager = wifiManager;
+        wifiHits = new HashMap<>(validMacAddresses.size());
+        initValidMacWithZeroHits();
+    }
+
+    private void initValidMacWithZeroHits() {
+        for (String mac : validMacAddresses)
+            wifiHits.put(mac, 0);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //Scan is complete, get list from scan.
-        if(checkIfClose(macAdresses,getWifiList())){
-            Log.d(TAG, "Mac matches, bus is near");
-            wifiMatchCounter++;
+        checkIfValidMacIsClose();
 
-        }
-        else{
-            Log.d(TAG, "No MAC match waiting for bus");
-        }
-
-        //Byt aktivitet, kalla på finish
-        if(wifiMatchCounter >= MATCH_LIMIT){
+        if(validMacIsCloseAndPersistent()){
             Log.d(TAG, "Wifi match counter reached, child on bus");
-            TravelingData data = ((TravelingData) nextIntent.getParcelableExtra("data"));
-            data.currentBusMacAdress = "abcdef123456789";
-            nextIntent.putExtra("data", data);
-            context.startActivity(nextIntent);
-            if (context instanceof Activity) {
-                ((Activity)context).finish();
-            }else Log.d(TAG,"Context was not an activity");
+
+            TravelingData travelingData = putMatchingMacInTravelingData();
+            putTravelingDataIntoIntent(travelingData);
+            startNextActivityWithProvidedContextAndFinishCurrentActivity(context);
         }
     }
 
-    //Puts scanresults in hashmap, bssid/level.
-    private HashMap<String, Integer> getWifiList() {
-        //Replace all non alphanumeric chars with ""
-        String regex = "[^A-Za-z0-9]";
-        localWifis = new HashMap<>();
-        List<ScanResult> wifiScanList = wifiManager.getScanResults();
-
-        for (int i = 0; i < wifiScanList.size(); i++) {
-            String currMac = wifiScanList.get(i).BSSID.replaceAll(regex, "");
-            localWifis.put(currMac, WifiManager.calculateSignalLevel(wifiScanList.get(i).level, 100));
-        }
-        return localWifis;
-    }
-
-    private boolean checkIfClose(ArrayList<String> macAdresses, Map<String, Integer> scannedAccessPoints) {
-        if (scannedAccessPoints == null) {
+    private void checkIfValidMacIsClose() {
+        Map<String, Integer> scanResult = getScanResultMap();
+        if (scanResult.size() > 0) {
+            for(String scannedMac : scanResult.keySet()){
+                Log.d(TAG, "Matching: " + scannedMac + " to: " + scanResult);
+                if(macIsValidAndClose(scanResult, scannedMac)){
+                    Log.d(TAG, "checkIfValidMacIsClose: Match for: "+scannedMac);
+                    wifiHits.put(scannedMac, wifiHits.get(scannedMac) + 1);
+                    Log.d(TAG, "checkIfValidMacIsClose: wifihits is now: "+wifiHits);
+                }
+            }
+        } else {
             Log.v((this).getClass().getSimpleName(), "No wifilist");
-            return false;
         }
-        for(String scannedMac : scannedAccessPoints.keySet()){
-//                Log.d(TAG, "Matching: " + mac + " to: " + scannedAccessPoints);
-            if(macAdresses.contains(scannedMac)){
+    }
+
+    private HashMap<String, Integer> getScanResultMap() {
+        HashMap<String, Integer> macStrengthMap = new HashMap<>();
+
+        for (ScanResult scanResult : wifiManager.getScanResults()) {
+            String mac = getCleanMac(scanResult);
+            int strength = getCalculatedStrength(scanResult);
+            macStrengthMap.put(mac, strength);
+        }
+
+        return macStrengthMap;
+    }
+
+    private String getCleanMac(ScanResult scanResult) {
+        return scanResult.BSSID.replaceAll(ALPHA_NUM_ONLY_REGEX, "");
+    }
+
+    private int getCalculatedStrength(ScanResult scanResult) {
+        return WifiManager.calculateSignalLevel(scanResult.level, NUM_WIFI_STRENGTH_LEVELS);
+    }
+
+    private boolean macIsValidAndClose(Map<String, Integer> scanResult, String scannedMac) {
+        return validMacAddresses.contains(scannedMac) && scanResult.get(scannedMac) > WIFI_STRENGTH_THRESHOLD;
+    }
+
+    private boolean validMacIsCloseAndPersistent() {
+        for (String mac : validMacAddresses) {
+            if (macReachedLimit(mac)) {
+                bussMacMatch = mac;
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean macReachedLimit(String mac) {
+        return wifiHits.get(mac) > MATCH_LIMIT;
+    }
+
+    @NonNull
+    private TravelingData putMatchingMacInTravelingData() {
+        TravelingData data = intentForNextActivity.getParcelableExtra(TRAVELING_DATA_FIELD);
+        data.currentBusMacAdress = bussMacMatch;
+        return data;
+    }
+
+    private void putTravelingDataIntoIntent(TravelingData data) {
+        intentForNextActivity.putExtra(TRAVELING_DATA_FIELD, data);
+    }
+
+    private void startNextActivityWithProvidedContextAndFinishCurrentActivity(Context context) {
+        context.startActivity(intentForNextActivity);
+        if (context instanceof Activity) {
+            ((Activity)context).finish();
+        }else Log.d(TAG, "Context was not an activity");
     }
 
 }

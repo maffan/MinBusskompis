@@ -73,6 +73,8 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         //eduroam i biblioteket
         wifiList.add("881dfc44578f");
         wifiList.add("881dfc2c8f60");
+        //Oxledsvägen 9
+        wifiList.add("14cc206d1eb2");
         addButtonListener();
 
         //Bind and update service

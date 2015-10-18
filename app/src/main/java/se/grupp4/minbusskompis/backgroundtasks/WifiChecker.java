@@ -37,7 +37,7 @@ public class WifiChecker implements Runnable {
         this.macAdresses = macAdresses;
         this.wifiManager = (WifiManager) currentContext.getSystemService(Context.WIFI_SERVICE);
 
-        wifiReceiver = new WifiCheckerLookReceiver(nextIntent, 2, macAdresses, wifiManager);
+        wifiReceiver = new WifiCheckerLookReceiver(nextIntent, macAdresses, wifiManager);
         currentContext.registerReceiver(wifiReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
 
