@@ -105,7 +105,7 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(),ParentChildrenList.class);
+                        Intent intent = new Intent(getApplicationContext(),ChildDestinations.class);
                         startActivity(intent);
                         finish();
                     }
