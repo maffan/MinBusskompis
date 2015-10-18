@@ -31,12 +31,20 @@ public class BussApplication extends Application {
         super.onCreate();
         initParseAndInitData();
         setDefaultSubscriptions();
-        setDefaultTravelStatus();
     }
 
     private void initParseAndInitData() {
         Parse.initialize(this);
-        BussData.getInstance().fetchData(null);
+        BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+            @Override
+            public void done() {
+                setDefaultTravelStatus();
+            }
+        });
+    }
+
+    private void setDefaultTravelStatus() {
+        BussData.getInstance().setStatusForSelf(0);
     }
 
     private void setDefaultSubscriptions() {
@@ -52,10 +60,6 @@ public class BussApplication extends Application {
             }
         }
         ParsePush.subscribeInBackground("i" + ParseInstallation.getCurrentInstallation().getInstallationId());
-    }
-
-    private void setDefaultTravelStatus() {
-        BussData.getInstance().setStatusForSelf(0);
     }
 
     @Override
