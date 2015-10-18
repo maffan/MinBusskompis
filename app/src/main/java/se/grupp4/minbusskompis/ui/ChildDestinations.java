@@ -52,6 +52,9 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_destinations);
 
+        //Set initial status
+        BussData.getInstance().setStatusForSelf(TravelingData.INACTIVE);
+
         viewHolder = new ViewHolder();
 
         childCodeButton = (Button) findViewById(R.id.child_destination_childcode_button);

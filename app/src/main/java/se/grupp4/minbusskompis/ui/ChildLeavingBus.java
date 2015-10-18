@@ -24,6 +24,7 @@ import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.backgroundtasks.WifiCheckerStart;
+import se.grupp4.minbusskompis.parsebuss.BussData;
 
 public class ChildLeavingBus extends AppCompatActivity implements ServiceConnection, Runnable {
 
@@ -88,6 +89,9 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_leave_bus);
         viewHolder = new ViewHolder();
+
+        //Set leaving bus status
+        BussData.getInstance().setStatusForSelf(TravelingData.LEAVING_BUS);
 
         //Get traveling data
         travelingData = getIntent().getParcelableExtra("data");

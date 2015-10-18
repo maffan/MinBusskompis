@@ -23,6 +23,7 @@ import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.backgroundtasks.WifiCheckerStart;
+import se.grupp4.minbusskompis.parsebuss.BussData;
 
 //Note that dummybuttons are temporary for debugging
 public class ChildBusStation extends AppCompatActivity implements ServiceConnection {
@@ -50,6 +51,9 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_buss_station);
         viewHolder = new ViewHolder();
+
+        //Set bus station status
+        BussData.getInstance().setStatusForSelf(TravelingData.AT_BUS_STATION);
 
         //Init views.
         viewHolder.busStopName = (TextView) findViewById(R.id.child_bus_stop_bsname_char);

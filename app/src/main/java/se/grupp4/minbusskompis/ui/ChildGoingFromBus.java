@@ -63,7 +63,8 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
         viewHolder.atDestinationButton = (Button) findViewById(R.id.child_going_from_bus_on_location);
         viewHolder.helpToFindDestinationButton = (Button) findViewById(R.id.child_going_from_bus_help_to_loc);
 
-
+        //Set walking status
+        BussData.getInstance().setStatusForSelf(TravelingData.WALKING);
 
         //Get target destination
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");

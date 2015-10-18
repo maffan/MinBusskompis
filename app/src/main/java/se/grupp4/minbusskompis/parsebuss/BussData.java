@@ -97,6 +97,16 @@ public class BussData {
         }
     }
 
+    public void setStatusForChild(int status, String childId){
+        ParseObject positionObject = getOrMakePositionObjectForId(childId);
+        positionObject.put("status",status);
+        positionObject.saveInBackground();
+    }
+
+    public void setStatusForSelf(int status){
+        setStatusForChild(status,getInstallationId());
+    }
+
     private ParseObject getOrMakePositionObjectForId(String id) {
         ParseQuery query = ParseQuery.getQuery("Position");
         query.whereEqualTo(INSTALLATION_FIELD, id);

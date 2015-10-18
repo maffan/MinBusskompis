@@ -59,6 +59,9 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
             startService(serviceIntent);
         }
 
+        //Set walking status
+        BussData.getInstance().setStatusForSelf(TravelingData.WALKING);
+
         //Get target destination
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");
         Log.d(TAG,"Got travelingData as: "+travelingData);

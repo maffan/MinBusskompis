@@ -29,8 +29,17 @@ public class BussApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initParseAndInitData();
+        setDefaultSubscriptions();
+        setDefaultTravelStatus();
+    }
+
+    private void initParseAndInitData() {
         Parse.initialize(this);
         BussData.getInstance().fetchData(null);
+    }
+
+    private void setDefaultSubscriptions() {
         ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
         List channels = parseInstallation.getList("channels");
         if (channels != null) {
@@ -43,6 +52,10 @@ public class BussApplication extends Application {
             }
         }
         ParsePush.subscribeInBackground("i" + ParseInstallation.getCurrentInstallation().getInstallationId());
+    }
+
+    private void setDefaultTravelStatus() {
+        BussData.getInstance().setStatusForSelf(0);
     }
 
     @Override
