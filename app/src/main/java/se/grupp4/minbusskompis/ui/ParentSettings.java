@@ -5,10 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -16,7 +15,6 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
-import se.grupp4.minbusskompis.api.BusData;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 
@@ -51,10 +49,7 @@ public class ParentSettings extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                sharedPreferences.edit().clear().apply();
-                                if (!(BussData.getInstance() == null)) {
-                                    BussData.getInstance().clearParseData();
-                                }
+                                new ResetAppTask().doInBackground();
                                 BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
                                     @Override
                                     public void done() {
@@ -66,26 +61,45 @@ public class ParentSettings extends AppCompatActivity {
                         })
                         .setNegativeButton("No", null)
                         .show();
-
             }
         });
     }
 
     public void addSwitchListener(){
-
         soundSwitch = (Switch)findViewById(R.id.sound_switch);
         soundSwitch.setChecked(sharedPreferences.getBoolean("soundsetting", true));
         soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     sharedPreferences.edit().putBoolean("soundsetting", true).apply();
                     Toast.makeText(getApplicationContext(), "Sound is ON", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     sharedPreferences.edit().putBoolean("soundsetting", false).apply();
                     Toast.makeText(getApplicationContext(), "Sound is OFF", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private class ResetAppTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+                @Override
+                public void done() {
+                    resetApp();
+                }
+            });
+            return null;
+        }
+    }
+    //clears information stored in sharedpreferences and parse.
+    private void resetApp(){
+        sharedPreferences.edit().clear().apply();
+        if (!(BussData.getInstance() == null)) {
+            BussData.getInstance().clearParseData();
+        }
     }
 }

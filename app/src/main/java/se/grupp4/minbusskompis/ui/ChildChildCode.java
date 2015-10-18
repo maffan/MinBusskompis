@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -70,10 +71,7 @@ public class ChildChildCode extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(ChildChildCode.this, MainActivity.class);
-                                sharedPreferences.edit().clear().apply();
-                                if (!(BussData.getInstance() == null)) {
-                                    BussData.getInstance().clearParseData();
-                                }
+                                new ResetAppTask().doInBackground();
                                 BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
                                     @Override
                                     public void done() {
@@ -107,5 +105,26 @@ public class ChildChildCode extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private class ResetAppTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+                @Override
+                public void done() {
+                    resetApp();
+                }
+            });
+            return null;
+        }
+    }
+    //clears information stored in sharedpreferences and parse.
+    private void resetApp(){
+        sharedPreferences.edit().clear().apply();
+        if (!(BussData.getInstance() == null)) {
+            BussData.getInstance().clearParseData();
+        }
     }
 }

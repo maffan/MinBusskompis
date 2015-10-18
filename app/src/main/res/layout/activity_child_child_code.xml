@@ -44,9 +44,10 @@
         android:background="#000000"
         android:text="Reset"
         android:id="@+id/button_resetMode"
-        android:layout_below="@+id/button_next"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="62dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/button_next"
+        android:layout_alignStart="@+id/button_next"
+        android:layout_marginBottom="50dp" />
 
 
 </RelativeLayout>
