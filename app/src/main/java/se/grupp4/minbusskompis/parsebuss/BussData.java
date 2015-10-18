@@ -98,13 +98,14 @@ public class BussData {
     }
 
     public void setStatusForChild(int status, String childId){
-        ParseObject positionObject = getOrMakePositionObjectForId(childId);
-        positionObject.put("status",status);
-        positionObject.saveInBackground();
+        ParseObject cloudPosition = getOrMakePositionObjectForId(childId);
+        cloudPosition.put("status",status);
+        cloudPosition.saveInBackground();
     }
 
     public void setStatusForSelf(int status){
-        setStatusForChild(status,getInstallationId());
+        cloudPosition.put("status",status);
+        cloudPosition.saveInBackground();
     }
 
     private ParseObject getOrMakePositionObjectForId(String id) {
