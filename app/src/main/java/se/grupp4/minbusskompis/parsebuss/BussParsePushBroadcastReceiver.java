@@ -75,7 +75,6 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     private void dispatchDataByType(JSONObject messageData, String type) {
         switch (type) {
             case "Message":
-                notificationSound(context);
                 sendToRelationMessenger(messageData);
                 super.onPushReceive(context,intent);
                 break;
@@ -127,23 +126,6 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
             provider.getSyncMessenger().setSyncMessage(messageData);
         } else if (type == BussParseSyncMessenger.RESPONSE_TYPE) {
             provider.getSyncMessenger().setSyncMessage(messageData);
-        }
-    }
-
-    private static void notificationSound(Context context){
-        MediaPlayer mediaPlayer;
-        SharedPreferences sharedPreferences;
-        sharedPreferences =  context.getSharedPreferences("MyPreferences", Context.MODE_APPEND);
-        if(!(sharedPreferences.getBoolean("soundsetting", false))){
-            mediaPlayer = MediaPlayer.create(context, R.raw.notification);
-            mediaPlayer.start();
-            //When sound is done it releases system resources
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    mediaPlayer.release();
-                }
-            });
         }
     }
 }

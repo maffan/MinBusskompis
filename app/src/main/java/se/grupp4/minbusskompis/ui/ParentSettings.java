@@ -83,7 +83,7 @@ public class ParentSettings extends AppCompatActivity {
     }
 
     public void addSwitchListener(){
-        soundSwitch = (Switch)findViewById(R.id.sound_switch);
+        soundSwitch = (Switch)findViewById(R.id.notification_switch);
         soundSwitch.setChecked(sharedPreferences.getBoolean("soundsetting", true));
         soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
