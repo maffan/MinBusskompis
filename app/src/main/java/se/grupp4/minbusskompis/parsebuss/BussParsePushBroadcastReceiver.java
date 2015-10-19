@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.util.Log;
 
+import com.parse.ParseInstallation;
 import com.parse.ParsePushBroadcastReceiver;
 
 import org.json.JSONException;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 import java.util.PriorityQueue;
 
 import se.grupp4.minbusskompis.R;
+import se.grupp4.minbusskompis.ui.ParentActiveChild;
 
 /**
  * Created by Marcus on 9/21/2015.
@@ -35,6 +37,16 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     private Context context;
     private Intent intent;
 
+
+
+
+    @Override
+    protected void onPushOpen(Context context, Intent intent) {
+        Intent nextIntent = new Intent(context, ParentActiveChild.class);
+        nextIntent.putExtra("child_id",intent.getStringExtra("child_id"));
+        nextIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(nextIntent);
+    }
 
     @Override
     protected void onPushReceive(Context context, Intent intent) {
@@ -72,11 +84,18 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
         return data.getString("type");
     }
 
-    private void dispatchDataByType(JSONObject messageData, String type) {
+    private void dispatchDataByType(JSONObject messageData, String type) throws JSONException {
         switch (type) {
             case "Message":
-                sendToRelationMessenger(messageData);
-                super.onPushReceive(context,intent);
+                Log.d(TAG, "dispatchDataByType: GOT MESSAGE WITH DATA: "+messageData);
+                if (context.getSharedPreferences("MyPreferences",Context.MODE_APPEND).getBoolean("soundsetting",true)) {
+                    String from = messageData.getString("from");
+                    if(!from.equals(ParseInstallation.getCurrentInstallation().getInstallationId())) {
+                        sendToRelationMessenger(messageData);
+                        intent.putExtra("child_id",from);
+                        super.onPushReceive(context, intent);
+                    }
+                }
                 break;
             case "SyncRequest":
                 sendDataByTypeToSyncMessenger(messageData, BussParseSyncMessenger.REQUEST_TYPE);

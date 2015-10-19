@@ -92,7 +92,7 @@ public class BussRelationMessenger extends Observable {
     }
 
     private void trySendMessage(String data) throws JSONException {
-        ParsePush push = getParsePushWithChannel(getInstallationId());
+        ParsePush push = getParsePushWithChannel("i"+getInstallationId());
         JSONObject messageObject = getMessageObjectWithData(data);
         sendPushWithObject(push, messageObject);
     }
@@ -142,7 +142,7 @@ public class BussRelationMessenger extends Observable {
     }
 
     private String getInstallationId() {
-        return "i" + ParseInstallation.getCurrentInstallation().getInstallationId();
+        return ParseInstallation.getCurrentInstallation().getInstallationId();
     }
 
     /**

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 import se.grupp4.minbusskompis.ui.adapters.ChildAdapter;
 import se.grupp4.minbusskompis.ui.adapters.ChildData;
 
@@ -40,6 +41,12 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         addButtonListeners();
         initList();
         populateList();
+        BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+            @Override
+            public void done() {
+                BussRelationMessenger.getInstance().setRelationships(BussData.getInstance().getChildren());
+            }
+        });
     }
 
     private void initViews() {
