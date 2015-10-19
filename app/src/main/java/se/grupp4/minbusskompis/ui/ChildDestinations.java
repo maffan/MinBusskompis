@@ -1,7 +1,10 @@
 package se.grupp4.minbusskompis.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -229,5 +232,4 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
 
         return super.onOptionsItemSelected(item);
     }
-
 }

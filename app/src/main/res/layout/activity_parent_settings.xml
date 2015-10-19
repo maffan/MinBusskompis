@@ -16,7 +16,7 @@
         android:layout_marginTop="@dimen/standard_top_margin"
         android:layout_width="@dimen/standard_width"
         android:layout_height="wrap_content"
-        android:text="Notifications"
+        android:text="@string/parent_settings_notifications_switch_text"
         android:id="@+id/notification_switch"
         android:textOn="ON"
         android:textOff="OFF"
@@ -26,7 +26,7 @@
         android:layout_marginTop="@dimen/button_top_margin"
         android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text="Reset"
+        android:text="@string/parent_settings_reset_button_text"
         android:textColor="@color/button_text"
         android:background="@color/button_background"
         android:id="@+id/parent_reset_button" />

@@ -1,5 +1,8 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +42,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
     private static final String TAG = "PARENT_CHILDREN_LIST";
     private ChildAdapter childrenListAdapter;
     private ViewHolder viewHolder;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

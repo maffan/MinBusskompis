@@ -5,7 +5,7 @@
 
     <!-- Top -->
     <string name="app_name">MinBusskompis</string>
-    <string name="title_activity">My Bus Buddy</string>
+    <string name="title_activity">My Busbuddy</string>
     <string name="title_activity_maps">Map</string>
     <string name="action_settings">Settings</string>
     <string name="action_about">About</string>
@@ -21,12 +21,25 @@
 
     <string name="activity_about_info_text" translatable="false">@string/startup_dialog_info_text</string>
 
+    <!-- Utilized by both views -->
+
+    <string name="all_reset_dialog_title">Reset</string>
+    <string name="all_reset_dialog_message">This will reset your app, and you will lose all connections
+    do you wish to continue?</string>
+    <string name="all_reset_dialog_yes">Yes</string>
+    <string name="all_reset_dialog_no">No</string>
+    <string name="all_exit_dialog_title">Exit Min BussKompis</string>
+    <string name="all_exit_dialog_message">Do you wish to exit the application?</string>
+    <string name="all_exit_dialog_yes">Yes</string>
+    <string name="all_exit_dialog_no">No</string>
+
     <!-- Parent views -->
     <string name="parent_children_loading_text">Loading children...</string>
     <string name="parent_active_child_current_status">Current Status</string>
     <string name="parent_children_list_item_active_text">Click for more info</string>
     <string name="parent_add_child_hint_text">Enter child code</string>
     <string name="parent_children_list_no_children_text">No children added</string>
+    <string name="parent_add_child_button_text">Add Child</string>
 
     <string name="parent_add_destination_ac_hint">Enter place name or address</string>
     <string name="parent_add_destination_save_as_name">Enter name</string>
@@ -37,10 +50,35 @@
     <string name="parent_child_settings_destinations_button">Destinations</string>
     <string name="parent_child_settings_delete_child_button">Delete child</string>
     <string name="parent_child_settings_exit_child_button">Save and exit</string>
+    <string name="parent_child_settings_delete_child_dialog_title">Remove child</string>
+    <string name="parent_child_settings_delete_child_dialog_message">Do you really want to remove this child?</string>
+    <string name="parent_child_settings_delete_child_dialog_yes">Yes</string>
+    <string name="parent_child_settings_delete_child_dialog_no">No</string>
+    <string name="parent_child_settings_delete_child_toast_post_execute">New name saved!</string>
+
+    <string name="parent_settings_reset_button_text">Reset</string>
+    <string name="parent_settings_notifications_switch_text">Notifications</string>
+    <string name="parent_settings_toast_notifications_on">Notifications on...</string>
+    <string name="parent_settings_toast_notifications_off">Notifications off...</string>
 
     <string name="startup_child_button">Child</string>
     <string name="startup_parent_button">Parent</string>
     <string name="startup_info_text">Select if the device should be used as child or as parent</string>
+
+    <string name="parent_active_child_inactive_text">Child not active</string>
+    <string name="parent_active_child_walking_text">Going to bus stop</string>
+    <string name="parent_active_child_atbusstation_text">At Bus station</string>
+    <string name="parent_active_child_onbus_text">Traveling by bus</string>
+    <string name="parent_active_child_leavingbus_text">Leaving bus</string>
+    <string name="parent_active_child_goingtodestination_text">Going to Destination</string>
+    <string name="parent_active_child_default">Child is active</string>
+
+    <string name="parent_child_destinations_viewholder_defaulttext">No destinations for child</string>
+
+    <string name="parent_children_add_busssync_toast_sync">Sending sync request...</string>
+    <string name="parent_children_add_busssync_toast_success">Succesfully synced with device with Installation ID: </string>
+    <string name="parent_children_add_busssync_toast_failed">Could not sync with device</string>
+    <string name="parent_children_add_busssynt_toast_noinput">No code has been entered...</string>
 
     <!-- Child views -->
     <string name="child_bus_station_title">On bus station</string>
@@ -51,6 +89,8 @@
     <string name="child_code_title">Code:</string>
     <string name="child_code_next_button">Next</string>
     <string name="child_code_reset_button">Reset</string>
+    <string name="child_code_toast_text_received">Received request from device with ID: </string>
+    <string name="child_code_toast_text_notreceived">No requests received</string>
 
     <string name="child_destinations_loading_text">Loading destinations...</string>
     <string name="child_destinatins_fetch_data">Fetching data for trip...</string>
@@ -70,5 +110,12 @@
     <string name="child_on_bus_next_bus_stop">Next bus stop</string>
     <string name="next_stop_init_text">Fetching next stop...</string>
     <string name="starting_journey_toast">Starting journey...</string>
+
+    <string name="child_bus_station_title_text">At Bus Station</string>
+
+    <string name="child_onbackwardspressed_dialog_title">Stop Trip</string>
+    <string name="child_onbackwardspressed_dialog_message">Do you wish to return to Destinations?</string>
+    <string name="child_onbackwardspressed_dialog_option_yes">Yes</string>
+    <string name="child_onbackwardspressed_dialog_option_no">No</string>
 
 </resources>

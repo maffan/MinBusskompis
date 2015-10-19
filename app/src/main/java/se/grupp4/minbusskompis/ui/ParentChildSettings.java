@@ -68,9 +68,9 @@ public class ParentChildSettings extends AppCompatActivity{
             public void onClick(View v) {
                 new AlertDialog.Builder(context)
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Remove child")
-                        .setMessage("Do you really want to remove this child?")
-                        .setPositiveButton("Hells yes!", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.parent_child_settings_delete_child_dialog_title)
+                        .setMessage(R.string.parent_child_settings_delete_child_dialog_message)
+                        .setPositiveButton(R.string.parent_child_settings_delete_child_dialog_yes, new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -81,7 +81,7 @@ public class ParentChildSettings extends AppCompatActivity{
                                 finish();
                             }
                         })
-                        .setNegativeButton("No way!", null)
+                        .setNegativeButton(R.string.parent_child_settings_delete_child_dialog_no, null)
                         .show();
             }
         });
@@ -112,7 +112,7 @@ public class ParentChildSettings extends AppCompatActivity{
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Toast.makeText(ParentChildSettings.this, "New name saved!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ParentChildSettings.this, R.string.parent_child_settings_delete_child_toast_post_execute, Toast.LENGTH_SHORT).show();
         }
     }
 }
