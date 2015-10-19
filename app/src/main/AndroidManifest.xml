@@ -176,6 +176,16 @@
             android:label="@string/title_activity"
             android:parentActivityName=".ui.ParentChildrenList">
         </activity>
+        <activity
+            android:name=".ui.ChildInfoAbout"
+            android:label="@string/title_activity"
+            android:parentActivityName=".ui.ChildDestinations">
+        </activity>
+        <activity
+            android:name=".ui.ParentInfoAbout"
+            android:label="@string/title_activity"
+            android:parentActivityName=".ui.ParentChildrenList">
+        </activity>
 
         <service
             android:name=".backgroundtasks.UpdateLocToParseService"
@@ -183,10 +193,6 @@
             android:exported="false" >
         </service>
 
-        <activity
-            android:name=".ui.InfoAbout"
-            android:label="@string/title_activity">
-        </activity>
     </application>
 
 </manifest>

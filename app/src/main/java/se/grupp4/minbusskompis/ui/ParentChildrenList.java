@@ -105,7 +105,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         }
 
         if (id == R.id.action_about)    {
-            Intent intent = new Intent(getApplicationContext(), InfoAbout.class);
+            Intent intent = new Intent(getApplicationContext(), ParentInfoAbout.class);
             startActivity(intent);
             return true;
         }

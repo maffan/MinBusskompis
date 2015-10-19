@@ -216,7 +216,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         }
 
         if (id == R.id.action_about)    {
-            Intent intent = new Intent(getApplicationContext(), InfoAbout.class);
+            Intent intent = new Intent(getApplicationContext(), ChildInfoAbout.class);
             startActivity(intent);
             return true;
         }
