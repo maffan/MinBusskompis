@@ -16,6 +16,8 @@ import java.util.Observable;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import se.grupp4.minbusskompis.TravelingData;
+
 /**
  * Created by Marcus on 9/21/2015.
  *
@@ -56,15 +58,37 @@ public class BussRelationMessenger extends Observable {
         channels.addAll(newChannels);
         parseInstallation.put("channels", channels);
         parseInstallation.saveInBackground();
-        Log.d(TAG,"Lade till "+channels+" till installationen");
+        Log.d(TAG, "Lade till " + channels + " till installationen");
     }
 
     public void sendMessage(String data){
         try {
+            Log.d(TAG, "sendMessage: sending message with data: "+data);
             trySendMessage(data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendStatusUpdateNotification(int status){
+        String name = BussData.getInstance().getOwnName();
+        String activity = "";
+        switch (status){
+            case TravelingData.WALKING:
+                activity = "walking";
+                break;
+            case TravelingData.AT_BUS_STATION:
+                activity = "waiting for the bus";
+                break;
+            case TravelingData.ON_BUS:
+                activity = "riding the bus";
+                break;
+            case TravelingData.LEAVING_BUS:
+                activity = "getting of the bus";
+                break;
+        }
+        String message = name+" is now "+activity+".";
+        sendMessage(message);
     }
 
     private void trySendMessage(String data) throws JSONException {
@@ -84,7 +108,7 @@ public class BussRelationMessenger extends Observable {
     private JSONObject getMessageObjectWithData(String data) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", "Message");
-        jsonObject.put("data", data);
+        jsonObject.put("alert", data);
         jsonObject.put("from", getInstallationId());
         return jsonObject;
     }
@@ -118,7 +142,7 @@ public class BussRelationMessenger extends Observable {
     }
 
     private String getInstallationId() {
-        return ParseInstallation.getCurrentInstallation().getInstallationId();
+        return "i" + ParseInstallation.getCurrentInstallation().getInstallationId();
     }
 
     /**

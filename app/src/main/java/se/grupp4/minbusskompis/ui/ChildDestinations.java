@@ -50,7 +50,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         setContentView(R.layout.activity_child_destinations);
 
         //Set initial status
-        BussData.getInstance().setStatusForSelf(TravelingData.INACTIVE);
+        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.INACTIVE);
 
         viewHolder = new ViewHolder();
 

@@ -171,18 +171,17 @@
             android:screenOrientation="portrait"
             android:parentActivityName=".ui.ParentChildrenList">
         </activity>
+        <activity
+            android:name=".ui.ParentChildSettings"
+            android:label="@string/title_activity"
+            android:parentActivityName=".ui.ParentChildrenList">
+        </activity>
 
         <service
             android:name=".backgroundtasks.UpdateLocToParseService"
             android:enabled="true"
             android:exported="false" >
         </service>
-
-        <activity
-            android:name=".ui.ParentChildSettings"
-            android:label="@string/title_activity"
-            android:parentActivityName=".ui.ParentChildrenList">
-        </activity>
     </application>
 
 </manifest>

@@ -52,7 +52,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         viewHolder = new ViewHolder();
 
         //Set bus station status
-        BussData.getInstance().setStatusForSelf(TravelingData.AT_BUS_STATION);
+        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.AT_BUS_STATION);
 
         //Init views.
         viewHolder.busStopName = (TextView) findViewById(R.id.child_bus_stop_bsname_char);

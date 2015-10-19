@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 
 public class BussData {
@@ -103,9 +104,11 @@ public class BussData {
         cloudPosition.saveInBackground();
     }
 
-    public void setStatusForSelf(int status){
+    public void setStatusForSelfAndNotifyParents(int status){
         cloudPosition.put("status",status);
         cloudPosition.saveInBackground();
+        if(status != TravelingData.INACTIVE)
+            BussRelationMessenger.getInstance().sendStatusUpdateNotification(status);
     }
 
     private ParseObject getOrMakePositionObjectForId(String id) {
@@ -326,7 +329,7 @@ public class BussData {
     }
 
     public String getOwnName(){
-        return name;
+        return cloudName.getString("name");
     }
 
     public void clearParseData(){

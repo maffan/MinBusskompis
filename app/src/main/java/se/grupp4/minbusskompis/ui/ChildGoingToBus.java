@@ -45,6 +45,7 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
     private Button needHelpButton;
     private Button noNeedHelpButton;
     private boolean neededHelp;
+    private boolean serviceBound = false;
     Intent serviceIntent;
 
     @Override
@@ -60,10 +61,10 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
         }
 
         //Set walking status
-        BussData.getInstance().setStatusForSelf(TravelingData.WALKING);
+        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
 
         //Get target destination
-        travelingData = (TravelingData) getIntent().getParcelableExtra("data");
+        travelingData = getIntent().getParcelableExtra("data");
         Log.d(TAG,"Got travelingData as: "+travelingData);
         destination = travelingData.destinationCoordinates;
         latitude = String.valueOf(destination.latitude);
@@ -145,6 +146,7 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
+        serviceBound = true;
         Log.d(TAG,"Received binder, start location listener");
 
         parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
@@ -193,7 +195,9 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(this);
+        if (serviceBound) {
+            unbindService(this);
+        }
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {

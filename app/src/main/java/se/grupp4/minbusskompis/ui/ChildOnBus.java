@@ -15,10 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -90,7 +87,7 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         viewHolder = new ViewHolder();
 
         //Set on bus status
-        BussData.getInstance().setStatusForSelf(TravelingData.ON_BUS);
+        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.ON_BUS);
 
         //Initiate views
         viewHolder.nextBusStop = (TextView) findViewById(R.id.child_on_bus_next_bus_stop);

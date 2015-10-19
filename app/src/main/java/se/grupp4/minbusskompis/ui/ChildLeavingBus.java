@@ -35,6 +35,7 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
     private ViewHolder viewHolder;
     private ScheduledThreadPoolExecutor poolExecutor;
     private WifiCheckerStart wifiCheckerStart;
+    private boolean serviceBound = false;
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
@@ -91,7 +92,7 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         viewHolder = new ViewHolder();
 
         //Set leaving bus status
-        BussData.getInstance().setStatusForSelf(TravelingData.LEAVING_BUS);
+        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.LEAVING_BUS);
 
         //Get traveling data
         travelingData = getIntent().getParcelableExtra("data");
@@ -99,6 +100,7 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         //Init service
         Intent serviceIntent = new Intent(context, UpdateLocToParseService.class);
         bindService(serviceIntent, this, 0);
+        serviceBound = true;
 
         //Init views
         viewHolder.leaveBusTitle = (TextView) findViewById(R.id.child_leave_bus_exit_at_next_stop);
@@ -124,7 +126,9 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         super.onDestroy();
         poolExecutor.shutdown();
         wifiCheckerStart.shutdown();
-        unbindService(this);
+        if(serviceBound){
+            unbindService(this);
+        }
     }
 
     @Override

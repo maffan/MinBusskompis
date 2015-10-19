@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -16,18 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.parse.LocationCallback;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
-import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 
@@ -64,7 +56,7 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
         viewHolder.helpToFindDestinationButton = (Button) findViewById(R.id.child_going_from_bus_help_to_loc);
 
         //Set walking status
-        BussData.getInstance().setStatusForSelf(TravelingData.WALKING);
+        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
 
         //Get target destination
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");
