@@ -61,7 +61,7 @@ public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
         viewHolder.destinationNameView.setText(currentDestination.getName());
 
         //Kolla om parent
-        if (true) {
+        if (!context.getSharedPreferences("MyPreferences", Context.MODE_APPEND).getBoolean("setaschild", false)) {
             //Add settings img
             viewHolder.deleteDestinationIconView.setImageResource(R.drawable.delete);
 

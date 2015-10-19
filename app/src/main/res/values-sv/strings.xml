@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MinBusskompis</string>
+    <string name="action_about">Om appen</string>
+    <string name="action_settings">Inställningar</string>
+    <string name="title_activity_maps">Karta</string>
+    <string name="child_bus_station_bus_coming_in">Bussen kommer om</string>
+    <string name="title_activity">Min Busskompis</string>
+    <string name="startup_parent_button">Förälder</string>
+    <string name="child_bus_station_bus_name">Din buss</string>
+    <string name="child_bus_station_leaving_from_title">Åker ifrån</string>
+    <string name="child_bus_station_title">Busshållplats</string>
+    <string name="startup_info_text">Välj om enheten skall användas av en förälder eller av ett barn</string>
+    <string name="startup_child_button">Barn</string>
+    <string name="child_code_next_button">Nästa</string>
+    
+    <string name="child_code_reset_button">Återställ</string><string name="parent_destinations_loading_text">Hämtar destinationer...</string>
+    <string name="child_code_title">Kod:</string>
+    <string name="parent_children_loading_text">Hämtar barn...</string>
+    
+    <string name="child_destinatins_fetch_data">Hämtar data för tur...</string><string name="parent_children_list_no_children_text">Inga barn tillagda</string>
+    <string name="child_destinations_loading_text">Laddar destinationer...</string>
+    <string name="parent_children_list_item_active_text">Klicka för mer information</string>
+    <string name="child_going_from_bus_help_to_loc">Hjälp mig hitta mitt mål</string>
+    <string name="parent_child_settings_exit_child_button">Spara och avsluta</string>
+    <string name="parent_child_settings_destinations_button">Destinationer</string>
+    <string name="parent_child_settings_delete_child_button">Ta bort barn</string>
+    <string name="parent_add_destination_save_button">Lägg till destination</string>
+    <string name="parent_add_destination_save_as_name">Välj ett namn</string>
+    <string name="parent_add_destination_ac_hint">Skriv ett namn eller adress</string>
+    <string name="child_going_from_bus_on_location">Jag är framme, avsluta resan</string>
+    <string name="parent_add_child_hint_text">Skriv barnets kod</string>
+    <string name="child_going_to_bus_help_to_bs">Hjälp mig hitta busshållplatsen</string>
+    <string name="parent_active_child_current_status">Aktuell status</string>
+    <string name="child_going_to_bus_im_on_bs">Jag är på busshållplatsen</string>
+    <string name="child_leave_bus_exit_at_next_stop">Gå av på nästa hållplats</string>
+    <string name="child_leave_bus_stop_button_text">Stopknapp ej tryckt</string>
+    <string name="child_on_bus_arriving_at">Bussen kommer</string>
+    <string name="child_on_bus_title">På bussen</string>
+    <string name="child_on_bus_your_bus_stop">Din hållplats</string>
+    <string name="child_on_bus_next_bus_stop">Nästa hållplats</string>
+</resources>

@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -104,7 +103,6 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
-        Toast.makeText(ParentActiveChild.this, "Got update!", Toast.LENGTH_SHORT).show();
         Log.d(TAG,"Got update!");
         JSONObject object = (JSONObject) data;
         try {

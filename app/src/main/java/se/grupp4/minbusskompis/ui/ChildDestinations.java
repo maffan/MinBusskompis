@@ -37,6 +37,7 @@ import se.grupp4.minbusskompis.ui.adapters.DestinationsAdapter;
 //Note that dummybuttons are temporary for debugging
 public class ChildDestinations extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
+    private static final String TAG = "ChildDestinations";
     private ViewHolder viewHolder;
     private String installationId;
     Context context = this;
@@ -65,7 +66,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         viewHolder.loadingTextView = (TextView) findViewById(R.id.child_destinations_loading_text);
 
         //Start updateparseservice
-        Toast.makeText(ChildDestinations.this, "Starting parse loc service...", Toast.LENGTH_SHORT).show();
+        Log.d(TAG,"Starting update to parse service");
         Intent serviceIntent = new Intent(this, UpdateLocToParseService.class);
         startService(serviceIntent);
 
@@ -153,6 +154,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         Coord from = new Coord(String.valueOf(latLng.latitude), String.valueOf(latLng.longitude));
         Coord to = new Coord(String.valueOf(targetDestination.latitude), String.valueOf(targetDestination.longitude));
         new ApiCallTask(travelingData).execute(from, to);
+        Toast.makeText(ChildDestinations.this, R.string.child_destinatins_fetch_data, Toast.LENGTH_SHORT).show();
     }
 
     private class PopulateDestinationListTask extends AsyncTask<Void, Void, Void> {

@@ -61,7 +61,7 @@ public class WifiCheckerLookReceiver extends BroadcastReceiver {
         Map<String, Integer> scanResult = getScanResultMap();
         if (scanResult.size() > 0) {
             for(String scannedMac : scanResult.keySet()){
-                Log.d(TAG, "Matching: " + scannedMac + " to: " + scanResult);
+                //Log.d(TAG, "Matching: " + scannedMac + " to: " + scanResult);
                 if(macIsValidAndClose(scanResult, scannedMac)){
                     Log.d(TAG, "checkIfValidMacIsClose: Match for: "+scannedMac);
                     wifiHits.put(scannedMac, wifiHits.get(scannedMac) + 1);
@@ -69,7 +69,7 @@ public class WifiCheckerLookReceiver extends BroadcastReceiver {
                 }
             }
         } else {
-            Log.v((this).getClass().getSimpleName(), "No wifilist");
+            Log.d((this).getClass().getSimpleName(), "No wifilist");
         }
     }
 

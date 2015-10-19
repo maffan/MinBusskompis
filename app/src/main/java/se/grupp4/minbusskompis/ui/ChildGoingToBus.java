@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.LocationCallback;
@@ -99,7 +98,6 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(context, "Made it back to BussKompis!!!", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, ChildBusStation.class);
         intent.putExtra("data",travelingData);
         startActivity(intent);

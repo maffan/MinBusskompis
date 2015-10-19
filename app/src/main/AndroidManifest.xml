@@ -87,8 +87,7 @@
         <activity
             android:name=".ui.ChildDestinations"
             android:label="@string/title_activity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.StartSelectMode">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.StartSplash"
@@ -109,8 +108,7 @@
         <activity
             android:name=".ui.ParentChildrenList"
             android:label="@string/title_activity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.StartSelectMode">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.ChildBusStation"

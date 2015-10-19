@@ -32,7 +32,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
     private static class ViewHolder {
         TextView busStopName;
         TextView timeToBus;
-        TextView nextBusName;
+        TextView yourBusName;
     }
 
     private ViewHolder viewHolder;
@@ -57,7 +57,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         //Init views.
         viewHolder.busStopName = (TextView) findViewById(R.id.child_bus_stop_bsname_char);
         viewHolder.timeToBus = (TextView) findViewById(R.id.child_bus_station_time_to_bus);
-        viewHolder.nextBusName = (TextView) findViewById(R.id.child_bus_station_next_bus_name);
+        viewHolder.yourBusName = (TextView) findViewById(R.id.child_bus_station_next_bus_name);
 
         //Get extras
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");
@@ -65,7 +65,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
 
         //Set texts
         viewHolder.busStopName.setText(travelingData.bussStationName);
-        viewHolder.nextBusName.setText(travelingData.bussName);
+        viewHolder.yourBusName.setText(travelingData.bussName);
         viewHolder.timeToBus.setText(travelingData.busLeavingAt);
 
         wifiList = new ArrayList<>();

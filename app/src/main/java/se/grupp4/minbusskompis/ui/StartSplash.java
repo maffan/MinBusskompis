@@ -26,17 +26,14 @@ public class StartSplash extends Activity {
                 catch(InterruptedException e){
                     e.printStackTrace();
                 }finally {
-                    Intent intent;/*
-                    if(sharedPreferences.contains("setaschild") && sharedPreferences.contains("hasparent")){
+                    Intent intent;
+                    if(sharedPreferences.contains("setaschild")){
                         intent = new Intent(getApplicationContext(), ChildDestinations.class);
-                    }
-                    else if(sharedPreferences.contains("setaschild")){
-                        intent = new Intent(getApplicationContext(), ChildChildCode.class);
                     }
                     else if(sharedPreferences.contains("setasparent")){
                         intent = new Intent(getApplicationContext(), ParentChildrenList.class);
                     }
-                    else*/
+                    else
                         intent = new Intent(getApplicationContext(), StartSelectMode.class);
 
                     startActivity(intent);
