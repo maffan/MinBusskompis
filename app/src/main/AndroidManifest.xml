@@ -182,6 +182,11 @@
             android:enabled="true"
             android:exported="false" >
         </service>
+
+        <activity
+            android:name=".ui.InfoAbout"
+            android:label="@string/title_activity">
+        </activity>
     </application>
 
 </manifest>

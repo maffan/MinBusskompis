@@ -215,6 +215,12 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
             return true;
         }
 
+        if (id == R.id.action_about)    {
+            Intent intent = new Intent(getApplicationContext(), InfoAbout.class);
+            startActivity(intent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
