@@ -45,7 +45,7 @@
     <!-- Child views -->
     <string name="child_bus_station_title">On bus station</string>
     <string name="child_bus_station_leaving_from_title">Leaving from</string>
-    <string name="child_bus_station_bus_coming_in">Bus coming in</string>
+    <string name="child_bus_station_bus_coming_in">The bus is arriving at</string>
     <string name="child_bus_station_bus_name">Your bus name</string>
 
     <string name="child_code_title">Code:</string>
@@ -65,8 +65,10 @@
     <string name="child_leave_bus_stop_button_text">Stop button not pressed</string>
 
     <string name="child_on_bus_title">On bus</string>
-    <string name="child_on_bus_your_bus_stop">Your bus stop</string>
+    <string name="child_on_bus_your_bus_stop">Exit at this bus stop</string>
     <string name="child_on_bus_arriving_at">Arriving at</string>
     <string name="child_on_bus_next_bus_stop">Next bus stop</string>
+    <string name="next_stop_init_text">Fetching next stop...</string>
+    <string name="starting_journey_toast">Starting journey...</string>
 
 </resources>

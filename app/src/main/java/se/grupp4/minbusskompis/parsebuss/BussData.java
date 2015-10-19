@@ -105,10 +105,11 @@ public class BussData {
     }
 
     public void setStatusForSelfAndNotifyParents(int status){
-        cloudPosition.put("status",status);
+        cloudPosition.put("status", status);
         cloudPosition.saveInBackground();
         if(status != TravelingData.INACTIVE)
             BussRelationMessenger.getInstance().sendStatusUpdateNotification(status);
+        BussRelationMessenger.getInstance().notifyPositionUpdate();
     }
 
     private ParseObject getOrMakePositionObjectForId(String id) {

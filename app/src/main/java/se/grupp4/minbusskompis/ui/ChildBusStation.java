@@ -105,6 +105,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, ChildOnBus.class);
+                travelingData.currentBusMacAdress = "1337";
                 intent.putExtra("data",travelingData);
                 startActivity(intent);
                 finish();

@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
+import se.grupp4.minbusskompis.api.BusData;
+import se.grupp4.minbusskompis.api.Methods;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.backgroundtasks.WifiCheckerStart;
 import se.grupp4.minbusskompis.parsebuss.BussData;
@@ -51,20 +53,20 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
 
     @Override
     public void run() {
-        new UpdateViewsTask(travelingData);
+        new UpdateViewsTask().execute();
     }
 
     private class UpdateViewsTask extends AsyncTask<Void, Void, TravelingData> {
-        private TravelingData parentTravelingData;
 
-        public UpdateViewsTask(TravelingData parentTravelingData) {
-            this.parentTravelingData = parentTravelingData;
+        public UpdateViewsTask() {
         }
 
         @Override
         protected TravelingData doInBackground(Void... params) {
             //Get data from api
-            TravelingData travelingData = new TravelingData();
+            //String dgw = BusData.getDgwByMac(travelingData.currentBusMacAdress);
+            String dgw = BusData.getDgwByMac("0013951349f7");
+            travelingData.stopButtonPressed = Methods.isStopPressed(BusData.getSimDgw());
             return travelingData;
         }
 
@@ -74,7 +76,7 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
                 viewHolder.stopButtonTextView.setText("Stop button is pressed!");
                 viewHolder.stopButtonImageView.setImageResource(R.drawable.button_pressed);
             }else{
-                //Try to press stop button.
+                viewHolder.stopButtonImageView.setImageResource(R.drawable.button_not_pressed);
             }
         }
     }
@@ -113,10 +115,10 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         nextIntent.putExtra("data", travelingData);
         String mac = travelingData.currentBusMacAdress;
 
-        wifiCheckerStart.startCheckIfLeave(context, nextIntent, mac, 30);
+        //wifiCheckerStart.startCheckIfLeave(context, nextIntent, mac, 30);
 
         poolExecutor = new ScheduledThreadPoolExecutor(1);
-        poolExecutor.scheduleAtFixedRate(this, 0, 30, TimeUnit.SECONDS);
+        poolExecutor.scheduleAtFixedRate(this, 0, 5, TimeUnit.SECONDS);
 
         addButtonListener();
     }

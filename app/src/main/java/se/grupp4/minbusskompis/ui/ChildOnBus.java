@@ -17,40 +17,51 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
+import se.grupp4.minbusskompis.api.BusData;
+import se.grupp4.minbusskompis.api.Methods;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 
 public class ChildOnBus extends AppCompatActivity implements ServiceConnection,Runnable {
     @Override
     public void run() {
-        new UpdateViewsTask(travelingData).execute();
+        new UpdateViewsTask().execute();
     }
 
     private class UpdateViewsTask extends AsyncTask<Void, Void, TravelingData>{
-        private TravelingData parentTravelingData;
 
-        public UpdateViewsTask(TravelingData parentTravelingData) {
-            this.parentTravelingData = parentTravelingData;
+        public UpdateViewsTask() {
         }
 
         @Override
         protected TravelingData doInBackground(Void... params) {
             //Get data from api
-            TravelingData travelingData = new TravelingData();
+            try {
+                String dgw = BusData.getDgwByMac("0013951349f7");
+                travelingData.nextBusStop = Methods.getNextStop(dgw);
+                travelingData.stopButtonPressed = Methods.isAtStop(dgw);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return travelingData;
         }
 
         @Override
         protected void onPostExecute(TravelingData travelingData) {
             super.onPostExecute(travelingData);
-            viewHolder.nextBusStop.setText(travelingData.busStopName);
+            viewHolder.nextBusStop.setText(travelingData.nextBusStop);
 
-            if(travelingData.nextBusStop.equals(this.parentTravelingData.busStopName) && !travelingData.isAtStop){
+            if(travelingData.nextBusStop.equals(travelingData.busStopName) && !travelingData.isAtStop){
                 //Next stop is same as wwe want to go, ok. to. this case. ok.
                 Intent intent = new Intent(context, ChildLeavingBus.class);
                 startActivity(intent);
@@ -95,12 +106,11 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         viewHolder.timeToStop = (TextView) findViewById(R.id.child_on_bus_station_time_to_bus_stop);
 
         //Get data from intent
-        travelingData = (TravelingData) getIntent().getParcelableExtra("data");
+        travelingData = getIntent().getParcelableExtra("data");
 
         //Set data
         viewHolder.busStopName.setText(travelingData.busStopName);
         viewHolder.timeToStop.setText(travelingData.busArrivingAt);
-        viewHolder.nextBusStop.setText(travelingData.bussStationName);
 
         //Update next busstop
         poolExecutor = new ScheduledThreadPoolExecutor(1);

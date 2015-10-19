@@ -73,9 +73,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Your bus name"
             android:gravity="center"
             android:textSize="18sp"
+            android:text="@string/next_stop_init_text"
             android:id="@+id/child_on_bus_next_bus_stop"
             />
 

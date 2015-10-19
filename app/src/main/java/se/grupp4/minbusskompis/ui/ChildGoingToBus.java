@@ -35,11 +35,7 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
     private static final int TIMEOUT = 60*1000;
     private static final int MODE = 1;
     private Context context = this;
-    private LatLng destination;
-    private String destinationName;
     private UpdateLocToParseService.UpdateLocBinder parseUpdateLocBinder;
-    private String latitude;
-    private String longitude;
     private TravelingData travelingData;
     private Button needHelpButton;
     private Button noNeedHelpButton;
@@ -62,15 +58,8 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
         //Set walking status
         BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
 
-        //Get target destination
+        //Init travelingData
         travelingData = getIntent().getParcelableExtra("data");
-        Log.d(TAG,"Got travelingData as: "+travelingData);
-        destination = travelingData.destinationCoordinates;
-        latitude = String.valueOf(destination.latitude);
-        longitude = String.valueOf(destination.longitude);
-        destinationName = travelingData.destinationName;
-        Log.d(TAG,"Latitude: "+ latitude);
-        Log.d(TAG, "Longitude: " + longitude);
 
         needHelpButton = (Button) findViewById(R.id.child_going_to_bus_help_to_bs);
         noNeedHelpButton = (Button) findViewById(R.id.child_going_to_bus_im_on_bs);
@@ -148,7 +137,7 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
         Log.d(TAG,"Received binder, start location listener");
 
         parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
-        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.WALKING, destinationName);
+        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.WALKING, travelingData.destinationName);
 
         if (neededHelp) {
             ParseGeoPoint.getCurrentLocationInBackground(TIMEOUT, new LocationCallback() {
@@ -156,15 +145,9 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
                 public void done(ParseGeoPoint parseGeoPoint, ParseException e) {
 
                     if (parseGeoPoint != null) {
-                        Location location = new Location("Nanana");
-                        location.setLatitude(parseGeoPoint.getLatitude());
-                        location.setLongitude(parseGeoPoint.getLongitude());
-                        ChildLocationAndStatus locationAndStatus = new ChildLocationAndStatus(location,MODE,destinationName);
-                        BussData.getInstance().updateLatestPosition(locationAndStatus);
                         Intent intent =
                                 new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse("google.navigation:q=" + latitude + "," + longitude + "&mode=w"));
-
+                                        Uri.parse("google.navigation:q=" + travelingData.bussStopCoordinates.latitude + "," + travelingData.bussStopCoordinates.longitude + "&mode=w"));
                         startActivityForResult(intent, 1);
                     } else {
                         //Send back to destinations

@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
@@ -21,7 +23,12 @@ import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 import se.grupp4.minbusskompis.ui.adapters.ChildAdapter;
 import se.grupp4.minbusskompis.ui.adapters.ChildData;
 
-public class ParentChildrenList extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ParentChildrenList extends AppCompatActivity implements AdapterView.OnItemClickListener, Observer {
+
+    @Override
+    public void update(Observable observable, Object data) {
+        populateList();
+    }
 
     private static class ViewHolder {
         ListView childrenListView;
@@ -47,6 +54,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
                 BussRelationMessenger.getInstance().setRelationships(BussData.getInstance().getChildren());
             }
         });
+        BussRelationMessenger.getInstance().addObserver(this);
     }
 
     private void initViews() {

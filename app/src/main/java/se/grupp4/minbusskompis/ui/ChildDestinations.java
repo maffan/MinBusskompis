@@ -41,7 +41,6 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
     private ViewHolder viewHolder;
     private String installationId;
     Context context = this;
-    private GoogleApiClient mGoogleApiClient;
 
     private static class ViewHolder {
         ListView destinationsListView;
@@ -120,7 +119,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
                     tData.bussStationName = l.getOrigin().getValue("name");
                     tData.busStopName = l.getDestination().getValue("name");
                     tData.bussStationChar = l.getOrigin().getValue("track");
-                    tData.bussName = l.getValue("sname ") + l.getValue("direction");
+                    tData.bussName = l.getValue("sname")+" " + l.getValue("direction");
                     tData.busLeavingAt = l.getOrigin().getValue("time");
                     tData.busArrivingAt = l.getOrigin().getValue("time");
                     break;
@@ -135,7 +134,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
             Intent intent = new Intent(context, ChildGoingToBus.class);
             intent.putExtra("data", travelingData);
             startActivity(intent);
-            Toast.makeText(ChildDestinations.this, "Starting journey...", Toast.LENGTH_LONG).show();
+            Toast.makeText(ChildDestinations.this, R.string.starting_journey_toast, Toast.LENGTH_LONG).show();
 
             ((Activity)context).finish();
         }
@@ -146,13 +145,10 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         //Send information to next intent
         BussDestination destination = (BussDestination) parent.getAdapter().getItem(position);
         LatLng targetDestination = new LatLng(destination.getDestination().getLatitude(),destination.getDestination().getLongitude());
-        LatLng busStopCordinates = new LatLng(destination.getDestination().getLatitude(),destination.getDestination().getLongitude());
-        Log.d(this.getLocalClassName(), "Destination: " + busStopCordinates.toString());
 
         //Pass data forward
         TravelingData travelingData = new TravelingData();
         travelingData.destinationCoordinates = targetDestination;
-        travelingData.bussStopCoordinates = busStopCordinates;
         travelingData.destinationName = destination.getName();
 
         GPSTracker gps = new GPSTracker(this);

@@ -97,6 +97,8 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
 
         if(child.isActive()){
             viewHolder.activeChildText.setVisibility(View.VISIBLE);
+        }else{
+            viewHolder.activeChildText.setVisibility(View.GONE);
         }
 
         return row;
