@@ -1,5 +1,7 @@
 package se.grupp4.minbusskompis.api;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +21,7 @@ class InnovationPlatform {
 	private static String key = "Basic Z3JwMjE6dlJ0Q2xydE9tMg==";
 	private static String baseurl = "https://ece01.ericsson.net:4443/ecity?";
 	private static int INTERVAL_LENGTH = 5;
+	private static String logTag = "API-IP: ";
 
 	private static String httpGet(int sec, String params) throws IOException {
 		long t2 = System.currentTimeMillis() - 5000;
@@ -31,13 +34,14 @@ class InnovationPlatform {
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Authorization", key);
 
+		Log.d(logTag, "ResponseCode: " + con.getResponseCode());
 		try {
 			if (con.getResponseCode() != 200) {
 				throw new IOException(con.getResponseMessage());
 			}
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			return e.getMessage();
+			Log.e(logTag, e.getMessage());
+			return "Error";
 		}
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -64,7 +68,7 @@ class InnovationPlatform {
 			String value = ((JSONObject) jso).getString("value");
 
 			if (key.equals(parameter))
-				if (time > timedValue.getTime())
+				if (time < timedValue.getTime())
 					timedValue.setValue(value, time);
 		}
 
@@ -95,8 +99,10 @@ class InnovationPlatform {
 		String response = "";
 
 		int tries = 1;
-		while (response.equals(""))
+		while (response.equals("")) {
 			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+			Log.d(logTag, tries-1 + " trie(s) in getNextStop()");
+		}
 
 		JSONArray data = new JSONArray(response);
 
@@ -110,8 +116,10 @@ class InnovationPlatform {
 		String response = "";
 
 		int tries = 1;
-		while (response.equals(""))
+		while (response.equals("")) {
 			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+			Log.d(logTag, tries-1 + " trie(s) in getLatestCoordOf()");
+		}
 
 		JSONArray data = new JSONArray(response);
 
@@ -126,8 +134,10 @@ class InnovationPlatform {
 		String response = "";
 
 		int tries = 1;
-		while (response.equals(""))
+		while (response.equals("")) {
 			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+			Log.d(logTag, tries-1 + " trie(s) in getJourneyInfo()");
+		}
 
 		JSONArray data = new JSONArray(response);
 
@@ -142,8 +152,10 @@ class InnovationPlatform {
 		String response = "";
 
 		int tries = 1;
-		while (response.equals(""))
+		while (response.equals("")) {
 			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+			Log.d(logTag, tries-1 + " trie(s) in getAllJourneyNames()");
+		}
 
 		JSONArray data = new JSONArray(response);
 		HashMap<String, String> busses = new HashMap<String, String>();
@@ -168,8 +180,10 @@ class InnovationPlatform {
 		String response = "";
 
 		int tries = 1;
-		while (response.equals(""))
+		while (response.equals("")) {
 			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+			Log.d(logTag, tries-1 + " trie(s) in getOutsideTemperature()");
+		}
 
 		JSONArray data = new JSONArray(response);
 
@@ -184,8 +198,10 @@ class InnovationPlatform {
 		String response = "";
 
 		int tries = 1;
-		while (response.equals(""))
+		while (response.equals("")) {
 			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+			Log.d(logTag, tries-1 + " trie(s) in isAtStop()");
+		}
 
 		JSONArray data = new JSONArray(response);
 
@@ -200,8 +216,10 @@ class InnovationPlatform {
 		String response = "";
 
 		int tries = 1;
-		while (response.equals(""))
+		while (response.equals("")) {
 			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
+			Log.d(logTag, tries-1 + " trie(s) in isStopPressed()");
+		}
 
 		JSONArray data = new JSONArray(response);
 
