@@ -1,7 +1,9 @@
 package se.grupp4.minbusskompis.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -234,4 +236,19 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed(){
+        new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.all_exit_dialog_title)
+                .setMessage(R.string.all_exit_dialog_message)
+                .setPositiveButton(R.string.all_exit_dialog_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        System.exit(0);
+                    }
+                })
+                .setNegativeButton(R.string.all_exit_dialog_no, null)
+                .show();
+    }
 }

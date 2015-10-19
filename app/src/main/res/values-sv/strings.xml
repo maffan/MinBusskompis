@@ -72,4 +72,8 @@
     <string name="parent_settings_toast_notifications_on">Notifikationer på...</string>
     <string name="child_code_toast_text_notreceived">Ingen synknings begäran har kommit</string>
     <string name="child_code_toast_text_received">Tog mot synkningsbegäran från ID: </string>
+    <string name="all_exit_dialog_message">Vill du avlsuta Min BussKompis? </string>
+    <string name="all_exit_dialog_no">Nej</string>
+    <string name="all_exit_dialog_title">Avsluta MinBussKompis</string>
+    <string name="all_exit_dialog_yes">Ja</string>
 </resources>

@@ -28,6 +28,10 @@
     do you wish to continue?</string>
     <string name="all_reset_dialog_yes">Yes</string>
     <string name="all_reset_dialog_no">No</string>
+    <string name="all_exit_dialog_title">Exit Min BussKompis</string>
+    <string name="all_exit_dialog_message">Do you wish to exit the application?</string>
+    <string name="all_exit_dialog_yes">Yes</string>
+    <string name="all_exit_dialog_no">No</string>
 
     <!-- Parent views -->
     <string name="parent_children_loading_text">Loading children...</string>

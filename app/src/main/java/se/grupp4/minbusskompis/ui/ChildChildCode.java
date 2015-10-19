@@ -94,7 +94,6 @@ public class ChildChildCode extends AppCompatActivity {
             public void onSyncTaskComplete(boolean success, String installationId) {
                 if (success) {
                     Toast.makeText(context, R.string.child_code_toast_text_received + installationId, Toast.LENGTH_LONG).show();
-                    sharedPreferences.edit().putBoolean("hasparent", true);
                     Intent intent = new Intent(ChildChildCode.this, ChildDestinations.class);
                     startActivity(intent);
                 } else {

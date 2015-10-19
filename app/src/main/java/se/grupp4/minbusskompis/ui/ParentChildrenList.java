@@ -1,5 +1,8 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +35,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
     private static final String TAG = "PARENT_CHILDREN_LIST";
     private ChildAdapter childrenListAdapter;
     private ViewHolder viewHolder;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,5 +177,21 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
             //Log.v("CHILDADAPTER","Child inactive: " +child.getId());
         }
 
+    }
+    @Override
+    public void onBackPressed(){
+        new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.all_exit_dialog_title)
+                .setMessage(R.string.all_exit_dialog_message)
+                .setPositiveButton(R.string.all_exit_dialog_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        onDestroy();
+                        System.exit(0);
+                    }
+                })
+                .setNegativeButton(R.string.all_exit_dialog_no, null)
+                .show();
     }
 }
