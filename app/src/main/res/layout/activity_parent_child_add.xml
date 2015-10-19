@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:hint="Enter child code"
+        android:hint="@string/parent_add_child_hint_text"
         android:gravity="center"
         android:layout_gravity="center_horizontal"
         android:allowUndo="true"
@@ -25,7 +25,7 @@
         android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Add child"
+        android:text="@string/parent_add_child_button_text"
         android:id="@+id/parent_add_child_add_child_button"
         android:textColor="#ffffff"
         android:background="#000000"/>

@@ -129,7 +129,7 @@ public class ParentChildDestinations extends AppCompatActivity {
         destinationsAdapter.clear();
         ArrayList<BussDestination> destList = BussData.getInstance().getDestinationsForChild(childId);
         if(destList.isEmpty()){
-            viewHolder.loadingTextView.setText("No destinations for child");
+            viewHolder.loadingTextView.setText(R.string.parent_child_destinations_viewholder_defaulttext);
             showMessage();
         }else{
             destinationsAdapter.addAll(destList);

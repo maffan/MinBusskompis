@@ -48,7 +48,7 @@ public class ParentChildrenAdd extends AppCompatActivity {
                 //Sending request
                 BussSync sync = new BussSync(new BussParseSyncMessenger());
                 if (!(codeTextView.getText().toString().equals(""))) {
-                    Toast.makeText(context, "Sending sync request...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.parent_children_add_busssync_toast_sync, Toast.LENGTH_LONG).show();
                     sync.syncWithSyncCode(codeTextView.getText().toString(), new SyncTaskCompleteCallback() {
                         @Override
                         public void onSyncTaskComplete(boolean success, String installationId) {
@@ -56,7 +56,7 @@ public class ParentChildrenAdd extends AppCompatActivity {
                                 Log.v("ParentChildrenAdd", "Successfully added");
                                 //Save child to parse data
                                 BussData.getInstance().addRelationship(installationId, BussData.CHILD);
-                                Toast.makeText(context, "Succesfully synced with device with Installation ID: " + installationId, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, R.string.parent_children_add_busssync_toast_success + installationId, Toast.LENGTH_LONG).show();
 
                                 //Switch to ChildSettings, pass on installation id
                                 Intent intent = new Intent(context, ParentChildSettings.class);
@@ -64,12 +64,12 @@ public class ParentChildrenAdd extends AppCompatActivity {
                                 startActivity(intent);
                             } else {
                                 Log.v("ParentChildrenAdd", "NOT Successfully added");
-                                Toast.makeText(context, "Could not sync with device", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, R.string.parent_children_add_busssync_toast_failed, Toast.LENGTH_LONG).show();
                             }
                         }
                     });
                 }else{
-                    Toast.makeText(context, "No code has been entered...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.parent_children_add_busssynt_toast_noinput, Toast.LENGTH_LONG).show();
                 }
             }
         });

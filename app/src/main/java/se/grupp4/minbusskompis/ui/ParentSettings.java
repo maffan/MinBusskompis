@@ -59,10 +59,9 @@ public class ParentSettings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Reset")
-                        .setMessage("This will reset your app, and you will lose all connections" +
-                                " do you wish to continue?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.parent_settings_reset_dialog_title)
+                        .setMessage(R.string.parent_settings_reset_dialog_message)
+                        .setPositiveButton(R.string.parent_settings_reset_dialog_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(getApplicationContext(), StartSelectMode.class);
@@ -76,7 +75,7 @@ public class ParentSettings extends AppCompatActivity {
                                 });
                             }
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton(R.string.parent_settings_reset_dialog_no, null)
                         .show();
             }
         });
@@ -90,10 +89,10 @@ public class ParentSettings extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     sharedPreferences.edit().putBoolean("soundsetting", true).apply();
-                    Toast.makeText(getApplicationContext(), "Sound is ON", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.parent_settings_toast_notifications_on, Toast.LENGTH_SHORT).show();
                 } else {
                     sharedPreferences.edit().putBoolean("soundsetting", false).apply();
-                    Toast.makeText(getApplicationContext(), "Sound is OFF", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.parent_settings_toast_notifications_off, Toast.LENGTH_SHORT).show();
                 }
             }
         });

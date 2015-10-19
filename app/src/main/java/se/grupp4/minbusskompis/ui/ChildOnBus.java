@@ -130,16 +130,17 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
     @Override
     public void onBackPressed(){
         new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Stop Trip")
-                .setMessage("Do you wish to go back to Destinations?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.child_onbackwardspressed_dialog_title)
+                .setMessage(R.string.child_onbackwardspressed_dialog_message)
+                .setPositiveButton(R.string.child_onbackwardspressed_dialog_option_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(getApplicationContext(), ChildDestinations.class);
                         startActivity(intent);
                         finish();
-                    }})
-                .setNegativeButton("No", null)
+                    }
+                })
+                .setNegativeButton(R.string.child_onbackwardspressed_dialog_option_no, null)
                 .show();
     }
 

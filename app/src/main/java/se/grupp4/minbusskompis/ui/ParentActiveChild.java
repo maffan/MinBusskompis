@@ -134,31 +134,31 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
     private void updateStatusText() {
         switch (status){
             case TravelingData.INACTIVE:
-                childStatus.setText("Child not active");
+                childStatus.setText(R.string.parent_active_child_inactive_text);
                 childStatusImage.setImageResource(R.drawable.inactive);
                 break;
             case TravelingData.WALKING:
-                childStatus.setText("Going to bus stop");
+                childStatus.setText(R.string.parent_active_child_walking_text);
                 childStatusImage.setImageResource(R.drawable.walking);
                 break;
             case TravelingData.AT_BUS_STATION:
-                childStatus.setText("At bus stop");
+                childStatus.setText(R.string.parent_active_child_atbusstation_text);
                 childStatusImage.setImageResource(R.drawable.busstop);
                 break;
             case TravelingData.ON_BUS:
-                childStatus.setText("Traveling by bus");
+                childStatus.setText(R.string.parent_active_child_onbus_text);
                 childStatusImage.setImageResource(R.drawable.bus);
                 break;
             case TravelingData.LEAVING_BUS:
-                childStatus.setText("Leaving bus");
+                childStatus.setText(R.string.parent_active_child_leavingbus_text);
                 childStatusImage.setImageResource(R.drawable.busstop);
                 break;
             case 5:
-                childStatus.setText("Going to destination");
+                childStatus.setText(R.string.parent_active_child_goingtodestination_text);
                 childStatusImage.setImageResource(R.drawable.walking);
                 break;
             default:
-                childStatus.setText("Child is active");
+                childStatus.setText(R.string.parent_active_child_default);
                 childStatusImage.setImageResource(R.drawable.inactive);
         }
     }

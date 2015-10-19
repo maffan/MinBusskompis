@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/child_bus_station_title"
-        android:text="@string/child_bus_station_title"
+        android:text="@string/child_bus_station_title_text"
         android:layout_below="@+id/button_dummystation"
         android:gravity="center"
         android:textSize="@dimen/font_title"
