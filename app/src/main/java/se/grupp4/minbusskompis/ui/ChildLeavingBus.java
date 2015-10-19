@@ -118,7 +118,7 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         //wifiCheckerStart.startCheckIfLeave(context, nextIntent, mac, 30);
 
         poolExecutor = new ScheduledThreadPoolExecutor(1);
-        poolExecutor.scheduleAtFixedRate(this, 0, 5, TimeUnit.SECONDS);
+        poolExecutor.scheduleAtFixedRate(this, 0, 15, TimeUnit.SECONDS);
 
         addButtonListener();
     }

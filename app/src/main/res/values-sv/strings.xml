@@ -48,7 +48,7 @@
     <string name="parent_active_child_default">Barn är aktivt</string>
     <string name="parent_active_child_goingtodestination_text">Påväg till slutmål</string>
     <string name="parent_active_child_inactive_text">Barn ej aktivt</string>
-    <string name="parent_active_child_leavingbus_text"></string>
+    <string name="parent_active_child_leavingbus_text">Lämnar bussen</string>
     <string name="parent_active_child_onbus_text">Påväg till bussen</string>
     <string name="parent_active_child_walking_text">Påväg till busshållplats</string>
     <string name="parent_add_child_button_text">Lägg till barn</string>
@@ -76,4 +76,6 @@
     <string name="all_exit_dialog_no">Nej</string>
     <string name="all_exit_dialog_title">Avsluta MinBussKompis</string>
     <string name="all_exit_dialog_yes">Ja</string>
+    <string name="next_stop_init_text">Hämtar nästa hållplats...</string>
+    <string name="starting_journey_toast">Startar resan...</string>
 </resources>
