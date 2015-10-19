@@ -34,14 +34,10 @@ class InnovationPlatform {
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Authorization", key);
 
-		Log.d(logTag, "ResponseCode: " + con.getResponseCode());
-		try {
-			if (con.getResponseCode() != 200) {
-				throw new IOException(con.getResponseMessage());
-			}
-		} catch (Exception e) {
-			Log.e(logTag, e.getMessage());
-			return "Error";
+		int responseCode = con.getResponseCode();
+		Log.d(logTag, "Response; Code: " + responseCode + " Message: " + con.getResponseMessage());
+		if (responseCode != 200) {
+			throw new IOException(con.getResponseMessage());
 		}
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -98,31 +94,28 @@ class InnovationPlatform {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Next_Stop";
 		String response = "";
 
-		int tries = 1;
+		int tries = 0; int interval = 0;
 		while (response.equals("")) {
-			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
-			Log.d(logTag, tries-1 + " trie(s) in getNextStop()");
+			interval = INTERVAL_LENGTH * ((int) Math.pow(2.0, (double) (++tries - 1)));
+			response = httpGet(interval, params);
 		}
+		Log.d(logTag, tries + " trie(s). Last interval length: " + interval + "s getNextStop()");
 
-		JSONArray data = new JSONArray(response);
-
-		String name = getLatestStringValueOf("Bus_Stop_Name_Value", data);
-
-		return name;
+		return getLatestStringValueOf("Bus_Stop_Name_Value", new JSONArray(response));
 	}
 
 	public static Coord getLatestCoordOf(String dgw) throws IOException, JSONException {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$GPS";
 		String response = "";
 
-		int tries = 1;
+		int tries = 0; int interval = 0;
 		while (response.equals("")) {
-			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
-			Log.d(logTag, tries-1 + " trie(s) in getLatestCoordOf()");
+			interval = INTERVAL_LENGTH * ((int) Math.pow(2.0, (double) (++tries - 1)));
+			response = httpGet(interval, params);
 		}
+		Log.d(logTag, tries + " trie(s). Last interval length: " + interval + "s getLatestCoordOf()");
 
 		JSONArray data = new JSONArray(response);
-
 		String lat = getLatestStringValueOf("Latitude_Value", data);
 		String lon = getLatestStringValueOf("Longitude_Value", data);
 
@@ -133,14 +126,14 @@ class InnovationPlatform {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Journey_Info";
 		String response = "";
 
-		int tries = 1;
+		int tries = 0; int interval = 0;
 		while (response.equals("")) {
-			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
-			Log.d(logTag, tries-1 + " trie(s) in getJourneyInfo()");
+			interval = INTERVAL_LENGTH * ((int) Math.pow(2.0, (double) (++tries - 1)));
+			response = httpGet(interval, params);
 		}
+		Log.d(logTag, tries + " trie(s). Last interval length: " + interval + "s getJourneyInfo()");
 
 		JSONArray data = new JSONArray(response);
-
 		String name = getLatestStringValueOf("Destination_Value", data);
 		String dest = getLatestStringValueOf("Journey_Name_Value", data);
 
@@ -151,11 +144,12 @@ class InnovationPlatform {
 		String params = "sensorSpec=Ericsson$Journey_Info";
 		String response = "";
 
-		int tries = 1;
+		int tries = 0; int interval = 0;
 		while (response.equals("")) {
-			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
-			Log.d(logTag, tries-1 + " trie(s) in getAllJourneyNames()");
+			interval = INTERVAL_LENGTH * ((int) Math.pow(2.0, (double) (++tries - 1)));
+			response = httpGet(interval, params);
 		}
+		Log.d(logTag, tries + " trie(s). Last interval length: " + interval + "s getAllJourneyNames()");
 
 		JSONArray data = new JSONArray(response);
 		HashMap<String, String> busses = new HashMap<String, String>();
@@ -179,17 +173,14 @@ class InnovationPlatform {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Ambient_Temperature";
 		String response = "";
 
-		int tries = 1;
+		int tries = 0; int interval = 0;
 		while (response.equals("")) {
-			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
-			Log.d(logTag, tries-1 + " trie(s) in getOutsideTemperature()");
+			interval = INTERVAL_LENGTH * ((int) Math.pow(2.0, (double) (++tries - 1)));
+			response = httpGet(interval, params);
 		}
+		Log.d(logTag, tries + " trie(s). Last interval length: " + interval + "s getOutsideTemperature()");
 
-		JSONArray data = new JSONArray(response);
-
-		String temp = getLatestStringValueOf("Ambient_Temperature_Value", data);
-
-		return temp;
+		return getLatestStringValueOf("Ambient_Temperature_Value", new JSONArray(response));
 	}
 
 	public static boolean isAtStop(String dgw) throws IOException, JSONException
@@ -197,15 +188,14 @@ class InnovationPlatform {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$At_Stop";
 		String response = "";
 
-		int tries = 1;
+		int tries = 0; int interval = 0;
 		while (response.equals("")) {
-			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
-			Log.d(logTag, tries-1 + " trie(s) in isAtStop()");
+			interval = INTERVAL_LENGTH * ((int) Math.pow(2.0, (double) (++tries - 1)));
+			response = httpGet(interval, params);
 		}
+		Log.d(logTag, tries + " trie(s). Last interval length: " + interval + "s isAtStop()");
 
-		JSONArray data = new JSONArray(response);
-
-		String value = getLatestStringValueOf("At_Stop_Value", data);
+		String value = getLatestStringValueOf("At_Stop_Value", new JSONArray(response));
 
 		return Boolean.parseBoolean(value);
 	}
@@ -215,15 +205,14 @@ class InnovationPlatform {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Stop_Pressed";
 		String response = "";
 
-		int tries = 1;
+		int tries = 0; int interval = 0;
 		while (response.equals("")) {
-			response = httpGet(INTERVAL_LENGTH * 2 ^ (tries++ - 1), params);
-			Log.d(logTag, tries-1 + " trie(s) in isStopPressed()");
+			interval = INTERVAL_LENGTH * ((int) Math.pow(2.0, (double) (++tries - 1)));
+			response = httpGet(interval, params);
 		}
+		Log.d(logTag, tries + " trie(s). Last interval length: " + interval + "s isStopPressed()");
 
-		JSONArray data = new JSONArray(response);
-
-		String value = getLatestStringValueOf("Stop_Pressed_Value", data);
+		String value = getLatestStringValueOf("Stop_Pressed_Value", new JSONArray(response));
 
 		return Boolean.parseBoolean(value);
 	}
