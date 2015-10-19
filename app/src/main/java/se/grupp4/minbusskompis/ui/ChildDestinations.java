@@ -109,8 +109,16 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
                 {
                     Leg l = trip.getLegs().get(i);
 
+                    String geometryRef = l.getGeometryRef();
+                    Coord startCoord = se.grupp4.minbusskompis.api.Methods.getGeometry(geometryRef).get(0);
+                    Log.d("CHILDDESTINATIONS: ", "BusStop at: " + startCoord.toString());
+
+                    double lat = Double.parseDouble(startCoord.getLatitude());
+                    double lng = Double.parseDouble(startCoord.getLongitude());
+
+                    tData.bussStopCoordinates = new LatLng(lat, lng);
                     tData.bussStationName = l.getOrigin().getValue("name");
-                    tData.busStopName = l.getOrigin().getValue("name");
+                    tData.busStopName = l.getDestination().getValue("name");
                     tData.bussStationChar = l.getOrigin().getValue("track");
                     tData.bussName = l.getValue("sname ") + l.getValue("direction");
                     tData.busLeavingAt = l.getOrigin().getValue("time");

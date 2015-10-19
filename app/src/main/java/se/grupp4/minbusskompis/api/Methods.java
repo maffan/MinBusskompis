@@ -14,10 +14,20 @@ import se.grupp4.minbusskompis.api.datatypes.vt.VTLocation;
 import se.grupp4.minbusskompis.api.datatypes.vt.StopLocation;
 import se.grupp4.minbusskompis.api.datatypes.vt.Trip;
 
+/**
+ * Contains methods for API calls
+ * to Innovation Plattform and Västtrafik.
+ */
 public class Methods 
 {
-	// Västtrafik
-	
+	/**
+	 *
+	 * @param lat
+	 * @param lng
+	 * @return
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static ArrayList<StopLocation> getNearbyStops(String lat, String lng) throws IOException, JSONException
 	{
 		return VastTrafik.getNearbyStops(lat, lng);
@@ -27,7 +37,15 @@ public class Methods
 	{
 		return VastTrafik.getLocationNamesByString(input);
 	}
-	
+
+	/**
+	 * Returns a list of Trip's between from and to.
+	 * @param from Coord
+	 * @param to Coord
+	 * @return ArrayList<Trip>
+	 * @see Trip
+	 * @see Coord
+	 */
 	public static ArrayList<Trip> getTriplist(Coord from, Coord to)
 	{
 		ArrayList<Trip> tripList = null;
@@ -41,6 +59,14 @@ public class Methods
 		return tripList;
 	}
 
+	/**
+	 * Gets the nearest trip from current time.
+	 * @param from Coord
+	 * @param to Coord
+	 * @return Trip
+	 * @see Trip
+	 * @see Coord
+	 */
 	public static Trip getClosestTrip(Coord from, Coord to)
 	{
 		ArrayList<Trip> tripList = getTriplist(from, to);
@@ -51,9 +77,17 @@ public class Methods
 		return tripList.get(0);
 	}
 	
-	public static ArrayList<Coord> getGeometry(String url) throws IOException, JSONException
+	public static ArrayList<Coord> getGeometry(String url)
 	{
-		return VastTrafik.getGeometry(url);
+		ArrayList<Coord> coordList;
+		try{
+			coordList = VastTrafik.getGeometry(url);
+		}catch(IOException | JSONException e){
+			coordList = new ArrayList<>();
+			coordList.add(new Coord("0","0"));
+		}
+
+		return coordList;
 	}
 	
 	// Innovation Platform
@@ -83,6 +117,11 @@ public class Methods
 		return InnovationPlatform.getAllJourneyNames();
 	}
 
+	/**
+	 * Checks if bus is at bus stop.
+	 * @param dgw Bus id
+	 * @return boolean
+	 */
 	public static boolean isAtStop(String dgw)
 	{
 		boolean value = false;
@@ -94,6 +133,11 @@ public class Methods
 		return value;
 	}
 
+	/**
+	 * Checks if the bus stop button is pressed.
+	 * @param dgw Bus id
+	 * @return boolean
+	 */
 	public static boolean isStopPressed(String dgw)
 	{
 		boolean value = false;
