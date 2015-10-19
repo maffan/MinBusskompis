@@ -94,7 +94,7 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
         }
 
         if (id == R.id.action_about)    {
-            Intent intent = new Intent(getApplicationContext(), InfoAbout.class);
+            Intent intent = new Intent(getApplicationContext(), ParentInfoAbout.class);
             startActivity(intent);
             return true;
         }

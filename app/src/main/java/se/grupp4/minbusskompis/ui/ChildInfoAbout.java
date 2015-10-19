@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import se.grupp4.minbusskompis.R;
 
-public class InfoAbout extends AppCompatActivity {
+public class ChildInfoAbout extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
