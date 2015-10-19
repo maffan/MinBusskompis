@@ -59,9 +59,9 @@ public class ParentSettings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle(R.string.parent_settings_reset_dialog_title)
-                        .setMessage(R.string.parent_settings_reset_dialog_message)
-                        .setPositiveButton(R.string.parent_settings_reset_dialog_yes, new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.all_reset_dialog_title)
+                        .setMessage(R.string.all_reset_dialog_message)
+                        .setPositiveButton(R.string.all_reset_dialog_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(getApplicationContext(), StartSelectMode.class);
@@ -75,7 +75,7 @@ public class ParentSettings extends AppCompatActivity {
                                 });
                             }
                         })
-                        .setNegativeButton(R.string.parent_settings_reset_dialog_no, null)
+                        .setNegativeButton(R.string.all_reset_dialog_no, null)
                         .show();
             }
         });

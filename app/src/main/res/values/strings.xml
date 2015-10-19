@@ -21,6 +21,14 @@
 
     <string name="activity_about_info_text" translatable="false">@string/startup_dialog_info_text</string>
 
+    <!-- Utilized by both views -->
+
+    <string name="all_reset_dialog_title">Reset</string>
+    <string name="all_reset_dialog_message">This will reset your app, and you will lose all connections
+    do you wish to continue?</string>
+    <string name="all_reset_dialog_yes">Yes</string>
+    <string name="all_reset_dialog_no">No</string>
+
     <!-- Parent views -->
     <string name="parent_children_loading_text">Loading children...</string>
     <string name="parent_active_child_current_status">Current Status</string>
@@ -48,11 +56,6 @@
     <string name="parent_settings_notifications_switch_text">Notifications</string>
     <string name="parent_settings_toast_notifications_on">Notifications on...</string>
     <string name="parent_settings_toast_notifications_off">Notifications off...</string>
-    <string name="parent_settings_reset_dialog_title">Reset</string>
-    <string name="parent_settings_reset_dialog_message">This will reset your app, and you will lose all connections
-    do you wish to continue?</string>
-    <string name="parent_settings_reset_dialog_yes">Yes</string>
-    <string name="parent_settings_reset_dialog_no">No</string>
 
     <string name="startup_child_button">Child</string>
     <string name="startup_parent_button">Parent</string>
@@ -82,6 +85,8 @@
     <string name="child_code_title">Code:</string>
     <string name="child_code_next_button">Next</string>
     <string name="child_code_reset_button">Reset</string>
+    <string name="child_code_toast_text_received">Received request from device with ID: </string>
+    <string name="child_code_toast_text_notreceived">No requests received</string>
 
     <string name="child_destinations_loading_text">Loading destinations...</string>
     <string name="child_destinatins_fetch_data">Fetching data for trip...</string>

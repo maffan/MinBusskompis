@@ -64,10 +64,12 @@
     <string name="parent_children_add_busssynt_toast_noinput">Ingen kod har blivit inslagen...</string>
     <string name="parent_settings_notifications_switch_text">Notifikationer</string>
     <string name="parent_settings_reset_button_text">Reset</string>
-    <string name="parent_settings_reset_dialog_message">Detta kommer att återsälla appen, vill du fortsätta?</string>
-    <string name="parent_settings_reset_dialog_no">Nej</string>
-    <string name="parent_settings_reset_dialog_title">Reset</string>
-    <string name="parent_settings_reset_dialog_yes">Ja</string>
+    <string name="all_reset_dialog_message">Detta kommer att återsälla appen, vill du fortsätta?</string>
+    <string name="all_reset_dialog_no">Nej</string>
+    <string name="all_reset_dialog_title">Reset</string>
+    <string name="all_reset_dialog_yes">Ja</string>
     <string name="parent_settings_toast_notifications_off">Notifikationer av...</string>
     <string name="parent_settings_toast_notifications_on">Notifikationer på...</string>
+    <string name="child_code_toast_text_notreceived">Ingen synknings begäran har kommit</string>
+    <string name="child_code_toast_text_received">Tog mot synkningsbegäran från ID: </string>
 </resources>

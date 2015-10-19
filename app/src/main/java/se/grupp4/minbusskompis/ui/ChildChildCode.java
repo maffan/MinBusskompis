@@ -62,10 +62,9 @@ public class ChildChildCode extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Reset")
-                        .setMessage("This will reset your app, and you will lose all connections" +
-                                " do you wish to continue?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.all_reset_dialog_title)
+                        .setMessage(R.string.all_reset_dialog_message)
+                        .setPositiveButton(R.string.all_reset_dialog_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(ChildChildCode.this, StartSelectMode.class);
@@ -79,7 +78,7 @@ public class ChildChildCode extends AppCompatActivity {
                                 });
                             }
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton(R.string.all_reset_dialog_no, null)
                         .show();
             }
         });
@@ -94,12 +93,12 @@ public class ChildChildCode extends AppCompatActivity {
             @Override
             public void onSyncTaskComplete(boolean success, String installationId) {
                 if (success) {
-                    Toast.makeText(context, "Received request from device with ID: " + installationId, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.child_code_toast_text_received + installationId, Toast.LENGTH_LONG).show();
                     sharedPreferences.edit().putBoolean("hasparent", true);
                     Intent intent = new Intent(ChildChildCode.this, ChildDestinations.class);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(context, "No requests received", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.child_code_toast_text_notreceived, Toast.LENGTH_LONG).show();
                 }
             }
         });
