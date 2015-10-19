@@ -16,8 +16,8 @@
         android:layout_marginTop="@dimen/standard_top_margin"
         android:layout_width="@dimen/standard_width"
         android:layout_height="wrap_content"
-        android:text="Sound"
-        android:id="@+id/sound_switch"
+        android:text="Notifications"
+        android:id="@+id/notification_switch"
         android:textOn="ON"
         android:textOff="OFF"
         />
