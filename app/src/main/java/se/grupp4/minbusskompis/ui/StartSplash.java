@@ -27,10 +27,10 @@ public class StartSplash extends Activity {
                     e.printStackTrace();
                 }finally {
                     Intent intent;
-                    if(sharedPreferences.contains("setaschild")){
+                    if(sharedPreferences.getBoolean("setaschild", false)){
                         intent = new Intent(getApplicationContext(), ChildDestinations.class);
                     }
-                    else if(sharedPreferences.contains("setasparent")){
+                    else if(sharedPreferences.getBoolean("setasparent", false)){
                         intent = new Intent(getApplicationContext(), ParentChildrenList.class);
                     }
                     else

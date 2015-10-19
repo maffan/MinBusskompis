@@ -48,6 +48,7 @@ public class StartSelectMode extends Activity {
             public void onClick(View v) {
                 //Ändrade startvy till listan på children då man är parent.
                 sharedPreferences.edit().putBoolean("setasparent", true).apply();
+                sharedPreferences.edit().putBoolean("setaschild", false).apply();
                 Intent intent = new Intent(getApplicationContext(), ParentChildrenList.class);
                 startActivity(intent);
             }
@@ -57,6 +58,7 @@ public class StartSelectMode extends Activity {
 
             public void onClick(View v) {
                 sharedPreferences.edit().putBoolean("setaschild", true).apply();
+                sharedPreferences.edit().putBoolean("setasparent", false).apply();
                 Intent intent = new Intent(getApplicationContext(), ChildDestinations.class);
                 startActivity(intent);
             }

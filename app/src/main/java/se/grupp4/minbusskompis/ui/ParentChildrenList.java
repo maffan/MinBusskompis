@@ -178,20 +178,4 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         }
 
     }
-    @Override
-    public void onBackPressed(){
-        new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(R.string.all_exit_dialog_title)
-                .setMessage(R.string.all_exit_dialog_message)
-                .setPositiveButton(R.string.all_exit_dialog_yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        onDestroy();
-                        System.exit(0);
-                    }
-                })
-                .setNegativeButton(R.string.all_exit_dialog_no, null)
-                .show();
-    }
 }

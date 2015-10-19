@@ -113,8 +113,7 @@
         <activity
             android:name=".ui.ChildBusStation"
             android:label="@string/title_activity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.ChildDestinations">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.map.addLocationOnMap"
@@ -124,26 +123,22 @@
         <activity
             android:name=".ui.ChildGoingToBus"
             android:label="@string/title_activity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.ChildDestinations">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.ChildGoingFromBus"
             android:label="@string/title_activity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.ChildDestinations">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.ChildOnBus"
             android:label="@string/title_activity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.ChildDestinations">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.ChildLeavingBus"
             android:label="@string/title_activity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.ChildDestinations">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.ParentActiveChild"
