@@ -1,12 +1,10 @@
 package se.grupp4.minbusskompis.backgroundtasks;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,7 +14,8 @@ import android.provider.Settings;
 import android.util.Log;
 
 /**
- * Created by joh on 2015-10-16.
+ * Ravi Tamada on February 3, 2015
+ * http://www.androidhive.info/2015/02/android-location-api-using-google-play-services/
  */
 public class GPSTracker extends Service implements LocationListener {
 
