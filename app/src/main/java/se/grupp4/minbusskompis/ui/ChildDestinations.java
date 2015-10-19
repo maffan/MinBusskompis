@@ -1,10 +1,12 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,10 @@ import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
+import se.grupp4.minbusskompis.api.datatypes.vt.Coord;
+import se.grupp4.minbusskompis.api.datatypes.vt.Leg;
+import se.grupp4.minbusskompis.api.datatypes.vt.Trip;
+import se.grupp4.minbusskompis.backgroundtasks.GPSTracker;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.BussData;
@@ -78,12 +84,61 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         new PopulateDestinationListTask().execute();
     }
 
+    private class ApiCallTask extends AsyncTask<Coord, Void, TravelingData> {
+        private TravelingData tData;
+
+        public ApiCallTask(TravelingData tData) {
+            this.tData = tData;
+        }
+
+        @Override
+        protected TravelingData doInBackground(Coord...params)
+        {
+            Trip trip = se.grupp4.minbusskompis.api.Methods.getClosestTrip(params[0], params[1]);
+
+            if(trip == null)
+            {
+                Log.d("ChildDestinations: ", "Trip is null.");
+                return tData;
+            }
+
+            for(int i = 0; i < trip.getLegs().size(); i++)
+            {
+                if(!trip.getLegs().get(i).getValue("type").equals("WALK"))
+                {
+                    Leg l = trip.getLegs().get(i);
+
+                    tData.bussStationName = l.getOrigin().getValue("name");
+                    tData.busStopName = l.getOrigin().getValue("name");
+                    tData.bussStationChar = l.getOrigin().getValue("track");
+                    tData.bussName = l.getValue("sname ") + l.getValue("direction");
+                    tData.busLeavingAt = l.getOrigin().getValue("time");
+                    tData.busArrivingAt = l.getOrigin().getValue("time");
+                    break;
+                }
+            }
+
+            return tData;
+        }
+
+        @Override
+        protected void onPostExecute(TravelingData travelingData) {
+            Intent intent = new Intent(context, ChildGoingToBus.class);
+            intent.putExtra("data", travelingData);
+            startActivity(intent);
+            Toast.makeText(ChildDestinations.this, "Starting journey...", Toast.LENGTH_LONG).show();
+
+            ((Activity)context).finish();
+        }
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Send information to next intent
         BussDestination destination = (BussDestination) parent.getAdapter().getItem(position);
         LatLng targetDestination = new LatLng(destination.getDestination().getLatitude(),destination.getDestination().getLongitude());
         LatLng busStopCordinates = new LatLng(destination.getDestination().getLatitude(),destination.getDestination().getLongitude());
+        Log.d(this.getLocalClassName(), "Destination: " + busStopCordinates.toString());
 
         //Pass data forward
         TravelingData travelingData = new TravelingData();
@@ -91,10 +146,13 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         travelingData.bussStopCoordinates = busStopCordinates;
         travelingData.destinationName = destination.getName();
 
-        Intent intent = new Intent(context,ChildGoingToBus.class);
-        intent.putExtra("data",travelingData);
-        startActivity(intent);
-        Toast.makeText(ChildDestinations.this, "Starting journey...", Toast.LENGTH_LONG).show();
+        GPSTracker gps = new GPSTracker(this);
+        LatLng latLng = new LatLng(gps.getLatitude(),gps.getLongitude());
+        Log.d(this.getLocalClassName(), "Currentlocation: " + latLng.toString());
+
+        Coord from = new Coord(String.valueOf(latLng.latitude), String.valueOf(latLng.longitude));
+        Coord to = new Coord(String.valueOf(targetDestination.latitude), String.valueOf(targetDestination.longitude));
+        new ApiCallTask(travelingData).execute(from, to);
     }
 
     private class PopulateDestinationListTask extends AsyncTask<Void, Void, Void> {

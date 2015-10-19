@@ -43,7 +43,12 @@ public class Methods
 
 	public static Trip getClosestTrip(Coord from, Coord to)
 	{
-		return getTriplist(from, to).get(0);
+		ArrayList<Trip> tripList = getTriplist(from, to);
+
+		if(tripList == null)
+			return null;
+
+		return tripList.get(0);
 	}
 	
 	public static ArrayList<Coord> getGeometry(String url) throws IOException, JSONException

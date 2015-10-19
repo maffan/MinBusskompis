@@ -28,14 +28,15 @@ class VastTrafik
 {
 	private static String key = "a0af190e-e343-4b0d-a1dc-6fdbff217050";
 	private static String baseurl = "http://api.vasttrafik.se/bin/rest.exe/v1/#?authKey=" + key;
+	private static String logTag = "API-VT";
 
 	private static String httpGet(String urlStr) throws IOException
 	{
 		URL url = new URL(urlStr);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
-		
-		
+
+		Log.d(logTag, "ResponseCode: " + con.getResponseCode());
 		if (con.getResponseCode() != 200) {
 			throw new IOException(con.getResponseMessage());
 		}
@@ -94,8 +95,6 @@ class VastTrafik
 		uBuilder.AddParameter("input", getISO88591String(input));
 		
 		String response = httpGet(uBuilder.getUrl() + "&format=json");
-		//String response = JsonTestResponses.getLocationNamesByStringArr;
-		//String response = JsonTestResponses.getLocationNamesByStringObjAndArr;
 
 		JSONObject jsonData = new JSONObject(response);
 		
@@ -149,11 +148,18 @@ class VastTrafik
 		try{
 			response = httpGet(uBuilder.getUrl() + "&format=json");
 		}catch(IOException e){
-			Log.e("API", e.getStackTrace().toString());
+			Log.e(logTag, e.getStackTrace().toString());
 			return null;
 		}
 
 		JSONObject jsonData = new JSONObject(response);
+
+		if(jsonData.getJSONObject("TripList").has("error"))
+		{
+			Log.d(logTag, jsonData.getJSONObject("TripList").getString("errorText"));
+			return null;
+		}
+
 		JSONArray tripList = jsonData.getJSONObject("TripList").getJSONArray("Trip");
 
 		ArrayList<Trip> triplist = new ArrayList<Trip>();
