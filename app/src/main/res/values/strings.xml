@@ -5,7 +5,7 @@
 
     <!-- Top -->
     <string name="app_name">MinBusskompis</string>
-    <string name="title_activity">My Busbuddy</string>
+    <string name="title_activity">Min BussKompis</string>
     <string name="title_activity_maps">Map</string>
     <string name="action_settings">Settings</string>
     <string name="action_about">About</string>
