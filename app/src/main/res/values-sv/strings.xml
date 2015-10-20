@@ -34,7 +34,7 @@
     <string name="parent_active_child_current_status">Aktuell status</string>
     <string name="child_going_to_bus_im_on_bs">Jag är på busshållplatsen</string>
     <string name="child_leave_bus_exit_at_next_stop">Gå av på nästa hållplats</string>
-    <string name="child_leave_bus_stop_button_text">Stopknapp ej tryckt</string>
+    <string name="child_leave_bus_stop_button_not_pressed">Stopknapp ej tryckt</string>
     <string name="child_on_bus_arriving_at">Bussen kommer</string>
     <string name="child_on_bus_title">På bussen</string>
     <string name="child_on_bus_your_bus_stop">Din hållplats</string>

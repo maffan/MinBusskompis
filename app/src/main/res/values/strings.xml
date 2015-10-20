@@ -94,6 +94,7 @@
 
     <string name="child_destinations_loading_text">Loading destinations...</string>
     <string name="child_destinatins_fetch_data">Fetching data for trip...</string>
+    <string name="child_destinations_not_found">No destinations for child</string>
 
     <string name="child_going_from_bus_on_location">Im there, end trip</string>
     <string name="child_going_from_bus_help_to_loc">Help me find my destination</string>
@@ -102,7 +103,8 @@
     <string name="child_going_to_bus_help_to_bs">Help me find the bus stop</string>
 
     <string name="child_leave_bus_exit_at_next_stop">Exit at next bus stop</string>
-    <string name="child_leave_bus_stop_button_text">Stop button not pressed</string>
+    <string name="child_leave_bus_stop_button_not_pressed">Stop button not pressed</string>
+    <string name="child_leave_bus_stop_button_pressed">Stop button is pressed</string>
 
     <string name="child_on_bus_title">On bus</string>
     <string name="child_on_bus_your_bus_stop">Exit at this bus stop</string>

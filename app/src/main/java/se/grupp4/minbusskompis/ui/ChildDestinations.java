@@ -184,7 +184,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
                 BussData.getInstance().getDestinationsForChild(
                         installationId);
         if(destList.isEmpty()){
-            viewHolder.loadingTextView.setText("No destinations for child");
+            viewHolder.loadingTextView.setText(R.string.child_destinations_not_found);
             showMessage();
         }else{
             destinationsAdapter.addAll(destList);

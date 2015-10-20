@@ -45,7 +45,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/child_leave_bus_stop_button_text"
+            android:text="@string/child_leave_bus_stop_button_not_pressed"
             android:id="@+id/child_leave_bus_stop_button_text"
             android:gravity="center"/>
     </LinearLayout>

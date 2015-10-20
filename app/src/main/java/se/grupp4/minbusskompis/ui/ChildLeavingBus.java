@@ -73,7 +73,7 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         @Override
         protected void onPostExecute(TravelingData travelingData) {
             if(travelingData.stopButtonPressed){
-                viewHolder.stopButtonTextView.setText("Stop button is pressed!");
+                viewHolder.stopButtonTextView.setText(R.string.child_leave_bus_stop_button_pressed);
                 viewHolder.stopButtonImageView.setImageResource(R.drawable.button_pressed);
             }else{
                 viewHolder.stopButtonImageView.setImageResource(R.drawable.button_not_pressed);
