@@ -22,10 +22,10 @@ public class BusData
 
 		/**
 		 * Bus constructor.
-		 * @param dgw
-		 * @param VIN
-		 * @param reg
-		 * @param Mac
+		 * @param dgw String
+		 * @param VIN String
+		 * @param reg String
+		 * @param Mac String
 		 */
 		Bus(String dgw, String VIN, String reg, String Mac)
 		{

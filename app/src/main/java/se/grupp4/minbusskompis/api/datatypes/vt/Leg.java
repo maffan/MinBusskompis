@@ -9,10 +9,14 @@ public class Leg extends KeyValueBase
 	
 	private Origin orig;
 	private Destination dest;
-	private ArrayList<Note> notes; // TODO Order by priority
+	private ArrayList<Note> notes; // TODO
 	private String journeyDetailRef;
 	private String geometryRef;
-	
+
+	/**
+	 * Constructor creates an empty leg, needs
+	 * to be filled manually with data.
+	 */
 	public Leg()
 	{
 		super();
@@ -21,7 +25,12 @@ public class Leg extends KeyValueBase
 		journeyDetailRef = "";
 		geometryRef = "";
 	}
-	
+
+	/**
+	 * Sets origin and destination for leg.
+	 * @param orig Origin
+	 * @param dest Destination
+	 */
 	public void addOriginAndDestination(Origin orig, Destination dest)
 	{
 		this.orig = orig;

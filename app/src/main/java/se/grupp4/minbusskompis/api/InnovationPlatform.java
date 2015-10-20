@@ -21,8 +21,15 @@ class InnovationPlatform {
 	private static String key = "Basic Z3JwMjE6dlJ0Q2xydE9tMg==";
 	private static String baseurl = "https://ece01.ericsson.net:4443/ecity?";
 	private static int INTERVAL_LENGTH = 5;
-	private static String logTag = "API-IP: ";
+	private static String logTag = "API-IP";
 
+	/**
+	 * Gets the Json response from the call to IP
+	 * @param sec int The interval length
+	 * @param params String Parameters to the api call
+	 * @return String Json response from call
+	 * @throws IOException
+	 */
 	private static String httpGet(int sec, String params) throws IOException {
 		long t2 = System.currentTimeMillis() - 5000;
 		long t1 = t2 - (1000 * sec);
@@ -53,8 +60,15 @@ class InnovationPlatform {
 		return response.toString();
 	}
 
+	/**
+	 * Returns the latest value of specified parameter in the JSONArray
+	 * @param parameter String
+	 * @param data JSONArray
+	 * @return String
+	 * @throws JSONException
+	 */
 	private static String getLatestStringValueOf(String parameter, JSONArray data) throws JSONException {
-		TimedValue timedValue = new TimedValue("", 0);
+		TimedValue timedValue = new TimedValue();
 
 		for (int i = 0; i < data.length(); i++) {
 			Object jso = data.get(i);
@@ -64,32 +78,47 @@ class InnovationPlatform {
 			String value = ((JSONObject) jso).getString("value");
 
 			if (key.equals(parameter))
-				if (time < timedValue.getTime())
 					timedValue.setValue(value, time);
 		}
 
 		return timedValue.value;
 	}
 
+	/**
+	 * Class used to make sure we have the latest value
+	 */
 	private static class TimedValue {
 		private String value;
 		private int time;
 
-		TimedValue(String value, int time) {
-			this.value = value;
-			this.time = time;
+		/**
+		 * Constructor sets an empty value and time to 0.
+		 */
+		public TimedValue() {
+			value = "";
+			time = 0;
 		}
 
-		public int getTime() {
-			return this.time;
-		}
-
+		/**
+		 * Sets value if its newer.
+		 * @param value String
+		 * @param time int
+		 */
 		public void setValue(String value, int time) {
-			this.value = value;
-			this.time = time;
+			if(time > this.time) {
+				this.value = value;
+				this.time = time;
+			}
 		}
 	}
 
+	/**
+	 * Returns the next stop of the bus with id dgw
+	 * @param dgw String Bus id
+	 * @return String Name of next stop
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static String getNextStop(String dgw) throws IOException, JSONException {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Next_Stop";
 		String response = "";
@@ -104,6 +133,13 @@ class InnovationPlatform {
 		return getLatestStringValueOf("Bus_Stop_Name_Value", new JSONArray(response));
 	}
 
+	/**
+	 * Returns the latest coordinates of bus with id dgw
+	 * @param dgw Bus id
+	 * @return Coord Coordinate of bus
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static Coord getLatestCoordOf(String dgw) throws IOException, JSONException {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$GPS";
 		String response = "";
@@ -122,6 +158,14 @@ class InnovationPlatform {
 		return new Coord(lat, lon);
 	}
 
+	/**
+	 * Returns the JorneyInfo for the bus with id dgw
+	 * @param dgw String Bus id
+	 * @return JourneyInfo
+	 * @see JourneyInfo
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static JourneyInfo getJourneyInfo(String dgw) throws IOException, JSONException {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Journey_Info";
 		String response = "";
@@ -140,6 +184,12 @@ class InnovationPlatform {
 		return new JourneyInfo(name, dest);
 	}
 
+	/**
+	 * Returns HashMap of all JourneyNames for all buses
+	 * @return HashMap<String,String>
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static HashMap<String, String> getAllJourneyNames() throws IOException, JSONException {
 		String params = "sensorSpec=Ericsson$Journey_Info";
 		String response = "";
@@ -169,6 +219,13 @@ class InnovationPlatform {
 		return busses;
 	}
 
+	/**
+	 * Returns the current temperature outside of bus
+	 * @param dgw String Bus id
+	 * @return String temperature in celsius
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static String getOutsideTemperature(String dgw) throws IOException, JSONException {
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Ambient_Temperature";
 		String response = "";
@@ -183,6 +240,13 @@ class InnovationPlatform {
 		return getLatestStringValueOf("Ambient_Temperature_Value", new JSONArray(response));
 	}
 
+	/**
+	 * Returns a boolean if bus with id dgw is at stop.
+	 * @param dgw String Bus id
+	 * @return boolean
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static boolean isAtStop(String dgw) throws IOException, JSONException
 	{
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$At_Stop";
@@ -200,6 +264,13 @@ class InnovationPlatform {
 		return Boolean.parseBoolean(value);
 	}
 
+	/**
+	 * Returns a boolean if bus with id dgw stop button is pressed.
+	 * @param dgw String Bus id
+	 * @return boolean
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static boolean isStopPressed(String dgw) throws IOException, JSONException
 	{
 		String params = "dgw=" + dgw + "&sensorSpec=Ericsson$Stop_Pressed";

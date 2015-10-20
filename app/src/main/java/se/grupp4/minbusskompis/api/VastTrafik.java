@@ -30,6 +30,12 @@ class VastTrafik
 	private static String baseurl = "http://api.vasttrafik.se/bin/rest.exe/v1/#?authKey=" + key;
 	private static String logTag = "API-VT";
 
+	/**
+	 * Gets the Json response from the call to VT
+	 * @param urlStr String the url to the api call
+	 * @return String Json response from call
+	 * @throws IOException
+	 */
 	private static String httpGet(String urlStr) throws IOException
 	{
 		URL url = new URL(urlStr);
@@ -37,8 +43,13 @@ class VastTrafik
 		con.setRequestMethod("GET");
 
 		Log.d(logTag, "ResponseCode: " + con.getResponseCode());
-		if (con.getResponseCode() != 200) {
-			throw new IOException(con.getResponseMessage());
+		try {
+			if (con.getResponseCode() != 200) {
+				throw new IOException(con.getResponseMessage());
+			}
+		} catch (Exception e) {
+			Log.e(logTag, e.getMessage());
+			return "Error";
 		}
 
 		BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -54,7 +65,15 @@ class VastTrafik
 		
 		return sb.toString();
 	}
-	
+
+	/**
+	 * Returns an ArrayList of StopLocation of stops near to lat, lng
+	 * @param lat String latitude
+	 * @param lng String longitude
+	 * @return ArrayList<StopLocation>
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static ArrayList<StopLocation> getNearbyStops(String lat, String lng) throws IOException, JSONException
 	{
 		UrlCallBuilder uBuilder = new UrlCallBuilder(baseurl, "location.nearbystops");
@@ -88,7 +107,14 @@ class VastTrafik
 		
 		return locationList;
 	}
-	
+
+	/**
+	 * Returns a list of VTLocations returned from the search string
+	 * @param input String search string
+	 * @return ArrayList<VTLocation>
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static ArrayList<VTLocation> getLocationNamesByString(String input) throws IOException, JSONException
 	{
 		UrlCallBuilder uBuilder = new UrlCallBuilder(baseurl, "location.name");
@@ -131,7 +157,14 @@ class VastTrafik
 		
 		return locationList;
 	}
-	
+
+	/**
+	 * Returns an ArrayList with Trips with start and end in from and to
+	 * @param from Coord
+	 * @param to Coord
+	 * @return ArrayList<Trip>
+	 * @throws JSONException
+	 */
 	public static ArrayList<Trip> getTripList(Coord from, Coord to) throws JSONException
 	{
 		UrlCallBuilder uBuilder = new UrlCallBuilder(baseurl, "trip");
@@ -148,7 +181,7 @@ class VastTrafik
 		try{
 			response = httpGet(uBuilder.getUrl() + "&format=json");
 		}catch(IOException e){
-			Log.e(logTag, e.getStackTrace().toString());
+			Log.e(logTag, e.getMessage());
 			return null;
 		}
 
@@ -225,7 +258,13 @@ class VastTrafik
 		
 		return triplist;
 	}
-	
+
+	/**
+	 * Returns the VTLocation in the JSONObject
+	 * @param location JSONObject
+	 * @return VTLocation
+	 * @throws JSONException
+	 */
 	private static VTLocation getJSONLocation(JSONObject location) throws JSONException
 	{
 		String name = location.getString("name");
@@ -233,7 +272,15 @@ class VastTrafik
 		
 		return new VTLocation(name, coord);
 	}
-	
+
+	/**
+	 * Returns an ArrayList of Coords along the trip of the leg.
+	 * @param url String Url to call
+	 * @return ArrayList<Coord>
+	 * @see Coord
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static ArrayList<Coord> getGeometry(String url) throws IOException, JSONException
 	{
 		String response = httpGet(url);
@@ -252,9 +299,21 @@ class VastTrafik
 		
 		return coords;
 	}
-	
-	private static String getISO88591String(String input) throws UnsupportedEncodingException
+
+	/**
+	 * Returns ISO8859-1 encoded string
+	 * @param input String
+	 * @return String
+	 */
+	private static String getISO88591String(String input)
 	{
-		return URLEncoder.encode(input, "ISO-8859-1");
+		String s = "";
+		try {
+			s = URLEncoder.encode(input, "ISO-8859-1");
+		}catch(UnsupportedEncodingException e){
+			Log.e(logTag, e.getMessage());
+		}
+
+		return s;
 	}
 }

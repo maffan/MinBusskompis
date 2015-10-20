@@ -44,15 +44,9 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         @Override
         protected TravelingData doInBackground(Void... params) {
             //Get data from api
-            try {
-                String dgw = BusData.getDgwByMac("0013951349f7");
-                travelingData.nextBusStop = Methods.getNextStop(dgw);
-                travelingData.stopButtonPressed = Methods.isAtStop(dgw);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            String dgw = BusData.getDgwByMac("0013951349f7");
+            travelingData.nextBusStop = Methods.getNextStop(dgw);
+            travelingData.stopButtonPressed = Methods.isAtStop(dgw);
             return travelingData;
         }
 
