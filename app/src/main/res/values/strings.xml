@@ -119,5 +119,6 @@
     <string name="child_onbackwardspressed_dialog_message">Do you wish to return to Destinations?</string>
     <string name="child_onbackwardspressed_dialog_option_yes">Yes</string>
     <string name="child_onbackwardspressed_dialog_option_no">No</string>
+    <string name="stop_button_pressed">Stop button is pressed!</string>
 
 </resources>

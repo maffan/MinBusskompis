@@ -18,7 +18,7 @@ import se.grupp4.minbusskompis.api.datatypes.vt.Trip;
  * Contains methods for API calls
  * to Innovation Plattform and Västtrafik.
  */
-public class Methods 
+public class Methods
 {
 	/**
 	 *

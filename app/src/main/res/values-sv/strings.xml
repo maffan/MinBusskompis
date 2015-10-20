@@ -78,4 +78,5 @@
     <string name="all_exit_dialog_yes">Ja</string>
     <string name="next_stop_init_text">Hämtar nästa hållplats...</string>
     <string name="starting_journey_toast">Startar resan...</string>
+    <string name="stop_button_pressed">Stoppknappen är tryckt!</string>
 </resources>
