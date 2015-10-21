@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
+import se.grupp4.minbusskompis.backgroundtasks.WaitAndClick;
 import se.grupp4.minbusskompis.parsebuss.BussData;
 
 public class ChildGoingToBus extends AppCompatActivity implements ServiceConnection {
@@ -83,6 +85,25 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
             }
         });
 
+        AsyncTask asTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    Log.d(TAG, "Im gonna wait to click da button");
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Something happened while waiting to cklicka da button");
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                Log.d(TAG, "Gonna klick da button");
+                noNeedHelpButton.callOnClick();
+            }};
+        asTask.execute();
     }
 
     @Override

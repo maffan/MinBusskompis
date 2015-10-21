@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -121,6 +122,26 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         poolExecutor.scheduleAtFixedRate(this, 0, 15, TimeUnit.SECONDS);
 
         addButtonListener();
+
+        AsyncTask asTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    Log.d("CHILDLEAVINGBUS", "Im gonna wait to click da button");
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    Log.e("CHILDLEAVINGBUS", "Something happened while waiting to cklicka da button");
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                Log.d("CHILDLEAVINGBUS", "Gonna klick da button");
+                dummyButton1.callOnClick();
+            }};
+        asTask.execute();
     }
 
     @Override

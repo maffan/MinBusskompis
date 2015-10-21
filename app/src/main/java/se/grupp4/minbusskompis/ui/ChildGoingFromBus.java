@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -86,6 +87,26 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
                 bindService(serviceIntent, (ServiceConnection) context, 0);
             }
         });
+
+        AsyncTask asTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    Log.d(TAG, "Im gonna wait to click da button");
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Something happened while waiting to cklicka da button");
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                Log.d(TAG, "Gonna klick da button");
+                viewHolder.atDestinationButton.callOnClick();
+            }};
+        asTask.execute();
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseInstallation;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
@@ -192,18 +193,33 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
             showContent();
         }
 
-        /*
-        try{
-            Log.d(TAG, "Tryig to wait");
-            this.wait(10000);
-        }catch(Exception e)
-        {
+        AsyncTask asTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    Log.d(TAG, "Im gonna wait to click da button");
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Something happened while waiting to cklicka da button");
+                    e.printStackTrace();
+                }
+                return null;
+            }
 
-        }
+            @Override
+            protected void onPostExecute(Object o) {
+                Log.d(TAG, "Gonna klick da button");
+                Random rng = new Random();
+                int buttonNr = rng.nextInt(destinations.size());
 
-        Log.d(TAG, "Gonna klick");
-        onItemClick(null, null, 0, 0);
-         */
+                ListView childrenListView = (ListView)viewHolder.destinationsListView;
+                childrenListView.performItemClick(
+                        destinationsAdapter.getView(buttonNr, null, childrenListView),
+                        buttonNr,
+                        destinationsAdapter.getItemId(buttonNr));
+
+            }};
+        asTask.execute();
     }
 
     private void showMessage() {

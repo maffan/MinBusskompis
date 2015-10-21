@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -79,6 +80,26 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         //Bind and update service
         Intent serviceIntent = new Intent(this,UpdateLocToParseService.class);
         bindService(serviceIntent, this, 0);
+
+        AsyncTask asTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    Log.d(TAG, "Im gonna wait to click da button");
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Something happened while waiting to cklicka da button");
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                Log.d(TAG, "Gonna klick da button");
+                dummyButton.callOnClick();
+            }};
+        asTask.execute();
     }
 
     @Override

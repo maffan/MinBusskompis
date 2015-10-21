@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -115,6 +116,26 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         //Init service
         Intent serviceIntent = new Intent(context, UpdateLocToParseService.class);
         bindService(serviceIntent, this, 0);
+
+        AsyncTask asTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    Log.d("CHILDONBUS", "Im gonna wait to click da button");
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    Log.e("CHILDONBUS", "Something happened while waiting to cklicka da button");
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                Log.d("CHILDONBUS", "Gonna klick da button");
+                dummyButtonOnBus.callOnClick();
+            }};
+        asTask.execute();
     }
 
     public void addButtonListener(){
