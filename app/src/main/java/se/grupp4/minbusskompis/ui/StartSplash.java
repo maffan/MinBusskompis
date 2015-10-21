@@ -37,7 +37,8 @@ public class StartSplash extends Activity {
 
             @Override
             protected void onPostExecute(Object o) {
-                if(sharedPreferences.getBoolean("data_enabled",false)){
+                //if(sharedPreferences.getBoolean("data_enabled",false)){
+                if(true){
                     Log.d(TAG,"Data is enabled, starting application");
                     Intent intent;
                     if(sharedPreferences.getBoolean("setaschild", false)){

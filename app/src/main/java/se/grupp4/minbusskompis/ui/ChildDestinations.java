@@ -68,7 +68,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         viewHolder.loadingTextView = (TextView) findViewById(R.id.child_destinations_loading_text);
 
         //Start updateparseservice
-        Log.d(TAG,"Starting update to parse service");
+        Log.d(TAG, "Starting update to parse service");
         Intent serviceIntent = new Intent(this, UpdateLocToParseService.class);
         startService(serviceIntent);
 
@@ -191,6 +191,19 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
             destinationsAdapter.notifyDataSetChanged();
             showContent();
         }
+
+        /*
+        try{
+            Log.d(TAG, "Tryig to wait");
+            this.wait(10000);
+        }catch(Exception e)
+        {
+
+        }
+
+        Log.d(TAG, "Gonna klick");
+        onItemClick(null, null, 0, 0);
+         */
     }
 
     private void showMessage() {
