@@ -1,12 +1,11 @@
 package se.grupp4.minbusskompis.ui;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +30,39 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
     @Override
     public void update(Observable observable, Object data) {
         populateList();
+    }
+
+    private class StartActiveChildTaskDelayed extends AsyncTask<Void, Void, Void> {
+        private int position;
+        private int millis;
+
+        public StartActiveChildTaskDelayed(int position, int millis) {
+            this.position = position;
+            this.millis = millis;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Log.d(TAG, "doInBackground: sleeping...");
+                Thread.sleep(millis);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Log.d(TAG, "doInBackground: wake up!");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.d(TAG, "onPostExecute: performing click!");
+            ListView childrenListView = viewHolder.childrenListView;
+            childrenListView.performItemClick(
+                    childrenListAdapter.getView(position, null, childrenListView),
+                    position,
+                    childrenListAdapter.getItemId(position));
+        }
     }
 
     private static class ViewHolder {
@@ -65,10 +97,10 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         viewHolder = new ViewHolder();
         viewHolder.childrenListView = (ListView) findViewById(R.id.parent_children_list);
         viewHolder.loadingTextView = (TextView) findViewById(R.id.parent_children_loading_text);
-        viewHolder.buttonAddChildView = (Button)findViewById(R.id.button_addchild);
+        viewHolder.buttonAddChildView = (Button) findViewById(R.id.button_addchild);
     }
 
-    public void addButtonListeners(){
+    public void addButtonListeners() {
         //Add child button
         viewHolder.buttonAddChildView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +155,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
             return true;
         }
 
-        if (id == R.id.action_about)    {
+        if (id == R.id.action_about) {
             Intent intent = new Intent(getApplicationContext(), ParentInfoAbout.class);
             startActivity(intent);
             return true;
@@ -132,7 +164,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         return super.onOptionsItemSelected(item);
     }
 
-    private class PopulateChildrenListTask extends AsyncTask<Void, Void, Void>{
+    private class PopulateChildrenListTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -140,6 +172,18 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
             return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            for (int i = 0; i < childrenListAdapter.getCount(); i++) {
+                Log.d(TAG, "update: i = " + i);
+                ChildData child = childrenListAdapter.getItem(i);
+                Log.d(TAG, "update: child = " + child);
+                if (child.isActive()) {
+                    Log.d(TAG, "update: child is active!");
+                    new StartActiveChildTaskDelayed(i, 6000).execute();
+                }
+            }
+        }
     }
 
     //hämta data från parse
@@ -158,9 +202,9 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
     }
 
     private void showContentOrMessage(ArrayList<ChildData> tempList) {
-        if(tempList.isEmpty()){
+        if (tempList.isEmpty()) {
             viewHolder.loadingTextView.setText(R.string.parent_children_list_no_children_text);
-        }else{
+        } else {
             childrenListAdapter.clear();
             childrenListAdapter.addAll(tempList);
             childrenListAdapter.notifyDataSetChanged();
@@ -168,22 +212,22 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         }
     }
 
-    private void showChildrenList(){
+    private void showChildrenList() {
         viewHolder.loadingTextView.setVisibility(View.GONE);
         viewHolder.childrenListView.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position, long id) {
+        Log.d(TAG, "onItemClick: view is: " + view.toString());
         ChildData child = (ChildData) parent.getAdapter().getItem(position);
 
-        if(child.isActive()){
-            Intent intent = new Intent(this, ParentActiveChild.class);
+        if (child.isActive()) {
+            Intent intent = new Intent(context, ParentActiveChild.class);
             intent.putExtra("child_id", child.getId());
             startActivity(intent);
-        }else{
+        } else {
             //Log.v("CHILDADAPTER","Child inactive: " +child.getId());
         }
-
     }
 }

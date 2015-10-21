@@ -31,4 +31,14 @@ public class ChildData {
     public int getMode(){
         return mode;
     }
+
+    @Override
+    public String toString() {
+        return "ChildData{" +
+                "name='" + name + '\'' +
+                ", active=" + active +
+                ", id='" + id + '\'' +
+                ", mode=" + mode +
+                '}';
+    }
 }

@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -136,6 +137,10 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
             case TravelingData.INACTIVE:
                 childStatus.setText(R.string.parent_active_child_inactive_text);
                 childStatusImage.setImageResource(R.drawable.inactive);
+                Intent backIntent = new Intent(this,ParentChildrenList.class);
+                Toast.makeText(ParentActiveChild.this, "Barn ej längre aktivt!", Toast.LENGTH_SHORT).show();
+                startActivity(backIntent);
+                finish();
                 break;
             case TravelingData.WALKING:
                 childStatus.setText(R.string.parent_active_child_walking_text);
