@@ -107,6 +107,8 @@ public class Methods
 			Log.e(logTag, "getNextStop() - " + e.getStackTrace().toString());
 		}
 
+		s = s.substring(0,s.length()-1) + ", "+s.charAt(s.length());
+
 		return s;
 	}
 	
