@@ -103,11 +103,12 @@ public class Methods
 
 		try{
 			s = InnovationPlatform.getNextStop(dgw);
+			Log.d(logTag, "dgw: " + dgw + " NextStop: " + s);
+			if(!s.equals(""))
+				s = s.substring(0,s.length()-1) + ", "+s.charAt(s.length()-1);
 		}catch(IOException | JSONException e) {
 			Log.e(logTag, "getNextStop() - " + e.getStackTrace().toString());
 		}
-
-		s = s.substring(0,s.length()-1) + ", "+s.charAt(s.length());
 
 		return s;
 	}
