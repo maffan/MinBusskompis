@@ -134,8 +134,9 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
     private void updateStatusText() {
         switch (status){
             case TravelingData.INACTIVE:
-                childStatus.setText(R.string.parent_active_child_inactive_text);
-                childStatusImage.setImageResource(R.drawable.inactive);
+                Intent backIntent = new Intent(this,ParentChildrenList.class);
+                startActivity(backIntent);
+                finish();
                 break;
             case TravelingData.WALKING:
                 childStatus.setText(R.string.parent_active_child_walking_text);

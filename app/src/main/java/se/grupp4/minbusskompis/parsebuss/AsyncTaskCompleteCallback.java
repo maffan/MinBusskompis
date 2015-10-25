@@ -1,7 +1,7 @@
 package se.grupp4.minbusskompis.parsebuss;
 
 /**
- * Created by Marcus on 10/5/2015.
+ * Simple functor to use as callback on asynchronous tasks.
  */
 public interface AsyncTaskCompleteCallback {
     void done();
