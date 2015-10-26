@@ -3,12 +3,7 @@ package se.grupp4.minbusskompis.parsebuss;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.content.SharedPreferencesCompat;
 import android.util.Log;
 
 import com.parse.ParseInstallation;
@@ -17,9 +12,6 @@ import com.parse.ParsePushBroadcastReceiver;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.PriorityQueue;
-
-import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.ui.ParentActiveChild;
 
 /**
@@ -33,12 +25,16 @@ import se.grupp4.minbusskompis.ui.ParentActiveChild;
 public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
 
     private static final String TAG = "RECEIVER";
+    public static final String PARSE_DATA_KEY = "com.parse.Data";
+    public static final String TYPE_FIELD = "type";
+    public static final String MESSAGE_TYPE = "Message";
+    public static final String SOUNDSETTING = "soundsetting";
+    public static final String PREFERENCES = "MyPreferences";
+    public static final String FROM_FIELD = "from";
+    public static final String CHILD_ID_FIELD = "child_id";
     private BussSyncMessengerProvider provider;
     private Context context;
     private Intent intent;
-
-
-
 
     @Override
     protected void onPushOpen(Context context, Intent intent) {
@@ -61,18 +57,17 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     }
 
     private void tryReceive(Intent intent) throws JSONException {
-        JSONObject data = getDataFromIntent(intent);
+        JSONObject data = getJSONDataFromIntent(intent);
         dispatch(data);
     }
 
-    private JSONObject getDataFromIntent(Intent intent) throws JSONException {
+    private JSONObject getJSONDataFromIntent(Intent intent) throws JSONException {
         Bundle extras = intent.getExtras();
-        return getDataFromParseJsonObject(extras);
+        return getJSONDataFromBundle(extras);
     }
 
-    @NonNull
-    protected JSONObject getDataFromParseJsonObject(Bundle extras) throws JSONException {
-        return new JSONObject(extras.getString("com.parse.Data"));
+    private JSONObject getJSONDataFromBundle(Bundle extras) throws JSONException {
+        return new JSONObject(extras.getString(PARSE_DATA_KEY));
     }
 
     private void dispatch(JSONObject data) throws JSONException {
@@ -81,27 +76,22 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     }
 
     private String getTypeFromJSONData(JSONObject data) throws JSONException {
-        return data.getString("type");
+        return data.getString(TYPE_FIELD);
     }
 
     private void dispatchDataByType(JSONObject messageData, String type) throws JSONException {
         switch (type) {
-            case "Message":
+            case MESSAGE_TYPE:
                 Log.d(TAG, "dispatchDataByType: GOT MESSAGE WITH DATA: "+messageData);
-                if (context.getSharedPreferences("MyPreferences",Context.MODE_APPEND).getBoolean("soundsetting",true)) {
-                    String from = messageData.getString("from");
-                    if(!from.equals(ParseInstallation.getCurrentInstallation().getInstallationId())) {
-                        sendToRelationMessenger(messageData);
-                        intent.putExtra("child_id",from);
-                        super.onPushReceive(context, intent);
-                    }
+                if (soundSettingsEnabled()) {
+                    showPushIfNotFromSelf(messageData);
                 }
                 break;
             case "SyncRequest":
-                sendDataByTypeToSyncMessenger(messageData, BussParseSyncMessenger.REQUEST_TYPE);
+                sendDataToSyncMessenger(messageData);
                 break;
             case "SyncResponse":
-                sendDataByTypeToSyncMessenger(messageData, BussParseSyncMessenger.RESPONSE_TYPE);
+                sendDataToSyncMessenger(messageData);
                 break;
             case "PositionUpdate":
                 BussRelationMessenger.getInstance().dataReceived(messageData);
@@ -111,40 +101,43 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
         }
     }
 
-    private void sendToRelationMessenger(JSONObject messageData) {
-        BussRelationMessenger.getInstance().dataReceived(messageData);
+    private boolean soundSettingsEnabled() {
+        return context.getSharedPreferences(PREFERENCES, Context.MODE_APPEND).getBoolean(SOUNDSETTING,true);
     }
 
-    private void sendDataByTypeToSyncMessenger(JSONObject messageData, int type) {
+    private void showPushIfNotFromSelf(JSONObject messageData) throws JSONException {
+        String from = messageData.getString(FROM_FIELD);
+        if(!from.equals(ParseInstallation.getCurrentInstallation().getInstallationId())) {
+            sendToRelationMessenger(messageData);
+            intent.putExtra(CHILD_ID_FIELD,from);
+            super.onPushReceive(context, intent);
+        }
+    }
+
+    private void sendDataToSyncMessenger(JSONObject messageData) {
         try {
-            trySendToSyncMessenger(messageData, type);
+            trySendToSyncMessenger(messageData);
         } catch (NoMessengerPresentException e) {
             e.printStackTrace();
             Log.d(TAG,"Received sync message, but no SyncMessenger was instantiated");
         }
     }
 
-    private void trySendToSyncMessenger(JSONObject messageData, int type) throws NoMessengerPresentException {
-        getProvider();
-        enqueueDataIfMessengerExists(messageData, type);
+    private void trySendToSyncMessenger(JSONObject messageData) throws NoMessengerPresentException {
+        getMessengerProvider();
+        enqueueDataIfMessengerExists(messageData);
     }
 
-    private void getProvider() {
+    private void getMessengerProvider() {
         provider = BussSyncMessengerProvider.getInstance();
     }
 
-    private void enqueueDataIfMessengerExists(JSONObject messageData, int type) throws NoMessengerPresentException {
+    private void enqueueDataIfMessengerExists(JSONObject messageData) throws NoMessengerPresentException {
         if (provider.hasMessenger())
-            enqueueSyncDataByType(messageData, type);
-        else
-            throw new NoMessengerPresentException("No Messenger present");
+            provider.getSyncMessenger().setSyncMessage(messageData);
     }
 
-    private void enqueueSyncDataByType(JSONObject messageData, int type) throws NoMessengerPresentException {
-        if (type == BussParseSyncMessenger.REQUEST_TYPE) {
-            provider.getSyncMessenger().setSyncMessage(messageData);
-        } else if (type == BussParseSyncMessenger.RESPONSE_TYPE) {
-            provider.getSyncMessenger().setSyncMessage(messageData);
-        }
+    private void sendToRelationMessenger(JSONObject messageData) {
+        BussRelationMessenger.getInstance().dataReceived(messageData);
     }
 }
