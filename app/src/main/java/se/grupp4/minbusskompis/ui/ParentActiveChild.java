@@ -24,7 +24,7 @@ import java.util.Observer;
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
 import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussRelationships;
 
@@ -57,14 +57,14 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
                 findFragmentById(R.id.parent_active_child_map)).getMap();
 
         //Set initial values
-        childName.setText(BussData.getInstance().getNameFromId(childId));
+        childName.setText(ParseCloudData.getInstance().getNameFromId(childId));
 
         //Listen to child
-        BussRelationships relationships = BussData.getInstance().getChildren();
+        BussRelationships relationships = ParseCloudData.getInstance().getChildren();
         BussRelationMessenger.getInstance().setRelationships(relationships);
 
         //Get and set initial values
-        ChildLocationAndStatus initialStatus = BussData.getInstance().getChildLocationAndStatusForId(childId);
+        ChildLocationAndStatus initialStatus = ParseCloudData.getInstance().getChildLocationAndStatusForId(childId);
         updateInfo(initialStatus);
 
         //Start listening for updates
@@ -109,7 +109,7 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
             if (object.getString("from").equals(childId)) {
                 Log.d(TAG, "Update was from my child!");
                 ChildLocationAndStatus locationAndStatus =
-                        BussData.getInstance().getChildLocationAndStatusForId(childId);
+                        ParseCloudData.getInstance().getChildLocationAndStatusForId(childId);
                 updateInfo(locationAndStatus);
             }
         } catch (JSONException e) {

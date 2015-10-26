@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
 import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussSyncCodeGenerator;
 import se.grupp4.minbusskompis.parsebuss.BussSync;
@@ -69,7 +69,7 @@ public class ChildChildCode extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(ChildChildCode.this, StartSelectMode.class);
                                 new ResetAppTask().doInBackground();
-                                BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+                                ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
                                     @Override
                                     public void done() {
                                         startActivity(intent);
@@ -107,7 +107,7 @@ public class ChildChildCode extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+            ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
                 @Override
                 public void done() {
                     resetApp();
@@ -119,8 +119,8 @@ public class ChildChildCode extends AppCompatActivity {
     //clears information stored in sharedpreferences and parse.
     private void resetApp(){
         sharedPreferences.edit().clear().apply();
-        if (!(BussData.getInstance() == null)) {
-            BussData.getInstance().clearParseData();
+        if (!(ParseCloudData.getInstance() == null)) {
+            ParseCloudData.getInstance().clearParseData();
         }
     }
 }

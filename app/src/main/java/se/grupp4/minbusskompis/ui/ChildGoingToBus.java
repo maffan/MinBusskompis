@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.location.Location;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -18,16 +17,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.parse.LocationCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
-import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
 
 public class ChildGoingToBus extends AppCompatActivity implements ServiceConnection {
 
@@ -56,7 +53,7 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
         }
 
         //Set walking status
-        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
+        ParseCloudData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
 
         //Init travelingData
         travelingData = getIntent().getParcelableExtra("data");

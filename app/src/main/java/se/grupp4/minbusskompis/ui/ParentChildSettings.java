@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
 
 /**
  * Created by Tobias on 2015-10-13.
@@ -36,7 +36,7 @@ public class ParentChildSettings extends AppCompatActivity{
 
         //Set default name
         nameEdit = (EditText) findViewById(R.id.parent_child_settings_name);
-        nameEdit.setText(BussData.getInstance().getNameFromId(currentInstallationId));
+        nameEdit.setText(ParseCloudData.getInstance().getNameFromId(currentInstallationId));
 
         //Set installation id
         TextView instId = (TextView) findViewById(R.id.parent_child_settings_installationid);
@@ -75,7 +75,7 @@ public class ParentChildSettings extends AppCompatActivity{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                BussData.getInstance().removeRelationship(currentInstallationId,BussData.CHILD);
+                                ParseCloudData.getInstance().removeRelationshipFromSelf(currentInstallationId, ParseCloudData.CHILD);
                                 Intent intent = new Intent(getApplicationContext(),ParentChildrenList.class);
                                 startActivity(intent);
                                 finish();
@@ -98,7 +98,7 @@ public class ParentChildSettings extends AppCompatActivity{
 
     private void changeName() {
         String newName = nameEdit.getText().toString();
-        BussData.getInstance().setNameForId(newName, currentInstallationId);
+        ParseCloudData.getInstance().setNameForId(newName, currentInstallationId);
 
     }
 

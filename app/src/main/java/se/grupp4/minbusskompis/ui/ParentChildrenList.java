@@ -1,8 +1,6 @@
 package se.grupp4.minbusskompis.ui;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +19,7 @@ import java.util.Observer;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
 import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 import se.grupp4.minbusskompis.ui.adapters.ChildAdapter;
 import se.grupp4.minbusskompis.ui.adapters.ChildData;
@@ -52,10 +50,10 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         addButtonListeners();
         initList();
         populateList();
-        BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+        ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
             @Override
             public void done() {
-                BussRelationMessenger.getInstance().setRelationships(BussData.getInstance().getChildren());
+                BussRelationMessenger.getInstance().setRelationships(ParseCloudData.getInstance().getChildren());
             }
         });
         BussRelationMessenger.getInstance().addObserver(this);
@@ -144,7 +142,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
 
     //hämta data från parse
     public void getAndShowChildrenListOrMessage() {
-        BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+        ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
             @Override
             public void done() {
                 ArrayList<ChildData> tempList = getChildrenListFromParse();
@@ -154,7 +152,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
     }
 
     private ArrayList<ChildData> getChildrenListFromParse() {
-        return BussData.getInstance().getChildren().getAsChildDataList();
+        return ParseCloudData.getInstance().getChildren().getAsChildDataList();
     }
 
     private void showContentOrMessage(ArrayList<ChildData> tempList) {

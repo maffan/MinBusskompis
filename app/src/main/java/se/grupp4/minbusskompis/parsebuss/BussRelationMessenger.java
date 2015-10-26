@@ -71,7 +71,7 @@ public class BussRelationMessenger extends Observable {
     }
 
     public void sendStatusUpdateNotification(int status){
-        String name = BussData.getInstance().getOwnName();
+        String name = ParseCloudData.getInstance().getOwnName();
         String activity = "";
         switch (status){
             case TravelingData.WALKING:
@@ -86,6 +86,8 @@ public class BussRelationMessenger extends Observable {
             case TravelingData.LEAVING_BUS:
                 activity = "getting of the bus";
                 break;
+            default:
+                return;
         }
         String message = name+" is now "+activity+".";
         sendMessage(message);

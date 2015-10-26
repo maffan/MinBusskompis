@@ -17,9 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +25,7 @@ import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.api.BusData;
 import se.grupp4.minbusskompis.api.Methods;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
 
 public class ChildOnBus extends AppCompatActivity implements ServiceConnection,Runnable {
     @Override
@@ -92,7 +89,7 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         viewHolder = new ViewHolder();
 
         //Set on bus status
-        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.ON_BUS);
+        ParseCloudData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.ON_BUS);
 
         //Initiate views
         viewHolder.nextBusStop = (TextView) findViewById(R.id.child_on_bus_next_bus_stop);

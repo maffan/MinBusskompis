@@ -1,10 +1,7 @@
 package se.grupp4.minbusskompis.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,7 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseInstallation;
 
@@ -32,7 +28,7 @@ import se.grupp4.minbusskompis.api.datatypes.vt.Trip;
 import se.grupp4.minbusskompis.backgroundtasks.GPSTracker;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
 import se.grupp4.minbusskompis.ui.adapters.DestinationsAdapter;
 
@@ -59,7 +55,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         setContentView(R.layout.activity_child_destinations);
 
         //Set initial status
-        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.INACTIVE);
+        ParseCloudData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.INACTIVE);
 
         viewHolder = new ViewHolder();
 
@@ -168,7 +164,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
 
         @Override
         protected Void doInBackground(Void... params) {
-            BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+            ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
                 @Override
                 public void done() {
                     populateDestinations();
@@ -181,7 +177,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
     private void populateDestinations() {
         destinationsAdapter.clear();
         ArrayList<BussDestination> destList =
-                BussData.getInstance().getDestinationsForChild(
+                ParseCloudData.getInstance().getDestinationsForChild(
                         installationId);
         if(destList.isEmpty()){
             viewHolder.loadingTextView.setText(R.string.child_destinations_not_found);

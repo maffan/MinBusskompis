@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 import se.grupp4.minbusskompis.ui.adapters.ChildData;
 
 /**
@@ -29,8 +28,8 @@ public class BussRelationships  {
         ArrayList<ChildData> list = new ArrayList<>();
         for (String id :
                 relations) {
-            String name = BussData.getInstance().getNameFromId(id);
-            int status = BussData.getInstance().getChildLocationAndStatusForId(id).getTripStatus();
+            String name = ParseCloudData.getInstance().getNameFromId(id);
+            int status = ParseCloudData.getInstance().getChildLocationAndStatusForId(id).getTripStatus();
             list.add(new ChildData(name,status != 0,id,status));
             Log.d(TAG, "getAsChildDataList: added child with name: "+name+" and status: "+status);
         }
