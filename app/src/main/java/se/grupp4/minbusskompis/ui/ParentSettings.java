@@ -19,7 +19,7 @@ import com.parse.ParseInstallation;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 
 public class ParentSettings extends AppCompatActivity {
 
@@ -66,7 +66,7 @@ public class ParentSettings extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(getApplicationContext(), StartSelectMode.class);
                                 new ResetAppTask().doInBackground();
-                                ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
+                                ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
                                     @Override
                                     public void done() {
                                         startActivity(intent);
@@ -102,7 +102,7 @@ public class ParentSettings extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
+            ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
                 @Override
                 public void done() {
                     resetApp();
@@ -114,8 +114,8 @@ public class ParentSettings extends AppCompatActivity {
     //clears information stored in sharedpreferences and parse.
     private void resetApp(){
         sharedPreferences.edit().clear().apply();
-        if (!(ParseCloudData.getInstance() == null)) {
-            ParseCloudData.getInstance().clearParseData();
+        if (!(ParseCloudManager.getInstance() == null)) {
+            ParseCloudManager.getInstance().clearParseData();
         }
     }
 }

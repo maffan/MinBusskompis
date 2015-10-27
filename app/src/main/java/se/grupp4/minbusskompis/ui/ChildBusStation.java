@@ -22,7 +22,7 @@ import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.backgroundtasks.WifiCheckerStart;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 
 //Note that dummybuttons are temporary for debugging
 public class ChildBusStation extends AppCompatActivity implements ServiceConnection {
@@ -52,7 +52,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         viewHolder = new ViewHolder();
 
         //Set bus station status
-        ParseCloudData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.AT_BUS_STATION);
+        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(TravelingData.AT_BUS_STATION);
 
         //Init views.
         viewHolder.busStopName = (TextView) findViewById(R.id.child_bus_stop_bsname_char);

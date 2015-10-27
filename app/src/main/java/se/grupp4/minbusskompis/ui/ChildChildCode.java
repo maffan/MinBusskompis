@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussSyncCodeGenerator;
 import se.grupp4.minbusskompis.parsebuss.BussSync;
@@ -69,7 +69,7 @@ public class ChildChildCode extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(ChildChildCode.this, StartSelectMode.class);
                                 new ResetAppTask().doInBackground();
-                                ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
+                                ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
                                     @Override
                                     public void done() {
                                         startActivity(intent);
@@ -89,7 +89,7 @@ public class ChildChildCode extends AppCompatActivity {
         BussSyncCodeGenerator generator = new BussSyncCodeGenerator(4);
         generatedCode.setText(generator.getCode());
         BussSync sync = new BussSync(new BussParseSyncMessenger());
-        sync.waitForSync(generator, new SyncTaskCompleteCallback() {
+        sync.waitForSyncRequest(generator, new SyncTaskCompleteCallback() {
             @Override
             public void onSyncTaskComplete(boolean success, String installationId) {
                 if (success) {
@@ -107,7 +107,7 @@ public class ChildChildCode extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
+            ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
                 @Override
                 public void done() {
                     resetApp();
@@ -119,8 +119,8 @@ public class ChildChildCode extends AppCompatActivity {
     //clears information stored in sharedpreferences and parse.
     private void resetApp(){
         sharedPreferences.edit().clear().apply();
-        if (!(ParseCloudData.getInstance() == null)) {
-            ParseCloudData.getInstance().clearParseData();
+        if (!(ParseCloudManager.getInstance() == null)) {
+            ParseCloudManager.getInstance().clearParseData();
         }
     }
 }

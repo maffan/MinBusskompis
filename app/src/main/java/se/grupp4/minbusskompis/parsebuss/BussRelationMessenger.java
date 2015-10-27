@@ -18,18 +18,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import se.grupp4.minbusskompis.TravelingData;
 
-/**
- * Created by Marcus on 9/21/2015.
- *
- * A singleton for handling sending messages between devices
- *
- * If you want to receive notifications sent to this device, simply implement
- * the Observer interface and add yourself as a listener to this singleton.
- *
- */
 public class BussRelationMessenger extends Observable {
 
     private static final String TAG = "RELATION_MESSENGER";
+    public static final String CHANNELS_FIELD = "channels";
+    public static final String TYPE_FIELD = "type";
+    public static final String DATA_FIELD = "data";
+    public static final String FROM_FIELD = "from";
     private static BussRelationMessenger bussRelationMessenger = new BussRelationMessenger();
 
     private Queue<JSONObject> incomingData;
@@ -43,36 +38,34 @@ public class BussRelationMessenger extends Observable {
     }
 
     public void setRelationships(BussRelationships relationships){
-        clearOldAndSetNewChannels(relationships);
+        ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
+        List channelsList = getChannelsListBasedOnRelationships(relationships, parseInstallation);
+        parseInstallation.put(CHANNELS_FIELD, channelsList);
+        parseInstallation.saveInBackground();
+        Log.d(TAG, "Lade till " + channelsList + " till installationen");
     }
 
-    private void clearOldAndSetNewChannels(BussRelationships relationships) {
-        ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
-        List channels = parseInstallation.getList("channels");
+    @NonNull
+    private List getChannelsListBasedOnRelationships(BussRelationships relationships, ParseInstallation parseInstallation) {
+        List oldChannelsList = parseInstallation.getList(CHANNELS_FIELD);
+        List<String> newChannelsList = getDifferenceOfRelationshipsAndChannelsList(relationships, oldChannelsList);
+        oldChannelsList.addAll(newChannelsList);
+        return oldChannelsList;
+    }
+
+    private List<String> getDifferenceOfRelationshipsAndChannelsList(BussRelationships relationships, List oldChannelsList) {
         List<String> newChannels = new ArrayList<>();
-        for(String channel:relationships.getRelationships()){
-            if(channels.contains("i"+channel))
+        for(String channel: relationships.getRelationships()){
+            if(oldChannelsList.contains("i"+channel))
                 continue;
             newChannels.add("i"+channel);
         }
-        channels.addAll(newChannels);
-        parseInstallation.put("channels", channels);
-        parseInstallation.saveInBackground();
-        Log.d(TAG, "Lade till " + channels + " till installationen");
-    }
-
-    public void sendMessage(String data){
-        try {
-            Log.d(TAG, "sendMessage: sending message with data: "+data);
-            trySendMessage(data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        return newChannels;
     }
 
     public void sendStatusUpdateNotification(int status){
-        String name = ParseCloudData.getInstance().getOwnName();
-        String activity = "";
+        String name = ParseCloudManager.getInstance().getOwnName();
+        String activity;
         switch (status){
             case TravelingData.WALKING:
                 activity = "walking";
@@ -93,25 +86,32 @@ public class BussRelationMessenger extends Observable {
         sendMessage(message);
     }
 
+    public void sendMessage(String data){
+        try {
+            Log.d(TAG, "sendMessage: sending message with data: "+data);
+            trySendMessage(data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void trySendMessage(String data) throws JSONException {
-        ParsePush push = getParsePushWithChannel("i"+getInstallationId());
+        ParsePush push = getParsePushWithChannel("i"+ ParseInstallation.getCurrentInstallation().getInstallationId());
         JSONObject messageObject = getMessageObjectWithData(data);
         sendPushWithObject(push, messageObject);
     }
 
-    @NonNull
     private ParsePush getParsePushWithChannel(String installationId) {
         ParsePush push = new ParsePush();
         push.setChannel(installationId);
         return push;
     }
 
-    @NonNull
     private JSONObject getMessageObjectWithData(String data) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", "Message");
         jsonObject.put("alert", data);
-        jsonObject.put("from", getInstallationId());
+        jsonObject.put(FROM_FIELD, ParseInstallation.getCurrentInstallation().getInstallationId());
         return jsonObject;
     }
 
@@ -129,57 +129,35 @@ public class BussRelationMessenger extends Observable {
     }
 
     private void tryNotifyPositionUpdate() throws JSONException {
-        ParsePush push = getParsePushWithChannel("i"+getInstallationId());
+        ParsePush push = getParsePushWithChannel("i"+ ParseInstallation.getCurrentInstallation().getInstallationId());
         JSONObject object = getPositionObjectWithData("");
         sendPushWithObject(push,object);
     }
 
-    @NonNull
     private JSONObject getPositionObjectWithData(String data) throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("type", "PositionUpdate");
-        jsonObject.put("data", data);
-        jsonObject.put("from", getInstallationId());
+        jsonObject.put(TYPE_FIELD, "PositionUpdate");
+        jsonObject.put(DATA_FIELD, data);
+        jsonObject.put(FROM_FIELD, ParseInstallation.getCurrentInstallation().getInstallationId());
         return jsonObject;
     }
 
-    private String getInstallationId() {
-        return ParseInstallation.getCurrentInstallation().getInstallationId();
-    }
-
-    /**
-     * This method should only be called by the applications ParsePushBroadcastReceiver.
-     *
-     * Enqueues incoming data and notifies observers that new data is available.
-     * @param data The data to be enqueued
-     */
     public void dataReceived(JSONObject data){
         enqueueData(data);
         notifyListeners(data);
     }
 
     private void enqueueData(JSONObject data) {
-        synchronized (this.incomingData){
-            this.incomingData.add(data);
-            this.incomingData.notify();
-        }
+        this.incomingData.add(data);
+        this.incomingData.notify();
     }
-
 
     private void notifyListeners(JSONObject data) {
         setChanged();
         notifyObservers(data);
     }
 
-    /**
-     * Returns a queue containing yet unprocessed messages.
-     * @return a Queue containing incoming data.
-     */
     public Queue<JSONObject> getDataQueue() {
         return incomingData;
     }
-
-
-
-
 }

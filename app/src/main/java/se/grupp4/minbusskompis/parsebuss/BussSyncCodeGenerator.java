@@ -1,30 +1,19 @@
 package se.grupp4.minbusskompis.parsebuss;
 
-import android.support.annotation.NonNull;
-
 import java.util.Random;
 
 /**
- * Created by Marcus on 10/1/2015.
+ * This class generates a random numeric code of a specified length that can later be accessed.
  */
 public class BussSyncCodeGenerator implements CodeGenerator {
-    public static final String CHARACTERS = "0123456789";
+    private static final String CHARACTERS = "0123456789";
     private String syncCode;
 
     public BussSyncCodeGenerator(int length){
         syncCode = generateSyncCode(length);
     }
 
-    public String getCode() {
-        return syncCode;
-    }
-
     private String generateSyncCode(int length){
-        return generateRandomString(length);
-    }
-
-    @NonNull
-    private String generateRandomString(int length) {
         Random random = new Random();
         StringBuilder builder = new StringBuilder();
 
@@ -33,7 +22,7 @@ public class BussSyncCodeGenerator implements CodeGenerator {
         return builder.toString();
     }
 
-
-
-
+    public String getCode() {
+        return syncCode;
+    }
 }

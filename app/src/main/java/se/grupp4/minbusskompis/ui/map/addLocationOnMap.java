@@ -33,7 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseGeoPoint;
 
 import se.grupp4.minbusskompis.R;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
 import se.grupp4.minbusskompis.ui.ParentChildDestinations;
 
@@ -144,7 +144,7 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
     private void saveLocation(String name){
         ParseGeoPoint geoPoint = new ParseGeoPoint(destinationLatLng.latitude, destinationLatLng.longitude);
         BussDestination destination = new BussDestination(geoPoint,name);
-        ParseCloudData.getInstance().addDestinationToChild(destination, childId);
+        ParseCloudManager.getInstance().addDestinationToChild(destination, childId);
 
         //Saveing, going back to childdestinations
         Toast.makeText(addLocationOnMap.this, "Saving: "+name, Toast.LENGTH_SHORT).show();

@@ -3,7 +3,6 @@ package se.grupp4.minbusskompis.parsebuss;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -19,12 +18,12 @@ import java.util.List;
 
 import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 
-public class ParseCloudData {
+public class ParseCloudManager {
     public static final int PARENT = 0;
     public static final int CHILD = 1;
     private static final String PARENTS_FIELD = "parents";
     private static final String CHILDREN_FIELD = "children";
-    private static final ParseCloudData parseCloudData = new ParseCloudData();
+    private static final ParseCloudManager parseCloudData = new ParseCloudManager();
     private static final String DESTINATIONS_TYPE = "Destinations";
     private static final String INSTALLATION_FIELD = "installationId";
     private static final String POSITION_FIELD = "position";
@@ -43,7 +42,7 @@ public class ParseCloudData {
     /**
      * This class handles all interaction to the Parse cloud
      */
-    public static ParseCloudData getInstance() {
+    public static ParseCloudManager getInstance() {
         return parseCloudData;
     }
 
@@ -196,7 +195,7 @@ public class ParseCloudData {
     public ChildLocationAndStatus getChildLocationAndStatusForId(String id){
         ParseObject positionObject = ParseCloudObjectFactory.createPositionObjectForId(id);
         Location location = getLocationFromPositionObject(positionObject);
-        int status = positionObject.getInt(ParseCloudData.STATUS_FIELD);
+        int status = positionObject.getInt(ParseCloudManager.STATUS_FIELD);
         String destination = positionObject.getString(DESTINATIONS_TYPE);
         return new ChildLocationAndStatus(location,status,destination);
     }

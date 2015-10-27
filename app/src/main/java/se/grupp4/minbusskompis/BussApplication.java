@@ -17,7 +17,7 @@ import java.util.List;
 
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 
 /**
  * Created by Marcus on 9/29/2015.
@@ -47,7 +47,7 @@ public class BussApplication extends Application {
 
     private void initParseAndInitData() {
         Parse.initialize(this);
-        ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
+        ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
             @Override
             public void done() {
                 setDefaultTravelStatus();
@@ -56,7 +56,7 @@ public class BussApplication extends Application {
     }
 
     private void setDefaultTravelStatus() {
-        ParseCloudData.getInstance().setStatusForSelfAndNotifyParents(0);
+        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(0);
     }
 
     private void setDefaultSubscriptions() {

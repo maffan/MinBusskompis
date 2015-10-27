@@ -25,7 +25,7 @@ import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.api.BusData;
 import se.grupp4.minbusskompis.api.Methods;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 
 public class ChildOnBus extends AppCompatActivity implements ServiceConnection,Runnable {
     @Override
@@ -89,7 +89,7 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         viewHolder = new ViewHolder();
 
         //Set on bus status
-        ParseCloudData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.ON_BUS);
+        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(TravelingData.ON_BUS);
 
         //Initiate views
         viewHolder.nextBusStop = (TextView) findViewById(R.id.child_on_bus_next_bus_stop);

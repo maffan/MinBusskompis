@@ -19,7 +19,7 @@ import java.util.Observer;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 import se.grupp4.minbusskompis.ui.adapters.ChildAdapter;
 import se.grupp4.minbusskompis.ui.adapters.ChildData;
@@ -50,10 +50,10 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         addButtonListeners();
         initList();
         populateList();
-        ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
+        ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
             @Override
             public void done() {
-                BussRelationMessenger.getInstance().setRelationships(ParseCloudData.getInstance().getChildren());
+                BussRelationMessenger.getInstance().setRelationships(ParseCloudManager.getInstance().getChildren());
             }
         });
         BussRelationMessenger.getInstance().addObserver(this);
@@ -142,7 +142,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
 
     //hämta data från parse
     public void getAndShowChildrenListOrMessage() {
-        ParseCloudData.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
+        ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
             @Override
             public void done() {
                 ArrayList<ChildData> tempList = getChildrenListFromParse();
@@ -152,7 +152,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
     }
 
     private ArrayList<ChildData> getChildrenListFromParse() {
-        return ParseCloudData.getInstance().getChildren().getAsChildDataList();
+        return ParseCloudManager.getInstance().getChildren().getAsChildDataList();
     }
 
     private void showContentOrMessage(ArrayList<ChildData> tempList) {

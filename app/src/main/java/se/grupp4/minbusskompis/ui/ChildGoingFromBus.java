@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 
 public class ChildGoingFromBus extends AppCompatActivity implements ServiceConnection {
 
@@ -56,7 +56,7 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
         viewHolder.helpToFindDestinationButton = (Button) findViewById(R.id.child_going_from_bus_help_to_loc);
 
         //Set walking status
-        ParseCloudData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
+        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
 
         //Get target destination
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");

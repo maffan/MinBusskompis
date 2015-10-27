@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussSync;
 import se.grupp4.minbusskompis.parsebuss.SyncTaskCompleteCallback;
@@ -55,7 +55,7 @@ public class ParentChildrenAdd extends AppCompatActivity {
                             if (success) {
                                 Log.v("ParentChildrenAdd", "Successfully added");
                                 //Save child to parse data
-                                ParseCloudData.getInstance().addRelationshipToSelf(installationId, ParseCloudData.CHILD);
+                                ParseCloudManager.getInstance().addRelationshipToSelf(installationId, ParseCloudManager.CHILD);
                                 Toast.makeText(context, R.string.parent_children_add_busssync_toast_success + installationId, Toast.LENGTH_LONG).show();
 
                                 //Switch to ChildSettings, pass on installation id
