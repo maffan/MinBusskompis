@@ -24,12 +24,23 @@ import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 import se.grupp4.minbusskompis.ui.adapters.ChildAdapter;
 import se.grupp4.minbusskompis.ui.adapters.ChildData;
 
+
+/*
+    ParentChildrenList
+    Populates list fetched from Parse with your relationships (children)
+    Fetches data, populates list, puts listener on list items.
+    If child is active you can click to view more information.
+    You can enter child specific settings on each child listed.
+
+    Check Childadapter for populated data info
+
+ */
 public class ParentChildrenList extends AppCompatActivity implements AdapterView.OnItemClickListener, Observer {
 
-    @Override
-    public void update(Observable observable, Object data) {
-        populateList();
-    }
+    private static final String TAG = "PARENT_CHILDREN_LIST";
+    private ChildAdapter childrenListAdapter;
+    private ViewHolder viewHolder;
+    private Context context = this;
 
     private static class ViewHolder {
         ListView childrenListView;
@@ -37,11 +48,11 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         Button buttonAddChildView;
     }
 
-    private static final String TAG = "PARENT_CHILDREN_LIST";
-    private ChildAdapter childrenListAdapter;
-    private ViewHolder viewHolder;
-    private Context context = this;
-
+    /**
+     * Creates viewholder, initiates views
+     * Connects adapter to listview, fetches data and populates relations (children)
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +70,9 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         BussRelationMessenger.getInstance().addObserver(this);
     }
 
+    /**
+     * Initate viewholder views, connect viewholder items to GUI objects
+     */
     private void initViews() {
         viewHolder = new ViewHolder();
         viewHolder.childrenListView = (ListView) findViewById(R.id.parent_children_list);
@@ -66,8 +80,10 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         viewHolder.buttonAddChildView = (Button)findViewById(R.id.button_addchild);
     }
 
+    /**
+     * Initate buttonlisteners
+     */
     public void addButtonListeners(){
-        //Add child button
         viewHolder.buttonAddChildView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +93,9 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         });
     }
 
+    /**
+     * Initiates childrenlist, connect adapter to list
+     */
     private void initList() {
         ArrayList<ChildData> childrenList = new ArrayList<>();
         childrenListAdapter =
@@ -90,16 +109,32 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         viewHolder.childrenListView.setOnItemClickListener(this);
     }
 
+    /**
+     * Repopulate list on observer update
+     * @param observable
+     * @param data
+     */
+    @Override
+    public void update(Observable observable, Object data) {
+        populateList();
+    }
+
     private void populateList() {
         new PopulateChildrenListTask().execute();
     }
 
+    /**
+     * Repopulate list on resume.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         populateList();
     }
 
+    /**
+     * Settings dropdown
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -130,6 +165,9 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Fetch data from parse, on callback populate list with relations(children)
+     */
     private class PopulateChildrenListTask extends AsyncTask<Void, Void, Void>{
 
         @Override
@@ -140,7 +178,9 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
 
     }
 
-    //hämta data från parse
+    /**
+     * Used from background task in PopulateChildrenListTask to fetch data
+     */
     public void getAndShowChildrenListOrMessage() {
         ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
             @Override
@@ -151,10 +191,18 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         });
     }
 
+    /**
+     * Converts parse json data to arraylist
+     * @return
+     */
     private ArrayList<ChildData> getChildrenListFromParse() {
         return ParseCloudManager.getInstance().getChildren().getAsChildDataList();
     }
 
+    /**
+     * Populate relationslist, shows empty message if no relations is available.
+     * @param tempList
+     */
     private void showContentOrMessage(ArrayList<ChildData> tempList) {
         if(tempList.isEmpty()){
             viewHolder.loadingTextView.setText(R.string.parent_children_list_no_children_text);
@@ -166,11 +214,17 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         }
     }
 
+    /**
+     * Removes "Loading text", replaces with list
+     */
     private void showChildrenList(){
         viewHolder.loadingTextView.setVisibility(View.GONE);
         viewHolder.childrenListView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Enable users to click on each active child to view more specific information about the ongoing trip.
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ChildData child = (ChildData) parent.getAdapter().getItem(position);
