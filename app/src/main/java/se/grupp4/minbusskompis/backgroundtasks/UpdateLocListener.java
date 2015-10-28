@@ -33,7 +33,7 @@ public class UpdateLocListener implements LocationListener {
                 Log.d(TAG, "Updated location to Parse");
                 //Spara location
                 ChildLocationAndStatus childLocationAndStatus = new ChildLocationAndStatus(loc,tripStatus,destination);
-                ParseCloudManager.getInstance().updateLatestPositionAndStatusForSelf(childLocationAndStatus);
+                ParseCloudManager.getInstance().updateLatestLocationAndStatusForSelf(childLocationAndStatus);
 
                 //Skicka push till alla föräldrar att nu finns ny position.
                 BussRelationMessenger.getInstance().notifyPositionUpdate();

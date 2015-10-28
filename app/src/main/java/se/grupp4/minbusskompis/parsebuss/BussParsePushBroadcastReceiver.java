@@ -14,14 +14,6 @@ import org.json.JSONObject;
 
 import se.grupp4.minbusskompis.ui.ParentActiveChild;
 
-/**
- * Created by Marcus on 9/21/2015.
- * <p/>
- * A broadcast receiver that intercepts all incoming pushes from Parse and
- * sends them to the BussRelationMessenger singleton.
- * <p/>
- * This class must be set as receiver in the manifest file.
- */
 public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
 
     private static final String TAG = "RECEIVER";
@@ -32,10 +24,19 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     public static final String PREFERENCES = "MyPreferences";
     public static final String FROM_FIELD = "from";
     public static final String CHILD_ID_FIELD = "child_id";
+    public static final String SYNC_REQUEST_TYPE = "SyncRequest";
+    public static final String SYNC_RESPONSE_TYPE = "SyncResponse";
+    public static final String POSITION_UPDATE_TYPE = "PositionUpdate";
     private BussSyncMessengerProvider provider;
     private Context context;
     private Intent intent;
 
+    /**
+     * Opens the active child activity corresponding to the child ID embedded in the chosen
+     * Push Notification
+     * @param context
+     * @param intent
+     */
     @Override
     protected void onPushOpen(Context context, Intent intent) {
         Intent nextIntent = new Intent(context, ParentActiveChild.class);
@@ -57,11 +58,11 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     }
 
     private void tryReceive(Intent intent) throws JSONException {
-        JSONObject data = getJSONDataFromIntent(intent);
+        JSONObject data = getEmbeddedJSONDataFromIntent(intent);
         dispatch(data);
     }
 
-    private JSONObject getJSONDataFromIntent(Intent intent) throws JSONException {
+    private JSONObject getEmbeddedJSONDataFromIntent(Intent intent) throws JSONException {
         Bundle extras = intent.getExtras();
         return getJSONDataFromBundle(extras);
     }
@@ -71,12 +72,8 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
     }
 
     private void dispatch(JSONObject data) throws JSONException {
-        String type = getTypeFromJSONData(data);
+        String type = data.getString(TYPE_FIELD);
         dispatchDataByType(data, type);
-    }
-
-    private String getTypeFromJSONData(JSONObject data) throws JSONException {
-        return data.getString(TYPE_FIELD);
     }
 
     private void dispatchDataByType(JSONObject messageData, String type) throws JSONException {
@@ -87,13 +84,13 @@ public class BussParsePushBroadcastReceiver extends ParsePushBroadcastReceiver {
                     showPushIfNotFromSelf(messageData);
                 }
                 break;
-            case "SyncRequest":
+            case SYNC_REQUEST_TYPE:
                 sendDataToSyncMessenger(messageData);
                 break;
-            case "SyncResponse":
+            case SYNC_RESPONSE_TYPE:
                 sendDataToSyncMessenger(messageData);
                 break;
-            case "PositionUpdate":
+            case POSITION_UPDATE_TYPE:
                 BussRelationMessenger.getInstance().dataReceived(messageData);
                 break;
             default:

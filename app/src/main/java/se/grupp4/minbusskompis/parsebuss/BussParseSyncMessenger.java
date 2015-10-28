@@ -98,8 +98,8 @@ public class BussParseSyncMessenger {
         int tries = 0;
         while (incomingSyncMessage == null){ //no message has arrived
             try {
-                syncMessageArrived.await(1, TimeUnit.SECONDS);
                 tries++;
+                syncMessageArrived.await(1, TimeUnit.SECONDS);
                 if(tries > TRIES_IN_SECONDS)
                     break;
             } catch (InterruptedException e) {

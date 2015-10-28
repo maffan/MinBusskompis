@@ -2,14 +2,12 @@ package se.grupp4.minbusskompis.parsebuss;
 
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.LinkedList;
 
-/**
- * Created by Marcus on 10/26/2015.
- */
 public class ParseCloudObjectFactory {
     private static final String PARENTS_FIELD = "parents";
     private static final String CHILDREN_FIELD = "children";
@@ -21,7 +19,7 @@ public class ParseCloudObjectFactory {
     private static final String POSITION_TYPE = "Position";
     private static final String NAME_TYPE = "Name";
     private static final String RELATIONSHIPS_TYPE = "Relationships";
-
+    private static ParseCloudObjectCache cache = new ParseCloudObjectCache();
 
     private static ParseQuery getTypeQueryForId(String type, String id) {
         ParseQuery query = ParseQuery.getQuery(type);
@@ -30,6 +28,24 @@ public class ParseCloudObjectFactory {
     }
 
     public static ParseObject createPositionObjectForId(String id) {
+        if (!cache.contains(POSITION_TYPE,id)) {
+            ParseQuery query = getTypeQueryForId(POSITION_TYPE, id);
+            ParseObject positionObject;
+            try {
+                positionObject = query.getFirst();
+            } catch (ParseException e) {
+                //Could not get object from parse
+                positionObject = createDefaultPositionObjectForId(id);
+            }
+            cache.addObject(POSITION_TYPE,id,positionObject);
+            return positionObject;
+        } else {
+            return cache.getObect(POSITION_TYPE,id);
+        }
+    }
+
+    public static ParseObject createPositionObjectForSelf() {
+        String id = ParseInstallation.getCurrentInstallation().getInstallationId();
         ParseQuery query = getTypeQueryForId(POSITION_TYPE, id);
         ParseObject positionObject;
         try {
@@ -57,6 +73,23 @@ public class ParseCloudObjectFactory {
     }
 
     public static ParseObject createNameObjectForId(String id){
+        if (!cache.contains(NAME_TYPE,id)) {
+            ParseQuery query = getTypeQueryForId(NAME_TYPE,id);
+            ParseObject cloudName;
+            try {
+                cloudName = query.getFirst();
+            } catch (ParseException e) {
+                cloudName = createDefaultNameObjectForId(id);
+            }
+            cache.addObject(NAME_TYPE,id,cloudName);
+            return cloudName;
+        } else {
+            return cache.getObect(NAME_TYPE,id);
+        }
+    }
+
+    public static ParseObject createNameObjectForSelf(){
+        String id = ParseInstallation.getCurrentInstallation().getInstallationId();
         ParseQuery query = getTypeQueryForId(NAME_TYPE,id);
         ParseObject cloudName;
         try {
@@ -81,6 +114,23 @@ public class ParseCloudObjectFactory {
     }
 
     public static ParseObject createRelationshipsObjectForId(String id) {
+        if (!cache.contains(RELATIONSHIPS_TYPE,id)) {
+            ParseQuery query = getTypeQueryForId(RELATIONSHIPS_TYPE,id);
+            ParseObject cloudRelationships;
+            try {
+                cloudRelationships = query.getFirst();
+            } catch (ParseException e) {
+                cloudRelationships = createDefaultRelationshipsObject(id);
+            }
+            cache.addObject(RELATIONSHIPS_TYPE,id,cloudRelationships);
+            return cloudRelationships;
+        } else {
+            return cache.getObect(RELATIONSHIPS_TYPE,id);
+        }
+    }
+
+    public static ParseObject createRelationshipsObjectForSelf() {
+        String id = ParseInstallation.getCurrentInstallation().getInstallationId();
         ParseQuery query = getTypeQueryForId(RELATIONSHIPS_TYPE,id);
         ParseObject cloudRelationships;
         try {
@@ -105,13 +155,29 @@ public class ParseCloudObjectFactory {
         return cloudRelationships;
     }
 
-    public static ParseObject createDestinationsObjectForID(String installationId) {
-        ParseQuery query = getTypeQueryForId(DESTINATIONS_TYPE,installationId);
+    public static ParseObject createDestinationsObjectForID(String id) {
+        if (!cache.contains(DESTINATIONS_TYPE,id)) {
+            ParseQuery query = getTypeQueryForId(DESTINATIONS_TYPE,id);
+            ParseObject cloudDestinations;
+            try {
+                cloudDestinations = query.getFirst();
+            } catch (ParseException e) {
+                cloudDestinations = createDefaultDestinationsObject(id);
+            }
+            cache.addObject(DESTINATIONS_TYPE,id,cloudDestinations);
+            return cloudDestinations;
+        } else {
+            return cache.getObect(DESTINATIONS_TYPE,id);
+        }
+    }
+    public static ParseObject createDestinationsObjectForSelf() {
+        String id = ParseInstallation.getCurrentInstallation().getInstallationId();
+        ParseQuery query = getTypeQueryForId(DESTINATIONS_TYPE,id);
         ParseObject cloudDestinations;
         try {
             cloudDestinations = query.getFirst();
         } catch (ParseException e) {
-            cloudDestinations = createDefaultDestinationsObject(installationId);
+            cloudDestinations = createDefaultDestinationsObject(id);
         }
         return cloudDestinations;
     }

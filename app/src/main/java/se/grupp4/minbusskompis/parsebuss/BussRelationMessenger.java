@@ -1,9 +1,6 @@
 package se.grupp4.minbusskompis.parsebuss;
 
 
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 
@@ -18,6 +15,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import se.grupp4.minbusskompis.TravelingData;
 
+/**
+ * This class handles all messages that is either received via broadcast or to be sent via broadcast.
+ */
 public class BussRelationMessenger extends Observable {
 
     private static final String TAG = "RELATION_MESSENGER";
@@ -37,15 +37,18 @@ public class BussRelationMessenger extends Observable {
         incomingData = new ConcurrentLinkedQueue<>();
     }
 
+    /**
+     * Adds the provided relationships to the Parse subscription list i.e. this device will receive
+     * messages sent from the devices contained in the BussRelationships object
+     * @param relationships
+     */
     public void setRelationships(BussRelationships relationships){
         ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
         List channelsList = getChannelsListBasedOnRelationships(relationships, parseInstallation);
         parseInstallation.put(CHANNELS_FIELD, channelsList);
         parseInstallation.saveInBackground();
-        Log.d(TAG, "Lade till " + channelsList + " till installationen");
     }
 
-    @NonNull
     private List getChannelsListBasedOnRelationships(BussRelationships relationships, ParseInstallation parseInstallation) {
         List oldChannelsList = parseInstallation.getList(CHANNELS_FIELD);
         List<String> newChannelsList = getDifferenceOfRelationshipsAndChannelsList(relationships, oldChannelsList);
@@ -63,7 +66,11 @@ public class BussRelationMessenger extends Observable {
         return newChannels;
     }
 
-    public void sendStatusUpdateNotification(int status){
+    /**
+     * Broadcasts a status change
+     * @param status
+     */
+    public void broadcastStatusUpdateNotification(int status){
         String name = ParseCloudManager.getInstance().getOwnName();
         String activity;
         switch (status){
@@ -83,12 +90,11 @@ public class BussRelationMessenger extends Observable {
                 return;
         }
         String message = name+" is now "+activity+".";
-        sendMessage(message);
+        broadcastMessage(message);
     }
 
-    public void sendMessage(String data){
+    private void broadcastMessage(String data){
         try {
-            Log.d(TAG, "sendMessage: sending message with data: "+data);
             trySendMessage(data);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -120,6 +126,9 @@ public class BussRelationMessenger extends Observable {
         push.sendInBackground();
     }
 
+    /**
+     * Broadcast that there now is new position data for this device in the Parse cloud
+     */
     public void notifyPositionUpdate(){
         try {
             tryNotifyPositionUpdate();
@@ -142,6 +151,11 @@ public class BussRelationMessenger extends Observable {
         return jsonObject;
     }
 
+    /**
+     * Enqueues messages sent to this device. Should only be called from a BroadcastReceivers
+     * onPushReceived method.
+     * @param data
+     */
     public void dataReceived(JSONObject data){
         enqueueData(data);
         notifyListeners(data);
@@ -149,7 +163,6 @@ public class BussRelationMessenger extends Observable {
 
     private void enqueueData(JSONObject data) {
         this.incomingData.add(data);
-        this.incomingData.notify();
     }
 
     private void notifyListeners(JSONObject data) {
@@ -157,6 +170,10 @@ public class BussRelationMessenger extends Observable {
         notifyObservers(data);
     }
 
+    /**
+     * Returns the queue containing all messages
+     * @return
+     */
     public Queue<JSONObject> getDataQueue() {
         return incomingData;
     }

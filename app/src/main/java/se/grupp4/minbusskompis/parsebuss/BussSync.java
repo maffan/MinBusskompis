@@ -15,6 +15,11 @@ public class BussSync {
         this.messenger = messenger;
     }
 
+    /**
+     * Attempts to sync with a child device.
+     * @param syncCode Code published by the child device
+     * @param callback
+     */
     public void syncWithSyncCode(String syncCode, SyncTaskCompleteCallback callback){
         new SyncRequestTask(syncCode, callback).execute();
     }
@@ -56,6 +61,11 @@ public class BussSync {
         BussSyncMessengerProvider.getInstance().removeMessenger();
     }
 
+    /**
+     * Waits for a parent device so sync with this device.
+     * @param generator
+     * @param callback
+     */
     public void waitForSyncRequest(CodeGenerator generator, SyncTaskCompleteCallback callback){
         String syncCode = generator.getCode();
         String legalSyncCode = BussParseSyncMessenger.getSyncCodeAsChannel(syncCode);

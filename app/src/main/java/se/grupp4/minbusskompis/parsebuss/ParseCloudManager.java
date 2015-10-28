@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -30,7 +29,7 @@ public class ParseCloudManager {
     private static final String STATUS_FIELD = "status";
     private static final String NAME_FIELD = "name";
     private static final String NAME_TYPE = "Name";
-    public static final String LOCATION_PROVIDER = "ParseCloud";
+    private static final String LOCATION_PROVIDER = "ParseCloud";
 
     private List<String> parents;
     private List<String> children;
@@ -59,15 +58,15 @@ public class ParseCloudManager {
 
         @Override
         protected Void doInBackground(Void... params) {
-            cloudDestinations = ParseCloudObjectFactory.createDestinationsObjectForID(ParseInstallation.getCurrentInstallation().getInstallationId());
+            cloudDestinations = ParseCloudObjectFactory.createDestinationsObjectForSelf();
 
-            cloudRelationships = ParseCloudObjectFactory.createRelationshipsObjectForId(ParseInstallation.getCurrentInstallation().getInstallationId());
+            cloudRelationships = ParseCloudObjectFactory.createRelationshipsObjectForSelf();
             parents = cloudRelationships.getList(PARENTS_FIELD);
             children = cloudRelationships.getList(CHILDREN_FIELD);
 
-            cloudName = ParseCloudObjectFactory.createNameObjectForId(ParseInstallation.getCurrentInstallation().getInstallationId());
+            cloudName = ParseCloudObjectFactory.createNameObjectForSelf();
 
-            cloudPosition = ParseCloudObjectFactory.createPositionObjectForId(ParseInstallation.getCurrentInstallation().getInstallationId());
+            cloudPosition = ParseCloudObjectFactory.createPositionObjectForSelf();
             return null;
         }
 
@@ -78,10 +77,14 @@ public class ParseCloudManager {
         }
     }
 
+    /**
+     * Sets the current traveling status for this device and broadcasts a notification.
+     * @param status
+     */
     public void setStatusForSelfAndNotifyParents(int status){
         cloudPosition.put(STATUS_FIELD, status);
         cloudPosition.saveInBackground();
-        BussRelationMessenger.getInstance().sendStatusUpdateNotification(status);
+        BussRelationMessenger.getInstance().broadcastStatusUpdateNotification(status);
         BussRelationMessenger.getInstance().notifyPositionUpdate();
     }
 
@@ -183,7 +186,7 @@ public class ParseCloudManager {
         cloudRelationships.saveInBackground();
     }
 
-    public void updateLatestPositionAndStatusForSelf(ChildLocationAndStatus location){
+    public void updateLatestLocationAndStatusForSelf(ChildLocationAndStatus location){
         ParseGeoPoint geoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
         int status = location.getTripStatus();
         cloudPosition.put(POSITION_FIELD,geoPoint);
