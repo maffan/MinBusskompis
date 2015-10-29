@@ -2,16 +2,17 @@ package se.grupp4.minbusskompis.parsebuss;
 
 import android.os.AsyncTask;
 
+import com.parse.ParseGeoPoint;
 import com.parse.ParsePush;
 
 /**
  * Created by Marcus on 10/4/2015.
  */
-public class BussSync {
+public class BussSyncer {
     private BussParseSyncMessenger messenger;
 
 
-    public BussSync(BussParseSyncMessenger messenger) {
+    public BussSyncer(BussParseSyncMessenger messenger) {
         this.messenger = messenger;
     }
 

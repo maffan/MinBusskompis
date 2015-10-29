@@ -13,8 +13,8 @@ import java.util.List;
  * This class contains all information regarding a specific destination
  */
 public class BussDestination {
-    public static final String DESTINATION_FIELD = "destination";
-    public static final String NAME_FIELD = "name";
+    private static final String DESTINATION_FIELD = "destination";
+    private static final String NAME_FIELD = "name";
     private ParseGeoPoint destination;
     private String name;
 

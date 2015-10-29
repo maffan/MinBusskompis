@@ -18,7 +18,7 @@ import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussSyncCodeGenerator;
-import se.grupp4.minbusskompis.parsebuss.BussSync;
+import se.grupp4.minbusskompis.parsebuss.BussSyncer;
 import se.grupp4.minbusskompis.parsebuss.SyncTaskCompleteCallback;
 
 public class ChildChildCode extends AppCompatActivity {
@@ -88,7 +88,7 @@ public class ChildChildCode extends AppCompatActivity {
     private void generateCode() {
         BussSyncCodeGenerator generator = new BussSyncCodeGenerator(4);
         generatedCode.setText(generator.getCode());
-        BussSync sync = new BussSync(new BussParseSyncMessenger());
+        BussSyncer sync = new BussSyncer(new BussParseSyncMessenger());
         sync.waitForSyncRequest(generator, new SyncTaskCompleteCallback() {
             @Override
             public void onSyncTaskComplete(boolean success, String installationId) {
