@@ -4,7 +4,7 @@
     <string name="parse_app_id" translatable="false">D7kI64caRSnhaF6ijs3z0DWeU334e2AdXejN7b06</string>
 
     <!-- Top -->
-    <string name="app_name">MinBusskompis</string>
+    <string name="app_name">Min Busskompis</string>
     <string name="title_activity">Min BussKompis</string>
     <string name="title_activity_maps">Map</string>
     <string name="action_settings">Settings</string>
@@ -133,7 +133,7 @@
 
     <string name="addlocationonmap_no_dest">No destination selected</string>
     <string name="addlocationonmap_no_name">Enter a destinationname to save</string>
-    <string name="addlocationonmap_saving">Saving</string>
+    <string name="addlocationonmap_saving">Saving...</string>
 
 
 </resources>

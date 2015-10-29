@@ -63,10 +63,10 @@
     <string name="parent_children_add_busssync_toast_sync">Begär synkning</string>
     <string name="parent_children_add_busssynt_toast_noinput">Ingen kod har blivit inslagen...</string>
     <string name="parent_settings_notifications_switch_text">Notifikationer</string>
-    <string name="parent_settings_reset_button_text">Reset</string>
+    <string name="parent_settings_reset_button_text">Återställ</string>
     <string name="all_reset_dialog_message">Detta kommer att återsälla appen, vill du fortsätta?</string>
     <string name="all_reset_dialog_no">Nej</string>
-    <string name="all_reset_dialog_title">Reset</string>
+    <string name="all_reset_dialog_title">Återställ</string>
     <string name="all_reset_dialog_yes">Ja</string>
     <string name="parent_settings_toast_notifications_off">Notifikationer av...</string>
     <string name="parent_settings_toast_notifications_on">Notifikationer på...</string>
@@ -90,4 +90,7 @@
     <string name="parent_child_settings_save_child_button">Spara namn</string>
     <string name="parent_settings_settings_text">Inställningar</string>
     <string name="startup_dialog_info_button">OK</string>
+    <string name="addlocationonmap_no_dest">Ingen destination vald</string>
+    <string name="addlocationonmap_no_name">Skriv ett namn på destinationen för att kunna spara</string>
+    <string name="addlocationonmap_saving">Sparar...</string>
 </resources>
