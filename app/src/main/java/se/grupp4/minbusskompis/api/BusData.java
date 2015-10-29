@@ -1,5 +1,6 @@
 package se.grupp4.minbusskompis.api;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -94,5 +95,17 @@ public class BusData
 				return b.Mac;
 		}
 		return "";
+	}
+
+	/**
+	 * Returns a list of all mac addresses in the current buslist
+	 * @return ArrayList
+	 */
+	public static ArrayList<String> getMacAdrList(){
+		ArrayList<String> macAdr = new ArrayList<>();
+		for(Bus current:busList){
+			macAdr.add(current.Mac);
+		}
+		return macAdr;
 	}
 }

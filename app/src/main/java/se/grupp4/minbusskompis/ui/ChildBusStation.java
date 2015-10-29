@@ -20,14 +20,31 @@ import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
+import se.grupp4.minbusskompis.api.BusData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.backgroundtasks.WifiCheckerStart;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
+import se.grupp4.minbusskompis.parsebuss.BussData;
 
-//Note that dummybuttons are temporary for debugging
+/*
+    ChildBusStation
+    Shown when child is at bus station.
+    * Updates UpdateLocToParseService to send updates with new mode
+    * Start Wifichecker to look for bus mac addresses
+    * Uses data from travelingdata to populate information
+ */
 public class ChildBusStation extends AppCompatActivity implements ServiceConnection {
 
     private static final String TAG = "ChildBusStation";
+    private ViewHolder viewHolder;
+    private Context context = this;
+    private UpdateLocToParseService.UpdateLocBinder parseUpdateLocBinder;
+    private String destinationName;
+    private ArrayList<String> wifiList;
+    private TravelingData travelingData;
+    private WifiCheckerStart wifiCheckerStart;
+
+    //Debug button
+    protected Button dummyButton;
 
     private static class ViewHolder {
         TextView busStopName;
@@ -35,15 +52,6 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         TextView yourBusName;
     }
 
-    private ViewHolder viewHolder;
-
-    protected Button dummyButton;
-    private Context context = this;
-    private UpdateLocToParseService.UpdateLocBinder parseUpdateLocBinder;
-    private String destinationName;
-    private ArrayList<String> wifiList;
-    private TravelingData travelingData;
-    WifiCheckerStart wifiCheckerStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +59,11 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         setContentView(R.layout.activity_child_bus_station);
         viewHolder = new ViewHolder();
 
-        //Set bus station status
-        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(TravelingData.AT_BUS_STATION);
+        //Update status
+        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.AT_BUS_STATION);
 
         //Init views.
-        viewHolder.busStopName = (TextView) findViewById(R.id.child_bus_stop_bsname_char);
-        viewHolder.timeToBus = (TextView) findViewById(R.id.child_bus_station_time_to_bus);
-        viewHolder.yourBusName = (TextView) findViewById(R.id.child_bus_station_next_bus_name);
+        initViews();
 
         //Get extras
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");
@@ -68,12 +74,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         viewHolder.yourBusName.setText(travelingData.bussName);
         viewHolder.timeToBus.setText(travelingData.busLeavingAt);
 
-        wifiList = new ArrayList<>();
-        //eduroam i biblioteket
-        wifiList.add("881dfc44578f");
-        wifiList.add("881dfc2c8f60");
-        //Oxledsvägen 9
-        wifiList.add("14cc206d1eb2");
+        wifiList = BusData.getMacAdrList();
         addButtonListener();
 
         //Bind and update service
@@ -81,6 +82,15 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         bindService(serviceIntent, this, 0);
     }
 
+    private void initViews() {
+        viewHolder.busStopName = (TextView) findViewById(R.id.child_bus_stop_bsname_char);
+        viewHolder.timeToBus = (TextView) findViewById(R.id.child_bus_station_time_to_bus);
+        viewHolder.yourBusName = (TextView) findViewById(R.id.child_bus_station_next_bus_name);
+    }
+
+    /**
+     * Cancel current trip by pressing back button
+     */
     @Override
     public void onBackPressed(){
         new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
@@ -98,6 +108,9 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
                 .show();
     }
 
+    /**
+     * Debug button, next activity
+     */
     public void addButtonListener(){
         dummyButton = (Button) findViewById(R.id.button_dummystation);
 
@@ -106,6 +119,7 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, ChildOnBus.class);
+                //Set currentBusMacAdress to test bus if debug button is pressed
                 travelingData.currentBusMacAdress = "1337";
                 intent.putExtra("data",travelingData);
                 startActivity(intent);
@@ -136,6 +150,10 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Shut down wifichecker when destroyed
+     * unbind parse service
+     */
     @Override
     protected void onDestroy() {
         Log.d(TAG, "Calling onDestroy");
@@ -144,11 +162,13 @@ public class ChildBusStation extends AppCompatActivity implements ServiceConnect
         unbindService(this);
     }
 
+    /**
+     * Use onServiceConnected callback to start service with new mode, and initate WifiChecker
+     */
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
-        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().resetLocationListener();
-        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.AT_BUS_STATION, destinationName);
+        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().setTripStatus(TravelingData.AT_BUS_STATION);
         Intent nextIntent = new Intent(context,ChildOnBus.class);
         nextIntent.putExtra("data",travelingData);
         wifiCheckerStart = new WifiCheckerStart();

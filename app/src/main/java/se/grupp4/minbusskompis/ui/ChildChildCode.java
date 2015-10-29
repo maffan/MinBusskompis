@@ -15,42 +15,52 @@ import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
+import se.grupp4.minbusskompis.parsebuss.BussData;
 import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussSyncCodeGenerator;
-import se.grupp4.minbusskompis.parsebuss.BussSyncer;
+import se.grupp4.minbusskompis.parsebuss.BussSync;
 import se.grupp4.minbusskompis.parsebuss.SyncTaskCompleteCallback;
 
+/*
+    ChildChildCode
+    Settings menu for children, used for matching devices
+    Generates ChildCode
+ */
 public class ChildChildCode extends AppCompatActivity {
 
-    protected Button nextButton;
-    protected Button resetButton;
-    protected TextView generatedCode;
     protected Context context = this;
-
     protected SharedPreferences sharedPreferences;
+    private ViewHolder viewHolder;
+
+    private static class ViewHolder{
+        Button nextButton;
+        Button resetButton;
+        TextView generatedCode;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_APPEND);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_child_code);
-        findViews();
+        sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_APPEND);
+        viewHolder = new ViewHolder();
+        initViews();
         addButtonListeners();
         generateCode();
     }
 
-    private void findViews() {
-        generatedCode = (TextView) findViewById(R.id.child_code_code_textview);
+    private void initViews() {
+        viewHolder.generatedCode = (TextView) findViewById(R.id.child_code_code_textview);
+        viewHolder.nextButton = (Button)findViewById(R.id.child_code_next_button);
+        viewHolder.resetButton = (Button)findViewById(R.id.child_code_reset_button);
     }
 
+    /**
+     * Add button listeners, on reset button a confirm diaog is shown
+     */
     public void addButtonListeners(){
-
-
-        nextButton=(Button)findViewById(R.id.child_code_next_button);
-        resetButton=(Button)findViewById(R.id.child_code_reset_button);
-
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ChildDestinations.class);
@@ -58,7 +68,7 @@ public class ChildChildCode extends AppCompatActivity {
             }
         });
 
-        resetButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
@@ -69,7 +79,7 @@ public class ChildChildCode extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(ChildChildCode.this, StartSelectMode.class);
                                 new ResetAppTask().doInBackground();
-                                ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
+                                BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
                                     @Override
                                     public void done() {
                                         startActivity(intent);
@@ -85,11 +95,14 @@ public class ChildChildCode extends AppCompatActivity {
     }
 
 
+    /**
+     * Generates a 4 number sync key
+     */
     private void generateCode() {
         BussSyncCodeGenerator generator = new BussSyncCodeGenerator(4);
-        generatedCode.setText(generator.getCode());
-        BussSyncer sync = new BussSyncer(new BussParseSyncMessenger());
-        sync.waitForSyncRequest(generator, new SyncTaskCompleteCallback() {
+        viewHolder.generatedCode.setText(generator.getCode());
+        BussSync sync = new BussSync(new BussParseSyncMessenger());
+        sync.waitForSync(generator, new SyncTaskCompleteCallback() {
             @Override
             public void onSyncTaskComplete(boolean success, String installationId) {
                 if (success) {
@@ -103,11 +116,21 @@ public class ChildChildCode extends AppCompatActivity {
         });
     }
 
+    /**
+     * Makes a full reset, deletes data from Parse, resets phone settings
+     */
+    private void resetApp(){
+        sharedPreferences.edit().clear().apply();
+        if (!(BussData.getInstance() == null)) {
+            BussData.getInstance().clearParseData();
+        }
+    }
+
     private class ResetAppTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
+            BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
                 @Override
                 public void done() {
                     resetApp();
@@ -116,11 +139,5 @@ public class ChildChildCode extends AppCompatActivity {
             return null;
         }
     }
-    //clears information stored in sharedpreferences and parse.
-    private void resetApp(){
-        sharedPreferences.edit().clear().apply();
-        if (!(ParseCloudManager.getInstance() == null)) {
-            ParseCloudManager.getInstance().clearParseData();
-        }
-    }
+
 }

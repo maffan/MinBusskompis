@@ -16,6 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.LocationCallback;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
 
 import java.util.ArrayList;
@@ -25,7 +28,6 @@ import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.api.datatypes.vt.Coord;
 import se.grupp4.minbusskompis.api.datatypes.vt.Leg;
 import se.grupp4.minbusskompis.api.datatypes.vt.Trip;
-import se.grupp4.minbusskompis.backgroundtasks.GPSTracker;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
@@ -33,41 +35,48 @@ import se.grupp4.minbusskompis.parsebuss.BussDestination;
 import se.grupp4.minbusskompis.ui.adapters.DestinationsAdapter;
 
 
-//Note that dummybuttons are temporary for debugging
+/*
+    ChildDestinations
+    Lists available destinations for current child.
+    Fetched from parse
+
+    * Starts UpdateLocToParseService
+    * Tries to fetch current position and calculate trip via västtrafik api when a destination is selected
+ */
 public class ChildDestinations extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private static final String TAG = "ChildDestinations";
+    private static final long GPSTIMEOUT = 30*1000;
     private ViewHolder viewHolder;
     private String installationId;
-    Context context = this;
+    private Context context = this;
+    private ArrayList<BussDestination> destinations;
+    private DestinationsAdapter destinationsAdapter;
+    TravelingData travelingData;
 
     private static class ViewHolder {
         ListView destinationsListView;
         TextView loadingTextView;
     }
 
-    private DestinationsAdapter destinationsAdapter;
-    private ArrayList<BussDestination> destinations;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_destinations);
+        viewHolder = new ViewHolder();
 
         //Set initial status
         ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(TravelingData.INACTIVE);
 
-        viewHolder = new ViewHolder();
-
         //Initiate views
-        viewHolder.destinationsListView = (ListView) findViewById(R.id.child_destinations_list);
-        viewHolder.loadingTextView = (TextView) findViewById(R.id.child_destinations_loading_text);
+        initiateViews();
 
         //Start updateparseservice
         Log.d(TAG,"Starting update to parse service");
         Intent serviceIntent = new Intent(this, UpdateLocToParseService.class);
         startService(serviceIntent);
 
+        //Initate list adapter, fetch and populate destinations
         destinations = new ArrayList<>();
         installationId = ParseInstallation.getCurrentInstallation().getInstallationId();
         destinationsAdapter =
@@ -79,10 +88,17 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
                 );
         viewHolder.destinationsListView.setOnItemClickListener(this);
         viewHolder.destinationsListView.setAdapter(destinationsAdapter);
-
         new PopulateDestinationListTask().execute();
     }
 
+    private void initiateViews() {
+        viewHolder.destinationsListView = (ListView) findViewById(R.id.child_destinations_list);
+        viewHolder.loadingTextView = (TextView) findViewById(R.id.child_destinations_loading_text);
+    }
+
+    /**
+     * Get data from Västtrafik, start trip on callback
+     */
     private class ApiCallTask extends AsyncTask<Coord, Void, TravelingData> {
         private TravelingData tData;
 
@@ -109,7 +125,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
 
                     String geometryRef = l.getGeometryRef();
                     Coord startCoord = se.grupp4.minbusskompis.api.Methods.getGeometry(geometryRef).get(0);
-                    Log.d("CHILDDESTINATIONS: ", "BusStop at: " + startCoord.toString());
+                    Log.d(TAG, "BusStop at: " + startCoord.toString());
 
                     double lat = Double.parseDouble(startCoord.getLatitude());
                     double lng = Double.parseDouble(startCoord.getLongitude());
@@ -133,33 +149,48 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
             Intent intent = new Intent(context, ChildGoingToBus.class);
             intent.putExtra("data", travelingData);
             startActivity(intent);
-            Toast.makeText(ChildDestinations.this, R.string.starting_journey_toast, Toast.LENGTH_LONG).show();
-
             ((Activity)context).finish();
         }
     }
 
+    /**
+     * When clicking on a destination, current location is fetched via gps, a call is made to Västtrafik api to get the current trip.
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //Send information to next intent
+        //Get destination coordinates
         BussDestination destination = (BussDestination) parent.getAdapter().getItem(position);
         LatLng targetDestination = new LatLng(destination.getDestination().getLatitude(),destination.getDestination().getLongitude());
 
         //Pass data forward
-        TravelingData travelingData = new TravelingData();
+        travelingData = new TravelingData();
         travelingData.destinationCoordinates = targetDestination;
         travelingData.destinationName = destination.getName();
 
-        GPSTracker gps = new GPSTracker(this);
-        LatLng latLng = new LatLng(gps.getLatitude(),gps.getLongitude());
-        Log.d(this.getLocalClassName(), "Currentlocation: " + latLng.toString());
-
-        Coord from = new Coord(String.valueOf(latLng.latitude), String.valueOf(latLng.longitude));
-        Coord to = new Coord(String.valueOf(targetDestination.latitude), String.valueOf(targetDestination.longitude));
-        new ApiCallTask(travelingData).execute(from, to);
-        Toast.makeText(ChildDestinations.this, R.string.child_destinatins_fetch_data, Toast.LENGTH_SHORT).show();
+        //Get current gps position
+        Toast.makeText(ChildDestinations.this, R.string.child_destinations_trying_to_get_gps, Toast.LENGTH_SHORT).show();
+        ParseGeoPoint.getCurrentLocationInBackground(GPSTIMEOUT, new LocationCallback() {
+            @Override
+            public void done(ParseGeoPoint parseGeoPoint, ParseException e) {
+                if (parseGeoPoint != null) {
+                    Toast.makeText(ChildDestinations.this, R.string.child_destinatins_fetch_data, Toast.LENGTH_SHORT).show();
+                    //Set current position
+                    Coord from = new Coord(String.valueOf(parseGeoPoint.getLatitude()), String.valueOf(parseGeoPoint.getLongitude()));
+                    //Set target destination from parse data, passed in travelingdata
+                    Coord to = new Coord(String.valueOf(travelingData.destinationCoordinates.latitude), String.valueOf(travelingData.destinationCoordinates.longitude));
+                    //Initiate api call in background, pass in travelingData with params
+                    new ApiCallTask(travelingData).execute(from, to);
+                }
+                else{
+                    Toast.makeText(ChildDestinations.this, R.string.child_destinations_trying_to_get_gps_not_found, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
+    /**
+     * Fetch data from parse, populate list
+     */
     private class PopulateDestinationListTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -174,6 +205,9 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         }
     }
 
+    /**
+     * Clear destinationslist and populate with destinations
+     */
     private void populateDestinations() {
         destinationsAdapter.clear();
         ArrayList<BussDestination> destList =
@@ -189,11 +223,17 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
         }
     }
 
+    /**
+     * Show loading message
+     */
     private void showMessage() {
         viewHolder.loadingTextView.setVisibility(View.VISIBLE);
         viewHolder.destinationsListView.setVisibility(View.GONE);
     }
 
+    /**
+     * Show destinations list
+     */
     private void showContent() {
         viewHolder.loadingTextView.setVisibility(View.GONE);
         viewHolder.destinationsListView.setVisibility(View.VISIBLE);

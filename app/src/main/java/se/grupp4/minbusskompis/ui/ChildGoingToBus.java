@@ -8,42 +8,51 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.parse.LocationCallback;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
-import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
+import se.grupp4.minbusskompis.parsebuss.BussData;
 
+/*
+    ChildGoingToBus
+    First activity for child, gives the user the choice of either saying that you are at the bus stop
+    or if you need help to find it.
+
+    * Starts sending updates on current position when clicking a button
+    * Changes UpdateLocToParseService mode
+    * Starts UpdateLocToParseService if not started
+ */
 public class ChildGoingToBus extends AppCompatActivity implements ServiceConnection {
 
-    private static final String TAG = "WALKMODE";
-    private static final int TIMEOUT = 60*1000;
-    private static final int MODE = 1;
+    private static final String TAG = "ChildGoingToBus";
     private Context context = this;
     private UpdateLocToParseService.UpdateLocBinder parseUpdateLocBinder;
     private TravelingData travelingData;
-    private Button needHelpButton;
-    private Button noNeedHelpButton;
     private boolean neededHelp;
     private boolean serviceBound = false;
-    Intent serviceIntent;
+    private Intent serviceIntent;
+    private ViewHolder viewHolder;
+
+    private static class ViewHolder {
+        Button needHelpButton;
+        Button noNeedHelpButton;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_going_to_bus);
+        viewHolder = new ViewHolder();
+
 
         //Check if service running, error when completing travels and trying to start again
         if(!isMyServiceRunning(UpdateLocToParseService.class)){
@@ -53,18 +62,18 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
         }
 
         //Set walking status
-        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
+        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
 
         //Init travelingData
         travelingData = getIntent().getParcelableExtra("data");
 
-        needHelpButton = (Button) findViewById(R.id.child_going_to_bus_help_to_bs);
-        noNeedHelpButton = (Button) findViewById(R.id.child_going_to_bus_im_on_bs);
+        //Init views
+        initiateViews();
 
         //Send to parse service
         serviceIntent = new Intent(context, UpdateLocToParseService.class);
 
-        needHelpButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.needHelpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 neededHelp = true;
@@ -72,7 +81,7 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
             }
         });
 
-        noNeedHelpButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.noNeedHelpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 neededHelp = false;
@@ -82,6 +91,14 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
 
     }
 
+    private void initiateViews() {
+        viewHolder.needHelpButton = (Button) findViewById(R.id.child_going_to_bus_help_to_bs);
+        viewHolder.noNeedHelpButton = (Button) findViewById(R.id.child_going_to_bus_im_on_bs);
+    }
+
+    /**
+     * Send user to next activity after returning from google maps
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Intent intent = new Intent(this, ChildBusStation.class);
@@ -90,6 +107,9 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
         finish();
     }
 
+    /**
+     * Cancel current trip and go back to destinations
+     */
     @Override
     public void onBackPressed(){
         new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
@@ -129,32 +149,23 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * On buttonclicks and when the service is connected, either start google maps or send user to next activity
+     */
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         serviceBound = true;
         Log.d(TAG,"Received binder, start location listener");
 
         parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
+        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().resetLocationListener();
         parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.WALKING, travelingData.destinationName);
 
         if (neededHelp) {
-            ParseGeoPoint.getCurrentLocationInBackground(TIMEOUT, new LocationCallback() {
-                @Override
-                public void done(ParseGeoPoint parseGeoPoint, ParseException e) {
-
-                    if (parseGeoPoint != null) {
-                        Intent intent =
-                                new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse("google.navigation:q=" + travelingData.bussStopCoordinates.latitude + "," + travelingData.bussStopCoordinates.longitude + "&mode=w"));
-                        startActivityForResult(intent, 1);
-                    } else {
-                        //Send back to destinations
-                       Intent nintent = new Intent(context, ChildDestinations.class);
-                       startActivity(nintent);
-                       finish();
-                    }
-                }
-            });
+            Intent intent =
+                    new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("google.navigation:q=" + travelingData.bussStopCoordinates.latitude + "," + travelingData.bussStopCoordinates.longitude + "&mode=w"));
+            startActivityForResult(intent, 1);
         }
         else{
             Intent intent = new Intent(this, ChildBusStation.class);
@@ -179,6 +190,11 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
         }
     }
 
+    /**
+     * Check if a service is running
+     * @param serviceClass Your current service
+     * @return boolean
+     */
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

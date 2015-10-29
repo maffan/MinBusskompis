@@ -95,9 +95,15 @@
     <string name="child_destinations_loading_text">Loading destinations...</string>
     <string name="child_destinatins_fetch_data">Fetching data for trip...</string>
     <string name="child_destinations_not_found">No destinations for child</string>
+    <string name="child_destinations_trying_to_get_gps">Trying to get your current location...</string>
+    <string name="child_destinations_trying_to_get_gps_not_found">Your current location could not be found, go outside and try again</string>
 
     <string name="child_going_from_bus_on_location">Im there, end trip</string>
     <string name="child_going_from_bus_help_to_loc">Help me find my destination</string>
+    <string name="child_going_from_bus_dialog_title">End trip</string>
+    <string name="child_going_from_bus_dialog_message">Are you at your final destination?</string>
+    <string name="child_going_from_bus_dialog_yes_button">Yes</string>
+    <string name="child_going_from_bus_dialog_no_button">No, help me find it</string>
 
     <string name="child_going_to_bus_im_on_bs">Im at the bus stop</string>
     <string name="child_going_to_bus_help_to_bs">Help me find the bus stop</string>
