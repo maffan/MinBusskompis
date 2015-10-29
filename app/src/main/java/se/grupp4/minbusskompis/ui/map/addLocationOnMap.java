@@ -37,18 +37,16 @@ import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
 import se.grupp4.minbusskompis.ui.ParentChildDestinations;
 
-
+/*
+    addLocationOnMap
+    Provides an activity that enables parents to add location on his or her child
+    When either searching for a place or clicking on the map the location can be saved as a choosen name
+    * Uses PlaceAutocompleter from google to find places when searching
+    * Uses Google maps to find locations and show a map
+ */
 public class addLocationOnMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "addLocationOnMap";
-
-    private static class ViewHolder{
-        AutoCompleteTextView autoCompleteLocationView;
-        Button saveLocationButton;
-        EditText saveAsName;
-        ImageView clearText;
-    }
-
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutocompleteAdapter mAdapter;
     private ViewHolder viewHolder;
@@ -58,23 +56,28 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
     private static final LatLngBounds BOUNDS_SVERIGE = new LatLngBounds(
             new LatLng(57.958012, 10.916143), new LatLng(59.584815, 23.097162));
 
+    private static class ViewHolder{
+        AutoCompleteTextView autoCompleteLocationView;
+        Button saveLocationButton;
+        EditText saveAsName;
+        ImageView clearText;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_child_destination_add);
+        viewHolder = new ViewHolder();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.add_destination_map);
         mapFragment.getMapAsync(this);
 
         childId = getIntent().getStringExtra("child_id");
         mMap = mapFragment.getMap();
-        viewHolder = new ViewHolder();
 
         //Initate views
-        viewHolder.autoCompleteLocationView = (AutoCompleteTextView) findViewById(R.id.destination_add_autocomplete);
-        viewHolder.saveLocationButton = (Button) findViewById(R.id.destination_add_save_button);
-        viewHolder.saveAsName = (EditText) findViewById(R.id.destination_add_name);
-        viewHolder.clearText = (ImageView) findViewById(R.id.add_destination_clear_text);
+        initateViews();
 
         // Construct a GoogleApiClient for the {@link Places#GEO_DATA_API} using AutoManage
         // functionality, which automatically sets up the API client to handle Activity lifecycle
@@ -105,17 +108,19 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
             public void onClick(View v) {
                 String destinationSaveName = viewHolder.saveAsName.getText().toString();
                 if(destinationLatLng == null){
-                    Toast.makeText(addLocationOnMap.this, "No destination selected", Toast.LENGTH_SHORT).show();
-                }else{
-                    if(destinationSaveName!=null && !destinationSaveName.equals("")){
+                    Toast.makeText(addLocationOnMap.this,R.string.addlocationonmap_no_dest, Toast.LENGTH_SHORT).show();
+                }
+                else if(destinationSaveName.equals("")){
+                    Toast.makeText(addLocationOnMap.this, R.string.addlocationonmap_no_name, Toast.LENGTH_SHORT).show();
+                }
+                else if(destinationSaveName!=null && !destinationSaveName.equals("")){
                         saveLocation(destinationSaveName);
-                    }
                 }
             }
         };
         viewHolder.saveLocationButton.setOnClickListener(addLocClickListener);
 
-        //Map onclick listener, saves map click as
+        //Map onclick listener, if you move the pin, a new location is saved
         mMap.setOnMapClickListener(new OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
@@ -127,6 +132,13 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
         });
     }
 
+    private void initateViews() {
+        viewHolder.autoCompleteLocationView = (AutoCompleteTextView) findViewById(R.id.destination_add_autocomplete);
+        viewHolder.saveLocationButton = (Button) findViewById(R.id.destination_add_save_button);
+        viewHolder.saveAsName = (EditText) findViewById(R.id.destination_add_name);
+        viewHolder.clearText = (ImageView) findViewById(R.id.add_destination_clear_text);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -134,25 +146,33 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
         return true;
     }
 
-    //Sätt startpos
+    //Initiate starting position
     @Override
     public void onMapReady(GoogleMap map) {
         LatLng chalmers = new LatLng(57.70662817011354,11.93630151450634);
         setLocSetPinAndZoom(chalmers);
     }
 
+    /**
+     * Save current long and lat into a destinationame for child
+     * @param name String
+     */
     private void saveLocation(String name){
         ParseGeoPoint geoPoint = new ParseGeoPoint(destinationLatLng.latitude, destinationLatLng.longitude);
         BussDestination destination = new BussDestination(geoPoint,name);
         ParseCloudManager.getInstance().addDestinationToChild(destination, childId);
 
         //Saveing, going back to childdestinations
-        Toast.makeText(addLocationOnMap.this, "Saving: "+name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(addLocationOnMap.this, R.string.addlocationonmap_saving + ": " + name, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, ParentChildDestinations.class);
         intent.putExtra("child_id", childId);
         startActivity(intent);
     }
 
+    /**
+     * Move pin, camera and zoom onto a new location
+     * @param newLocation
+     */
     private void setLocSetPinAndZoom(LatLng newLocation){
         mMap.clear();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 14));
@@ -160,7 +180,7 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
     }
 
 
-    //Hanterar klick i autocomplete listan
+    //Autocomplete adapter
     private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -173,7 +193,7 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
             final String placeId = item.getPlaceId();
             final CharSequence primaryText = item.getPrimaryText(null);
 
-            Log.i(TAG, "Autocomplete item selected: " + primaryText);
+            Log.d(TAG, "Autocomplete item selected: " + primaryText);
 
             /*
              Issue a request to the Places Geo Data API to retrieve a Place object with additional
@@ -185,7 +205,7 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
         }
     };
 
-    //Callback för vad man skall göra vid val av location
+    //Callback after selected place
     private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
             = new ResultCallback<PlaceBuffer>() {
         @Override
@@ -199,11 +219,11 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
             // Get the Place object from the buffer.
             final Place place = places.get(0);
 
-            //Spara val, flytta map
+            //Do something with the selected place, move camera and pin to that location
             destinationLatLng = place.getLatLng();
             setLocSetPinAndZoom(destinationLatLng);
 
-            Log.i(TAG, "Place details received: " + place.getName());
+            Log.d(TAG, "Place details received: " + place.getName());
             places.release();
         }
     };
@@ -226,56 +246,4 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
                 "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
                 Toast.LENGTH_SHORT).show();
     }
-
-//    // An AsyncTask class for accessing the GeoCoding Web Service
-//    private class GeocoderTask extends AsyncTask<String, Void, List<Address>> {
-//
-//        @Override
-//        protected List<Address> doInBackground(String... locationName) {
-//            // Creating an instance of Geocoder class
-//            Geocoder geocoder = new Geocoder(getBaseContext());
-//            List<Address> addresses = null;
-//
-//            try {
-//                // Getting a maximum of 3 Address that matches the input text
-//                addresses = geocoder.getFromLocationName(locationName[0], 3);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return addresses;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<Address> addresses) {
-//
-//            if (addresses == null || addresses.size() == 0) {
-//                Toast.makeText(getBaseContext(), "No Location found", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            // Clears all the existing markers on the map
-//            mMap.clear();
-//
-//            // Adding Markers on Google Map for each matching address
-//            for (int i = 0; i < addresses.size(); i++) {
-//
-//                Address address = (Address) addresses.get(i);
-//
-//                // Creating an instance of GeoPoint, to display in Google Map
-//                latLng = new LatLng(address.getLatitude(), address.getLongitude());
-//
-//                String addressText = String.format("%s",
-//                        address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "");
-//
-//                markerOptions = new MarkerOptions();
-//                markerOptions.position(latLng);
-//                markerOptions.title(addressText);
-//
-//                mMap.addMarker(markerOptions);
-//
-//                // Locate the first location
-//                if (i == 0)
-//                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-//            }
-//        }
-//    }
 }

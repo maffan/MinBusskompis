@@ -8,12 +8,10 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by Tobias on 2015-10-09.
+/*
+    WifiCheckerStart
+    Used to either look for valid wifis or check if you are leaving a specific one.
  */
-
-
-//Create service with macAdress that should be polled against, pass in delay and what activity that should be switched to if matched
 public class WifiCheckerStart {
     private static final String TAG = "WifiCheckerStart";
     ScheduledThreadPoolExecutor poolExecutor;
@@ -23,24 +21,46 @@ public class WifiCheckerStart {
         poolExecutor = new ScheduledThreadPoolExecutor(1);
     }
 
+    /**
+     * Look for valid wifis
+     * @param currentContext Current activity, will be used when switching activities
+     * @param nextIntent What the next activity should be (when finding a persistent match)
+     * @param macAdresses List of valid mac addresses
+     * @param delay How often in seconds, you should fetch new wifis
+     * @return
+     */
     public boolean startLookForWifi(Context currentContext, Intent nextIntent, ArrayList<String> macAdresses, int delay){
         wifiChecker = new WifiChecker(currentContext, nextIntent, macAdresses);
         poolExecutor.scheduleWithFixedDelay(wifiChecker,0,delay, TimeUnit.SECONDS);
         return true;
     }
 
+    /**
+     * Keep track if you are leaving a wifi
+     * @param currentContext Current activity, will be used when switching activities
+     * @param nextIntent What the next activity should be (when finding a persistent match)
+     * @param macAdress What mac address you should keep track of
+     * @param delay How often in seconds, you should fetch new wifis
+     * @return
+     */
     public boolean startCheckIfLeave(Context currentContext, Intent nextIntent, String macAdress, int delay){
         wifiChecker = new WifiChecker(currentContext, nextIntent, macAdress);
         poolExecutor.scheduleWithFixedDelay(wifiChecker,0,delay, TimeUnit.SECONDS);
         return true;
     }
 
+    /**
+     * Shutdown WifiChecker, remove receivers, stop threadpool
+     */
     public void shutdown(){
         unregisterReceivers();
         poolExecutor.shutdown();
     }
 
-    //Call to unregister receivers
+
+    /**
+     * Unregister receivers if started
+     */
     public void unregisterReceivers(){
         Log.d(TAG,"Unregister receivers");
        if(wifiChecker != null){

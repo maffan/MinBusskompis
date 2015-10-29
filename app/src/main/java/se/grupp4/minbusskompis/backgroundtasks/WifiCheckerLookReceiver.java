@@ -15,8 +15,10 @@ import java.util.Map;
 
 import se.grupp4.minbusskompis.TravelingData;
 
-/**
- * Created by Tobias on 2015-10-16.
+/*
+    WifiCheckerLookReceiver
+    BroadcastReceiver used to look for a list of wifis, if a wifi matches and is over the set threshold
+    it will become the chosen one.
  */
 public class WifiCheckerLookReceiver extends BroadcastReceiver {
     private static final int MATCH_LIMIT = 2;
@@ -39,14 +41,21 @@ public class WifiCheckerLookReceiver extends BroadcastReceiver {
         initValidMacWithZeroHits();
     }
 
+    /**
+     * Resets allowed mac addresses with zero hits, used to find a good match
+     */
     private void initValidMacWithZeroHits() {
         for (String mac : validMacAddresses)
             wifiHits.put(mac, 0);
     }
 
+    /**
+     * On each new receive, scanned mac addresses will be checked against valid mac addresses
+     * If any is in range and persistent during a time you have a match
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
-        checkIfValidMacIsClose();
+        checkIfAnyValidMacIsClose();
 
         if(validMacIsCloseAndPersistent()){
             Log.d(TAG, "Wifi match counter reached, child on bus");
@@ -57,22 +66,25 @@ public class WifiCheckerLookReceiver extends BroadcastReceiver {
         }
     }
 
-    private void checkIfValidMacIsClose() {
+    /**
+     * Matches current scanned wifis agaist valid mac list
+     */
+    private void checkIfAnyValidMacIsClose() {
         Map<String, Integer> scanResult = getScanResultMap();
         if (scanResult.size() > 0) {
             for(String scannedMac : scanResult.keySet()){
-                //Log.d(TAG, "Matching: " + scannedMac + " to: " + scanResult);
                 if(macIsValidAndClose(scanResult, scannedMac)){
-                    Log.d(TAG, "checkIfValidMacIsClose: Match for: "+scannedMac);
                     wifiHits.put(scannedMac, wifiHits.get(scannedMac) + 1);
-                    Log.d(TAG, "checkIfValidMacIsClose: wifihits is now: "+wifiHits);
                 }
             }
         } else {
             Log.d((this).getClass().getSimpleName(), "No wifilist");
         }
     }
-
+    /**
+     * Put mac addresses from scan results into a HashMap
+     * @return HashMap
+     */
     private HashMap<String, Integer> getScanResultMap() {
         HashMap<String, Integer> macStrengthMap = new HashMap<>();
 
@@ -85,18 +97,38 @@ public class WifiCheckerLookReceiver extends BroadcastReceiver {
         return macStrengthMap;
     }
 
+    /**
+     * Removes all spacing and symbols from mac address
+     * @param scanResult mac address as clean string
+     * @return String
+     */
     private String getCleanMac(ScanResult scanResult) {
         return scanResult.BSSID.replaceAll(ALPHA_NUM_ONLY_REGEX, "");
     }
 
+    /**
+     * Convert signal level into more human friendly level, for example 80% instead of -73
+     * @param scanResult
+     * @return int Signal strenght
+     */
     private int getCalculatedStrength(ScanResult scanResult) {
         return WifiManager.calculateSignalLevel(scanResult.level, NUM_WIFI_STRENGTH_LEVELS);
     }
 
+    /**
+     * Check if a mac is valid and over the wifi strength
+     * @param scanResult All scanresults
+     * @param scannedMac
+     * @return
+     */
     private boolean macIsValidAndClose(Map<String, Integer> scanResult, String scannedMac) {
         return validMacAddresses.contains(scannedMac) && scanResult.get(scannedMac) > WIFI_STRENGTH_THRESHOLD;
     }
 
+    /**
+     * Check if any valid mac has been close during a period of time
+     * @return boolean
+     */
     private boolean validMacIsCloseAndPersistent() {
         for (String mac : validMacAddresses) {
             if (macReachedLimit(mac)) {
@@ -107,6 +139,10 @@ public class WifiCheckerLookReceiver extends BroadcastReceiver {
         return false;
     }
 
+    /**
+     * @param mac Mac to check
+     * @return If the current mac has enough hits to be chosen as winner
+     */
     private boolean macReachedLimit(String mac) {
         return wifiHits.get(mac) > MATCH_LIMIT;
     }

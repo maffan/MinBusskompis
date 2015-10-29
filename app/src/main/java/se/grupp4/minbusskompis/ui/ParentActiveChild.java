@@ -27,7 +27,13 @@ import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
 import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussRelationships;
+/*
+    ParentActiveChild
+    See details information about an active child.
 
+    * Fetches tripdata from parse, with position and trip status
+    * Observes BussRelationMessanger that will receive the updates on ongoing trips
+ */
 public class ParentActiveChild extends AppCompatActivity implements Observer {
 
     private static final String TAG = "PARENT_ACTIVE_CHILD";
@@ -36,28 +42,28 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
     private int status;
     private double latitude;
     private double longitude;
-    private TextView childName;
-    private TextView childStatus;
-    private TextView childGoingTo;
-    private ImageView childStatusImage;
     private String destination;
+    private ViewHolder viewHolder;
+
+    private class ViewHolder {
+        TextView childName;
+        TextView childStatus;
+        TextView childGoingTo;
+        ImageView childStatusImage;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_active_child);
+        viewHolder = new ViewHolder();
         childId = getIntent().getStringExtra("child_id");
 
         //Init views
-        childName = (TextView) findViewById(R.id.parent_active_child_name_textview);
-        childStatus = (TextView) findViewById(R.id.parent_active_child_current_status);
-        childStatusImage = (ImageView) findViewById(R.id.parent_active_child_status_icon);
-        childGoingTo = (TextView) findViewById(R.id.parent_active_child_destination_textview);
-        map = ((MapFragment) getFragmentManager().
-                findFragmentById(R.id.parent_active_child_map)).getMap();
+        initViews();
 
         //Set initial values
-        childName.setText(ParseCloudManager.getInstance().getNameFromId(childId));
+        viewHolder.childName.setText(ParseCloudManager.getInstance().getNameFromId(childId));
 
         //Listen to child
         BussRelationships relationships = ParseCloudManager.getInstance().getChildren();
@@ -69,6 +75,15 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
 
         //Start listening for updates
         BussRelationMessenger.getInstance().addObserver(this);
+    }
+
+    private void initViews() {
+        viewHolder.childName = (TextView) findViewById(R.id.parent_active_child_name_textview);
+        viewHolder.childStatus = (TextView) findViewById(R.id.parent_active_child_current_status);
+        viewHolder.childStatusImage = (ImageView) findViewById(R.id.parent_active_child_status_icon);
+        viewHolder.childGoingTo = (TextView) findViewById(R.id.parent_active_child_destination_textview);
+        map = ((MapFragment) getFragmentManager().
+                findFragmentById(R.id.parent_active_child_map)).getMap();
     }
 
     @Override
@@ -101,6 +116,9 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * On an update new data will be populated
+     */
     @Override
     public void update(Observable observable, Object data) {
         Log.d(TAG,"Got update!");
@@ -117,6 +135,10 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
         }
     }
 
+    /**
+     * Update views with new data
+     * @param locationAndStatus Data about the current location and status
+     */
     private void updateInfo(ChildLocationAndStatus locationAndStatus) {
         status = locationAndStatus.getTripStatus();
         destination = locationAndStatus.getDestination();
@@ -127,49 +149,60 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
         updatePinAndCamera();
     }
 
+    /**
+     * Update destinationtext
+     */
     private void updateDestinationText() {
-        childGoingTo.setText("Going to: " +destination);
+        viewHolder.childGoingTo.setText("Going to: " +destination);
     }
 
+    /**
+     * Update statustext and icon based on trip status
+     */
     private void updateStatusText() {
         switch (status){
             case TravelingData.INACTIVE:
+                viewHolder.childStatus.setText(R.string.parent_active_child_inactive_text);
+                viewHolder.childStatusImage.setImageResource(R.drawable.inactive);
                 Intent backIntent = new Intent(this,ParentChildrenList.class);
                 startActivity(backIntent);
                 finish();
                 break;
             case TravelingData.WALKING:
-                childStatus.setText(R.string.parent_active_child_walking_text);
-                childStatusImage.setImageResource(R.drawable.walking);
+                viewHolder.childStatus.setText(R.string.parent_active_child_walking_text);
+                viewHolder.childStatusImage.setImageResource(R.drawable.walking);
                 break;
             case TravelingData.AT_BUS_STATION:
-                childStatus.setText(R.string.parent_active_child_atbusstation_text);
-                childStatusImage.setImageResource(R.drawable.busstop);
+                viewHolder.childStatus.setText(R.string.parent_active_child_atbusstation_text);
+                viewHolder.childStatusImage.setImageResource(R.drawable.busstop);
                 break;
             case TravelingData.ON_BUS:
-                childStatus.setText(R.string.parent_active_child_onbus_text);
-                childStatusImage.setImageResource(R.drawable.bus);
+                viewHolder.childStatus.setText(R.string.parent_active_child_onbus_text);
+                viewHolder.childStatusImage.setImageResource(R.drawable.bus);
                 break;
             case TravelingData.LEAVING_BUS:
-                childStatus.setText(R.string.parent_active_child_leavingbus_text);
-                childStatusImage.setImageResource(R.drawable.busstop);
+                viewHolder.childStatus.setText(R.string.parent_active_child_leavingbus_text);
+                viewHolder.childStatusImage.setImageResource(R.drawable.busstop);
                 break;
             case 5:
-                childStatus.setText(R.string.parent_active_child_goingtodestination_text);
-                childStatusImage.setImageResource(R.drawable.walking);
+                viewHolder.childStatus.setText(R.string.parent_active_child_goingtodestination_text);
+                viewHolder.childStatusImage.setImageResource(R.drawable.walking);
                 break;
             default:
-                childStatus.setText(R.string.parent_active_child_default);
-                childStatusImage.setImageResource(R.drawable.inactive);
+                viewHolder.childStatus.setText(R.string.parent_active_child_default);
+                viewHolder.childStatusImage.setImageResource(R.drawable.inactive);
         }
     }
 
+    /**
+     * Move map pin, refocus and zoom
+     */
     private void updatePinAndCamera() {
         //Update pin and camera
         map.clear();
         LatLng position = new LatLng(latitude, longitude);
         map.addMarker(new MarkerOptions().position(position).
-                title(childName.getText().toString()));
+                title(viewHolder.childName.getText().toString()));
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 17));
     }
 }

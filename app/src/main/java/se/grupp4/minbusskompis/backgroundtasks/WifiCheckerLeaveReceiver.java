@@ -14,8 +14,9 @@ import java.util.Map;
 
 import se.grupp4.minbusskompis.TravelingData;
 
-/**
- * Created by Tobias on 2015-10-16.
+/*
+     WifiCheckerLeaveReceiver
+     BroadcastReceiver used to check if your leave a specific wifi.
  */
 public class WifiCheckerLeaveReceiver extends BroadcastReceiver {
     private static final String TAG = "WifiCheckIfLeaveReceiver";
@@ -33,6 +34,9 @@ public class WifiCheckerLeaveReceiver extends BroadcastReceiver {
         this.wifiManager = wifiManager;
     }
 
+    /**
+     * On each new receive, the new wifis will be matched against the wifi you are polling against
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         //Scan is complete, get list from scan.
@@ -56,7 +60,11 @@ public class WifiCheckerLeaveReceiver extends BroadcastReceiver {
         }
     }
 
-    //Puts scanresults in hashmap, bssid/level.
+
+    /**
+     * Put mac addresses from scan results into a HashMap
+     * @return HashMap
+     */
     private HashMap<String, Integer> getWifiList() {
         //Replace all non alphanumeric chars with ""
         String regex = "[^A-Za-z0-9]";
@@ -70,6 +78,12 @@ public class WifiCheckerLeaveReceiver extends BroadcastReceiver {
         return localWifis;
     }
 
+    /**
+     * Determine if a mac exist in a list of mac addresses
+     * @param currMac Mac address to poll against
+     * @param scannedAccessPoints Results from latest scan
+     * @return If currMac is close to scannedAccessPoints
+     */
     private boolean checkIfClose(String currMac, Map<String, Integer> scannedAccessPoints) {
         if (scannedAccessPoints == null) {
             Log.v((this).getClass().getSimpleName(), "No wifilist");

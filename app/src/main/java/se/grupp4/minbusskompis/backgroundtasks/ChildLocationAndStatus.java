@@ -3,8 +3,9 @@ package se.grupp4.minbusskompis.backgroundtasks;
 
 import android.location.Location;
 
-/**
- * Created by Tobias on 2015-10-08.
+/*
+    ChildLocationAndStatus
+    Data object used to pass along trip mode and location
  */
 public class ChildLocationAndStatus extends Location {
     private int mode;

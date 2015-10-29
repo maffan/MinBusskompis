@@ -20,12 +20,16 @@ import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
 import se.grupp4.minbusskompis.ui.adapters.DestinationsAdapter;
 import se.grupp4.minbusskompis.ui.map.addLocationOnMap;
-
+/*
+    ParentChildDestinations
+    Shows a list of current destinations for current child
+    * Fetches data from parse with destinations
+ */
 public class ParentChildDestinations extends AppCompatActivity {
     private DestinationsAdapter destinationsAdapter;
     private ArrayList<BussDestination> destinations;
     private String childId;
-    private Context context;
+    private Context context = this;
     private ViewHolder viewHolder;
 
     private static class ViewHolder {
@@ -38,17 +42,18 @@ public class ParentChildDestinations extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_child_destinations);
-        this.context = this;
-        //Initiate views
         viewHolder = new ViewHolder();
-        viewHolder.destinationsView = (ListView) findViewById(R.id.parent_destinations_list);
-        viewHolder.loadingTextView = (TextView) findViewById(R.id.parent_destinations_loading_text);
-        viewHolder.addDestinationButtonView = (Button) findViewById(R.id.parent_destinations_add_destination_button);
+
+        //Initiate views
+        initiateViews();
+
         //Get child id
         childId = getIntent().getStringExtra("child_id");
+
         //Add button listeners
-        addButtonListener();
-        //Add destinations adapter
+        addButtonListeners();
+
+        //Init destinations adapter and fetch destinations
         destinations = new ArrayList<>();
         destinationsAdapter =
                 new DestinationsAdapter(
@@ -60,9 +65,14 @@ public class ParentChildDestinations extends AppCompatActivity {
         new PopulateDestinationListTask().execute();
     }
 
+    private void initiateViews() {
+        viewHolder.destinationsView = (ListView) findViewById(R.id.parent_destinations_list);
+        viewHolder.loadingTextView = (TextView) findViewById(R.id.parent_destinations_loading_text);
+        viewHolder.addDestinationButtonView = (Button) findViewById(R.id.parent_destinations_add_destination_button);
+    }
 
 
-    public void addButtonListener(){
+    public void addButtonListeners(){
         viewHolder.addDestinationButtonView.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -111,6 +121,9 @@ public class ParentChildDestinations extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Fetch a childs destinations from parse
+     */
     private class PopulateDestinationListTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -125,6 +138,9 @@ public class ParentChildDestinations extends AppCompatActivity {
         }
     }
 
+    /**
+     * Populate destinations on gui
+     */
     private void populateDestinations() {
         destinationsAdapter.clear();
         ArrayList<BussDestination> destList = ParseCloudManager.getInstance().getDestinationsForChild(childId);
@@ -138,11 +154,17 @@ public class ParentChildDestinations extends AppCompatActivity {
         }
     }
 
+    /**
+     * Show loading message
+     */
     private void showMessage() {
         viewHolder.loadingTextView.setVisibility(View.VISIBLE);
         viewHolder.destinationsView.setVisibility(View.GONE);
     }
 
+    /**
+     * Show destinations list
+     */
     private void showContent() {
         viewHolder.loadingTextView.setVisibility(View.GONE);
         viewHolder.destinationsView.setVisibility(View.VISIBLE);

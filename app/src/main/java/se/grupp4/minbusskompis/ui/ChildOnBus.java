@@ -25,10 +25,13 @@ import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.api.BusData;
 import se.grupp4.minbusskompis.api.Methods;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 /*
     ChildOnBus
     Activity shown when user is traveling on the bus.
+
+    * UpdateLocToParseService, change tripStatus
+    * Check if next bus stop and the bus has left the last bus stop each 20s, change activity if that occours.
  */
 public class ChildOnBus extends AppCompatActivity implements ServiceConnection,Runnable {
     private Context context = this;
@@ -52,7 +55,7 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         viewHolder = new ViewHolder();
 
         //Set on bus status
-        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.ON_BUS);
+        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(TravelingData.ON_BUS);
 
         //Initiate views
         initiateViews();
@@ -81,8 +84,10 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         viewHolder.timeToStop = (TextView) findViewById(R.id.child_on_bus_station_time_to_bus_stop);
     }
 
+    /**
+     * Debug
+     */
     public void addButtonListener(){
-
         dummyButtonOnBus = (Button)findViewById(R.id.button_dummy_busonbus);
         dummyButtonOnBus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +100,9 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         });
     }
 
+    /**
+     * Shut down the pool executor and unbind updatetoparse serivce on detroy.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -104,18 +112,21 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
 
     @Override
     public void run() {
-        new UpdateViewsTask().execute();
+        new CheckIfNextStopIsYoursAsTask().execute();
     }
 
-    private class UpdateViewsTask extends AsyncTask<Void, Void, TravelingData>{
+    /**
+     * Checks if the next bus stop is yours and if the bus has left the bus station, passes user to last activity if so.
+     */
+    private class CheckIfNextStopIsYoursAsTask extends AsyncTask<Void, Void, TravelingData>{
 
-        public UpdateViewsTask() {
+        public CheckIfNextStopIsYoursAsTask() {
         }
 
         @Override
         protected TravelingData doInBackground(Void... params) {
             //Get data from api
-            String dgw = BusData.getDgwByMac("0013951349f7");
+            String dgw = BusData.getDgwByMac(travelingData.currentBusMacAdress);
             travelingData.nextBusStop = Methods.getNextStop(dgw);
             travelingData.stopButtonPressed = Methods.isAtStop(dgw);
             return travelingData;
@@ -127,7 +138,6 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
             viewHolder.nextBusStop.setText(travelingData.nextBusStop);
 
             if(travelingData.nextBusStop.equals(travelingData.busStopName) && !travelingData.isAtStop){
-                //Next stop is same as wwe want to go, ok. to. this case. ok.
                 Intent intent = new Intent(context, ChildLeavingBus.class);
                 startActivity(intent);
                 ((Activity)context).finish();
@@ -135,6 +145,9 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         }
     }
 
+    /**
+     * Cancel current trip dialog if back is pressed
+     */
     @Override
     public void onBackPressed(){
         new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
@@ -174,11 +187,13 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Change tripstatus mode
+     */
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         updateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
-        updateLocBinder.getService().getUpdateLocGpsAndSettings().resetLocationListener();
-        updateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.ON_BUS, travelingData.destinationName);
+        updateLocBinder.getService().getUpdateLocGpsAndSettings().setTripStatus(TravelingData.ON_BUS);
 
     }
 

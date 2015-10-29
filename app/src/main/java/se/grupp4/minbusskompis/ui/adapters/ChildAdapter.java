@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.ui.ParentChildSettings;
 
-/**
- * Created by Tobias on 2015-10-12.
+/*
+    ChildAdapter
+    Adapter used to populate data in "ChildrenLists"
  */
 public class ChildAdapter extends ArrayAdapter<ChildData> {
     private Context context;
@@ -43,16 +44,12 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.fragment_parent_child_list_item, parent, false);
 
-            viewHolder.activityIconView = (ImageView) row.findViewById(R.id.parent_children_list_item_child_active_icon);
-            viewHolder.childNameView = (TextView) row.findViewById(R.id.parent_children_list_item_name);
-            viewHolder.settingsButtonView = (ImageView) row.findViewById(R.id.parent_children_list_item_settings_icon);
-            viewHolder.activeChildText = (TextView) row.findViewById(R.id.parent_children_list_item_active_text);
+            initViews(row, viewHolder);
             row.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
             row = convertView;
         }
-
 
         //Set icon by mode
         switch (child.getMode()){
@@ -102,5 +99,12 @@ public class ChildAdapter extends ArrayAdapter<ChildData> {
         }
 
         return row;
+    }
+
+    private void initViews(View row, ViewHolder viewHolder) {
+        viewHolder.activityIconView = (ImageView) row.findViewById(R.id.parent_children_list_item_child_active_icon);
+        viewHolder.childNameView = (TextView) row.findViewById(R.id.parent_children_list_item_name);
+        viewHolder.settingsButtonView = (ImageView) row.findViewById(R.id.parent_children_list_item_settings_icon);
+        viewHolder.activeChildText = (TextView) row.findViewById(R.id.parent_children_list_item_active_text);
     }
 }

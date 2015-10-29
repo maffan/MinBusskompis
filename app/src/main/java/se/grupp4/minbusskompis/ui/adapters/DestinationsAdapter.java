@@ -14,8 +14,9 @@ import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
 
-/**
- * Created by Tobias on 2015-10-12.
+/*
+    DestinationsAdapter
+    Used to populate destinations for both parent and child
  */
 public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
     private Context context;
@@ -45,9 +46,7 @@ public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             row = inflater.inflate(R.layout.fragment_destinations_list_item, parent, false);
 
-            viewHolder.destinationIconView = (ImageView) row.findViewById(R.id.destination_list_item_icon);
-            viewHolder.destinationNameView = (TextView) row.findViewById(R.id.destination_list_item_destination_name);
-            viewHolder.deleteDestinationIconView = (ImageView) row.findViewById(R.id.destination_list_item_delete_icon);
+            initViews(row, viewHolder);
             row.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -60,7 +59,7 @@ public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
         //Set destination name
         viewHolder.destinationNameView.setText(currentDestination.getName());
 
-        //Kolla om parent
+        //If parent, add remove button
         if (!context.getSharedPreferences("MyPreferences", Context.MODE_APPEND).getBoolean("setaschild", false)) {
             //Add settings img
             viewHolder.deleteDestinationIconView.setImageResource(R.drawable.delete);
@@ -77,5 +76,11 @@ public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
         }
 
         return row;
+    }
+
+    private void initViews(View row, ViewHolder viewHolder) {
+        viewHolder.destinationIconView = (ImageView) row.findViewById(R.id.destination_list_item_icon);
+        viewHolder.destinationNameView = (TextView) row.findViewById(R.id.destination_list_item_destination_name);
+        viewHolder.deleteDestinationIconView = (ImageView) row.findViewById(R.id.destination_list_item_delete_icon);
     }
 }

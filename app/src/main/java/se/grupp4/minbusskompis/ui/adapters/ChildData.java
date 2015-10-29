@@ -1,7 +1,8 @@
 package se.grupp4.minbusskompis.ui.adapters;
 
-/**
- * Created by Tobias on 2015-10-12.
+/*
+    ChildData
+    Data class used to fetch data from parse to populate into childrenlist, used by ChildAdapter
  */
 public class ChildData {
     private String name;

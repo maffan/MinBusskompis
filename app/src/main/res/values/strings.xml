@@ -131,4 +131,9 @@
     <string name="child_onbackwardspressed_dialog_option_no">No</string>
     <string name="stop_button_pressed">Stop button is pressed!</string>
 
+    <string name="addlocationonmap_no_dest">No destination selected</string>
+    <string name="addlocationonmap_no_name">Enter a destinationname to save</string>
+    <string name="addlocationonmap_saving">Saving</string>
+
+
 </resources>

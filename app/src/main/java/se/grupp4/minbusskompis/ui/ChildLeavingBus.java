@@ -26,7 +26,7 @@ import se.grupp4.minbusskompis.api.BusData;
 import se.grupp4.minbusskompis.api.Methods;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.backgroundtasks.WifiCheckerStart;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 /*
     ChildLeavingBus
     Activity shown when child is about to leave bus
@@ -59,7 +59,7 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         viewHolder = new ViewHolder();
 
         //Set leaving bus status
-        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.LEAVING_BUS);
+        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(TravelingData.LEAVING_BUS);
 
         //Get traveling data
         travelingData = getIntent().getParcelableExtra("data");

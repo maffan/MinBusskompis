@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 /*
     ChildGoingFromBus
     Gives the user help to find his or her final destination, after leaving bus
@@ -61,7 +61,7 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
         initiateViews();
 
         //Set walking status
-        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
+        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
 
         //Get target destination
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");

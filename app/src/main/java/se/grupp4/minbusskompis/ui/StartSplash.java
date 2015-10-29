@@ -11,7 +11,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
-
+/*
+    StartSplash
+    Startup logo.
+    Will start application if data is enabled
+ */
 public class StartSplash extends Activity {
 
     private static final String TAG = "StartSplash";

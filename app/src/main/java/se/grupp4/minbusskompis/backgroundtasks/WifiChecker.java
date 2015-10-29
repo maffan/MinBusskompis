@@ -9,8 +9,11 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * Created by Tobias on 2015-10-07.
+/*
+    WifiChecker
+    Class used to check if you either are close to a electricity wifi or leaving a specific one.
+    To initate looking for wifis, create a WifiChecker with an ArrayList.
+    To keep track if you leave initiate with only a mac address
  */
 public class WifiChecker implements Runnable {
 
@@ -21,7 +24,7 @@ public class WifiChecker implements Runnable {
     ArrayList<String> macAdresses;
     private Context currentContext;
 
-    //Skapa kontroll mot ifall man lämnar wifi
+    //Create WifiChecker that will check if you leave a specific wifi
     public WifiChecker(Context currentContext, Intent nextIntent, String macAdress){
         this.currentContext = currentContext;
         this.macAdress = macAdress;
@@ -31,22 +34,28 @@ public class WifiChecker implements Runnable {
         currentContext.registerReceiver(wifiReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
 
-    //Skapar koll mot vanligt wifi
-    public WifiChecker(Context currentContext, Intent nextIntent, ArrayList<String> macAdresses){
+    //Create WIfiChecker that will look for wifis included in macAddresses
+    public WifiChecker(Context currentContext, Intent nextIntent, ArrayList<String> macAddresses){
         this.currentContext = currentContext;
-        this.macAdresses = macAdresses;
+        this.macAdresses = macAddresses;
         this.wifiManager = (WifiManager) currentContext.getSystemService(Context.WIFI_SERVICE);
 
-        wifiReceiver = new WifiCheckerLookReceiver(nextIntent, macAdresses, wifiManager);
+        wifiReceiver = new WifiCheckerLookReceiver(nextIntent, macAddresses, wifiManager);
         currentContext.registerReceiver(wifiReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
 
+    /**
+     * Remove broadcastreceiver
+     */
     public void unregReceiver(){
         Log.d(TAG,"Unregistered receiver: " + wifiReceiver);
         currentContext.unregisterReceiver(wifiReceiver);
     }
 
-    //Initates the scan, the reciver will do the work when scan is complete.
+
+    /**
+     * Start a wifi scan, the check will occour on the broadcastreceiver callback
+     */
     @Override
     public void run() {
         if (!wifiManager.isWifiEnabled()) {

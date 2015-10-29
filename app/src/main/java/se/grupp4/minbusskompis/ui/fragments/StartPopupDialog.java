@@ -7,15 +7,16 @@ import android.widget.Button;
 
 import se.grupp4.minbusskompis.R;
 
-/**
- * Created by Tobias on 2015-10-12.
+/*
+    StartPopupDialog
+    Info/about dialog
  */
 public class StartPopupDialog extends Dialog {
     Button dismissButton;
 
     public StartPopupDialog(Context context) {
         super(context);
-        this.setTitle("Min Busskompis");
+        this.setTitle(R.string.title_activity);
         this.setContentView(R.layout.fragment_start_info_dialog);
 
         dismissButton = (Button) this.findViewById(R.id.startup_dialog_dismiss_button);

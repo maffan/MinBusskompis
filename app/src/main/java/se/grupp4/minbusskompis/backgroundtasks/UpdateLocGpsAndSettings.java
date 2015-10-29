@@ -1,13 +1,14 @@
 package se.grupp4.minbusskompis.backgroundtasks;
 
-import android.app.Activity;
 import android.content.Context;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.util.Log;
 
-/**
- * Created by Tobias on 2015-10-07.
+/*
+    UpdateLocGpsAndSettings
+    Class that manages gps and location listeners.
+    When calling startLocationListener a locationlistener is bound to gps updates and will provide updates to parse.
+    This is used to send the current location and mode for the child
  */
 public class UpdateLocGpsAndSettings {
     private static final String TAG = "UpdateLocGpsAndSettings";
@@ -18,22 +19,22 @@ public class UpdateLocGpsAndSettings {
     private UpdateLocListener locationListener;
 
     public UpdateLocGpsAndSettings(Context context, int updateRate){
-        //Set mode & updaterate
         this.updateRate = updateRate;
         this.context = context;
-        //Get service
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    //Lyssnaren skapas vid denna metod, detta för att kunna ändra "mode"
+    /**
+     * Start a locationlistener that will send updates to parse when location has been changed.
+     * @param tripStatus Current tripStatus, Walking, On bus etc
+     * @param destination Destination name
+     * @return boolean added for future development
+     */
     public boolean startLocationListener(int tripStatus, String destination){
-        //Init location listener with trip status
         locationListener = new UpdateLocListener(tripStatus, context, destination);
         Log.d(TAG, "Starting Locationlistener");
 
-        //Enable location updates to locationlistener
         try {
-            //GPS, tid mellan uppdateringar, distans per uppdatering, locationlistener att uppdatera till
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateRate, METER_UPDATE, locationListener);
             Log.d(TAG, "Locationlistener successfully ADDED");
             return true;
@@ -47,10 +48,12 @@ public class UpdateLocGpsAndSettings {
         }
     }
 
-    //Ta bort aktuell lyssnare
+    /**
+     * Removes updates to the locationlistener added.
+     * @return boolean added for future development
+     */
     public boolean resetLocationListener(){
         try {
-            //GPS, tid mellan uppdateringar, distans per uppdatering, locationlistener att uppdatera till
             Log.d(TAG, "Locationlistener successfully REMOVED");
             locationManager.removeUpdates(locationListener);
             return true;
@@ -64,6 +67,10 @@ public class UpdateLocGpsAndSettings {
         }
     }
 
+    /**
+     * Change current triptatus, when a child switches mode/activity
+     * @param tripStatus Current trip status
+     */
     public void setTripStatus(int tripStatus){
         locationListener.setTripStatus(tripStatus);
     }

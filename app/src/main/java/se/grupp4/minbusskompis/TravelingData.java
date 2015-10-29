@@ -3,7 +3,11 @@ package se.grupp4.minbusskompis;
         import android.os.Parcel;
         import android.os.Parcelable;
         import com.google.android.gms.maps.model.LatLng;
-
+/*
+    TravelingData
+    Static parcelable data used to pass information between activities.
+    Used in all activities used by the child.
+ */
 public class TravelingData implements Parcelable {
     public LatLng bussStopCoordinates;
     public LatLng destinationCoordinates;

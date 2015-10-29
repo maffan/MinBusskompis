@@ -15,10 +15,10 @@ import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussSyncCodeGenerator;
-import se.grupp4.minbusskompis.parsebuss.BussSync;
+import se.grupp4.minbusskompis.parsebuss.BussSyncer;
 import se.grupp4.minbusskompis.parsebuss.SyncTaskCompleteCallback;
 
 /*
@@ -79,7 +79,7 @@ public class ChildChildCode extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(ChildChildCode.this, StartSelectMode.class);
                                 new ResetAppTask().doInBackground();
-                                BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+                                ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
                                     @Override
                                     public void done() {
                                         startActivity(intent);
@@ -101,8 +101,8 @@ public class ChildChildCode extends AppCompatActivity {
     private void generateCode() {
         BussSyncCodeGenerator generator = new BussSyncCodeGenerator(4);
         viewHolder.generatedCode.setText(generator.getCode());
-        BussSync sync = new BussSync(new BussParseSyncMessenger());
-        sync.waitForSync(generator, new SyncTaskCompleteCallback() {
+        BussSyncer sync = new BussSyncer(new BussParseSyncMessenger());
+        sync.waitForSyncRequest(generator, new SyncTaskCompleteCallback() {
             @Override
             public void onSyncTaskComplete(boolean success, String installationId) {
                 if (success) {
@@ -121,8 +121,8 @@ public class ChildChildCode extends AppCompatActivity {
      */
     private void resetApp(){
         sharedPreferences.edit().clear().apply();
-        if (!(BussData.getInstance() == null)) {
-            BussData.getInstance().clearParseData();
+        if (!(ParseCloudManager.getInstance() == null)) {
+            ParseCloudManager.getInstance().clearParseData();
         }
     }
 
@@ -130,7 +130,7 @@ public class ChildChildCode extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+            ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
                 @Override
                 public void done() {
                     resetApp();

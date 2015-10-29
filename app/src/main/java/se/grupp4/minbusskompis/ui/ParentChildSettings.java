@@ -16,44 +16,64 @@ import android.widget.Toast;
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 
-/**
- * Created by Tobias on 2015-10-13.
+/*
+    ParentChildSettings
+    Child specific settings.
  */
 public class ParentChildSettings extends AppCompatActivity{
 
-    private EditText nameEdit;
     private String currentInstallationId;
-    private Context context;
+    private Context context = this;
+    private ViewHolder viewHolder;
+
+    private class ViewHolder{
+        EditText nameEdit;
+        Button saveNameButton;
+        Button destinationsButton;
+        Button deleteChildButton;
+        Button saveAndExitButton;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_child_settings);
-        this.context = this;
+        viewHolder = new ViewHolder();
 
         Intent intent = getIntent();
         currentInstallationId = intent.getStringExtra("child_id");
 
-        //Set default name
-        nameEdit = (EditText) findViewById(R.id.parent_child_settings_name);
-        nameEdit.setText(ParseCloudManager.getInstance().getNameFromId(currentInstallationId));
+        //Init views
+        initViews();
+        
+        //Set name
+        viewHolder.nameEdit.setText(ParseCloudManager.getInstance().getNameFromId(currentInstallationId));
 
         //Set installation id
         TextView instId = (TextView) findViewById(R.id.parent_child_settings_installationid);
         instId.setText(currentInstallationId);
 
-        //Set save name button
-        Button saveNameButton = (Button) findViewById(R.id.parent_child_settings_savename_button);
-        saveNameButton.setOnClickListener(new View.OnClickListener() {
+        //Button listeners
+        initButtonListeners();
+    }
+
+    private void initViews() {
+        viewHolder.nameEdit = (EditText) findViewById(R.id.parent_child_settings_name);
+        viewHolder.saveNameButton = (Button) findViewById(R.id.parent_child_settings_savename_button);
+        viewHolder.destinationsButton = (Button) findViewById(R.id.parent_child_settings_destinations_button);
+        viewHolder.deleteChildButton = (Button) findViewById(R.id.parent_child_settings_delete_child_button);
+        viewHolder.saveAndExitButton = (Button) findViewById(R.id.parent_child_settings_exit_child_button);
+    }
+
+    private void initButtonListeners() {
+        viewHolder.saveNameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new ChangeNameTask().execute();
             }
         });
 
-        //Set destinations button
-        Button destinationsButton = (Button) findViewById(R.id.parent_child_settings_destinations_button);
-        destinationsButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.destinationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ParentChildSettings.this,ParentChildDestinations.class);
@@ -62,8 +82,7 @@ public class ParentChildSettings extends AppCompatActivity{
             }
         });
 
-        Button deleteChildButton = (Button) findViewById(R.id.parent_child_settings_delete_child_button);
-        deleteChildButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.deleteChildButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(context)
@@ -86,8 +105,7 @@ public class ParentChildSettings extends AppCompatActivity{
             }
         });
 
-        Button saveAndExitButton = (Button) findViewById(R.id.parent_child_settings_exit_child_button);
-        saveAndExitButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.saveAndExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ParentChildrenList.class);
@@ -96,8 +114,11 @@ public class ParentChildSettings extends AppCompatActivity{
         });
     }
 
+    /**
+     * Push name change to parse
+     */
     private void changeName() {
-        String newName = nameEdit.getText().toString();
+        String newName = viewHolder.nameEdit.getText().toString();
         ParseCloudManager.getInstance().setNameForId(newName, currentInstallationId);
 
     }

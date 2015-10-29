@@ -19,11 +19,12 @@ import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
 import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 
-/**
- * Created by Marcus on 9/29/2015.
+/*
+    BussApplication
+    Startup for Min Busskompis
  */
 public class BussApplication extends Application {
-    private static final String TAG = "APPLICATION";
+    private static final String TAG = "BussApplication";
     private Context context = this;
     SharedPreferences sharedPreferences;
 
@@ -35,8 +36,6 @@ public class BussApplication extends Application {
         if(!checkIfDataEnabled()){
             Log.d(TAG,"Data disabled");
             sharedPreferences.edit().putBoolean("data_enabled", false).apply();
-            //Toast.makeText(context, "Enable data to start application", Toast.LENGTH_SHORT).show();
-            //System.exit(0);
         }else{
             Log.d(TAG,"Data enabled");
             sharedPreferences.edit().putBoolean("data_enabled", true).apply();
@@ -45,6 +44,24 @@ public class BussApplication extends Application {
         }
     }
 
+    public boolean checkIfDataEnabled(){
+        boolean mobileDataEnabled = false; // Assume disabled
+        ConnectivityManager cm1 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            Class cmClass = Class.forName(cm1.getClass().getName());
+            Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
+            method.setAccessible(true); // Make the method callable
+            // get the setting for "mobile data"
+            mobileDataEnabled = (Boolean)method.invoke(cm1);
+        } catch (Exception e) {
+            Log.d(TAG,"Error checking mobile data status");
+        }
+        return mobileDataEnabled;
+    }
+
+    /**
+     *  Makes sure that Parse is initialized and that the cloud manager has the latest data.
+     */
     private void initParseAndInitData() {
         Parse.initialize(this);
         ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
@@ -55,10 +72,16 @@ public class BussApplication extends Application {
         });
     }
 
+    /**
+     * Makes sure that the initial state of the device is not in a traveling mode.
+     */
     private void setDefaultTravelStatus() {
         ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(0);
     }
 
+    /**
+     * Makes sure that this device is listening to the channels it should
+     */
     private void setDefaultSubscriptions() {
         ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
         List channels = parseInstallation.getList("channels");
@@ -78,20 +101,5 @@ public class BussApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         stopService(new Intent(this, UpdateLocToParseService.class));
-    }
-
-    public boolean checkIfDataEnabled(){
-        boolean mobileDataEnabled = false; // Assume disabled
-        ConnectivityManager cm1 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        try {
-            Class cmClass = Class.forName(cm1.getClass().getName());
-            Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
-            method.setAccessible(true); // Make the method callable
-            // get the setting for "mobile data"
-            mobileDataEnabled = (Boolean)method.invoke(cm1);
-        } catch (Exception e) {
-            Log.d(TAG,"Error checking mobile datat status");
-        }
-        return mobileDataEnabled;
     }
 }

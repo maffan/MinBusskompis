@@ -20,7 +20,7 @@ import android.widget.Button;
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 
 /*
     ChildGoingToBus
@@ -62,7 +62,7 @@ public class ChildGoingToBus extends AppCompatActivity implements ServiceConnect
         }
 
         //Set walking status
-        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
+        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
 
         //Init travelingData
         travelingData = getIntent().getParcelableExtra("data");

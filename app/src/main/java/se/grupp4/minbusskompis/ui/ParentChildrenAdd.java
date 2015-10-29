@@ -17,39 +17,47 @@ import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussSyncer;
 import se.grupp4.minbusskompis.parsebuss.SyncTaskCompleteCallback;
-
+/*
+    ParentChildrenAdd
+    Add a new child by child id
+ */
 public class ParentChildrenAdd extends AppCompatActivity {
 
-    private Button addChildButton;
-    private TextView codeTextView;
-    private Context context;
+    private Context context = this;
+    private ViewHolder viewHolder;
+
+    private class ViewHolder{
+        private Button addChildButton;
+        private TextView codeTextView;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getApplicationContext();
         setContentView(R.layout.activity_parent_child_add);
-        findViews();
-        addButtonListener();
+        viewHolder = new ViewHolder();
+        initiateViews();
+        addButtonListeners();
     }
 
-    private void findViews() {
-        codeTextView = (TextView) findViewById(R.id.parent_add_child_hint_text);
+    private void initiateViews() {
+        viewHolder.codeTextView = (TextView) findViewById(R.id.parent_add_child_hint_text);
+        viewHolder.addChildButton=(Button)findViewById(R.id.parent_add_child_add_child_button);
     }
 
-    public void addButtonListener(){
-
-        addChildButton=(Button)findViewById(R.id.parent_add_child_add_child_button);
-
-        addChildButton.setOnClickListener(new View.OnClickListener() {
+    /**
+     * When pressing add button a syncrequest will be sent via parse, if child acknowledges user will be sent into the settings for that child
+     */
+    public void addButtonListeners(){
+        viewHolder.addChildButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //Sending request
                 BussSyncer sync = new BussSyncer(new BussParseSyncMessenger());
-                if (!(codeTextView.getText().toString().equals(""))) {
+                if (!(viewHolder.codeTextView.getText().toString().equals(""))) {
                     Toast.makeText(context, R.string.parent_children_add_busssync_toast_sync, Toast.LENGTH_LONG).show();
-                    sync.syncWithSyncCode(codeTextView.getText().toString(), new SyncTaskCompleteCallback() {
+                    sync.syncWithSyncCode(viewHolder.codeTextView.getText().toString(), new SyncTaskCompleteCallback() {
                         @Override
                         public void onSyncTaskComplete(boolean success, String installationId) {
                             if (success) {
@@ -68,7 +76,7 @@ public class ParentChildrenAdd extends AppCompatActivity {
                             }
                         }
                     });
-                }else{
+                } else {
                     Toast.makeText(context, R.string.parent_children_add_busssynt_toast_noinput, Toast.LENGTH_LONG).show();
                 }
             }

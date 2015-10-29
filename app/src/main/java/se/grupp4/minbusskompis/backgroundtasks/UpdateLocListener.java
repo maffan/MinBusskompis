@@ -11,8 +11,9 @@ import android.widget.Toast;
 import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 
-/**
- * Created by Tobias on 2015-10-07.
+/*
+    UpdateLocListener
+    Locationlistener that will send data to parse on updated position
  */
 public class UpdateLocListener implements LocationListener {
         private static final String TAG = "UpdateLocListener";
@@ -26,16 +27,17 @@ public class UpdateLocListener implements LocationListener {
             this.destination = destination;
         }
 
-        //Skicka data till parse vid ändring av position
+    /**
+     * On location changed, send current location and mode to parse and parent
+     * @param loc Current location, callback
+     */
         @Override
         public void onLocationChanged(Location loc) {
             if (loc != null) {
                 Log.d(TAG, "Updated location to Parse");
-                //Spara location
                 ChildLocationAndStatus childLocationAndStatus = new ChildLocationAndStatus(loc,tripStatus,destination);
                 ParseCloudManager.getInstance().updateLatestLocationAndStatusForSelf(childLocationAndStatus);
 
-                //Skicka push till alla föräldrar att nu finns ny position.
                 BussRelationMessenger.getInstance().notifyPositionUpdate();
             }else {
                 Log.d(TAG, "Got null location");
