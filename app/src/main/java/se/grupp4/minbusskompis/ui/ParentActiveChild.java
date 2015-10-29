@@ -24,7 +24,7 @@ import java.util.Observer;
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.ChildLocationAndStatus;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 import se.grupp4.minbusskompis.parsebuss.BussRelationships;
 
@@ -57,14 +57,14 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
                 findFragmentById(R.id.parent_active_child_map)).getMap();
 
         //Set initial values
-        childName.setText(BussData.getInstance().getNameFromId(childId));
+        childName.setText(ParseCloudManager.getInstance().getNameFromId(childId));
 
         //Listen to child
-        BussRelationships relationships = BussData.getInstance().getChildren();
+        BussRelationships relationships = ParseCloudManager.getInstance().getChildren();
         BussRelationMessenger.getInstance().setRelationships(relationships);
 
         //Get and set initial values
-        ChildLocationAndStatus initialStatus = BussData.getInstance().getChildLocationAndStatusForId(childId);
+        ChildLocationAndStatus initialStatus = ParseCloudManager.getInstance().getChildLocationAndStatusForId(childId);
         updateInfo(initialStatus);
 
         //Start listening for updates
@@ -109,7 +109,7 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
             if (object.getString("from").equals(childId)) {
                 Log.d(TAG, "Update was from my child!");
                 ChildLocationAndStatus locationAndStatus =
-                        BussData.getInstance().getChildLocationAndStatusForId(childId);
+                        ParseCloudManager.getInstance().getChildLocationAndStatusForId(childId);
                 updateInfo(locationAndStatus);
             }
         } catch (JSONException e) {
@@ -134,8 +134,9 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
     private void updateStatusText() {
         switch (status){
             case TravelingData.INACTIVE:
-                childStatus.setText(R.string.parent_active_child_inactive_text);
-                childStatusImage.setImageResource(R.drawable.inactive);
+                Intent backIntent = new Intent(this,ParentChildrenList.class);
+                startActivity(backIntent);
+                finish();
                 break;
             case TravelingData.WALKING:
                 childStatus.setText(R.string.parent_active_child_walking_text);

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -18,7 +17,7 @@ import java.util.List;
 
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 
 /**
  * Created by Marcus on 9/29/2015.
@@ -48,7 +47,7 @@ public class BussApplication extends Application {
 
     private void initParseAndInitData() {
         Parse.initialize(this);
-        BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+        ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
             @Override
             public void done() {
                 setDefaultTravelStatus();
@@ -57,7 +56,7 @@ public class BussApplication extends Application {
     }
 
     private void setDefaultTravelStatus() {
-        BussData.getInstance().setStatusForSelfAndNotifyParents(0);
+        ParseCloudManager.getInstance().setStatusForSelfAndNotifyParents(0);
     }
 
     private void setDefaultSubscriptions() {

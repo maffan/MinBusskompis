@@ -10,6 +10,10 @@ import com.parse.ParsePush;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created by Marcus on 10/4/2015.
  */
@@ -17,62 +21,66 @@ public class BussParseSyncMessenger {
     private static final int TRIES_IN_SECONDS = 30;
     private static final String REQUEST_STRING = "SyncRequest";
     private static final String RESPONSE_STRING = "SyncResponse";
-    public static final int REQUEST_TYPE = 0;
-    public static final int RESPONSE_TYPE = 1;
     private static final String TAG = "SYNC_MESSENGER";
+    public static final String TYPE_FIELD = "type";
+    public static final String SENDER_FIELD = "sender";
 
-    private JSONObject incomingSync;
+    private JSONObject incomingSyncMessage;
     private String syncInstallationId;
 
-    private final Object lock;
+    private ReentrantLock lock;
+    private Condition syncMessageArrived;
 
     public BussParseSyncMessenger(){
-        lock = new Object();
+        lock = new ReentrantLock(true);
+        syncMessageArrived = lock.newCondition();
     }
 
     public void sendSyncRequest(String syncCode){
         try {
-            SendMessageToChannelWithType(syncCode, REQUEST_STRING);
+            SendMessageToChannelWithType(getSyncCodeAsChannel(syncCode), REQUEST_STRING);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * In parse, a channel name may not start with a digit
+     */
+    public static String getSyncCodeAsChannel(String syncCode) {
+        if(Character.isDigit(syncCode.charAt(0)))
+            return "c" + syncCode;
+        else
+            return syncCode;
     }
 
     public void sendSyncResponse() {
-        try {
-            SendMessageToChannelWithType(getSyncInstallationIdAsChannel(), RESPONSE_STRING);
+        try { //"i" is because channel may not start with a number
+            SendMessageToChannelWithType("i" + syncInstallationId, RESPONSE_STRING);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private String getSyncInstallationIdAsChannel() {
-        return "i"+syncInstallationId;
-    }
-
     private void SendMessageToChannelWithType(String channel, String type) throws JSONException {
-        ParsePush push = getParsePushWithChannel(channel);
-        JSONObject syncObject = getSyncObject(type);
+        ParsePush push = createPushWithChannel(channel);
+        JSONObject syncObject = createSyncObject(type);
         sendPushWithObject(push, syncObject);
     }
 
     @NonNull
-    private ParsePush getParsePushWithChannel(String channel) {
+    private ParsePush createPushWithChannel(String channel) {
         ParsePush push = new ParsePush();
         push.setChannel(channel);
         return push;
     }
 
     @NonNull
-    private JSONObject getSyncObject(String type) throws JSONException {
+    private JSONObject createSyncObject(String type) throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("type", type);
-        jsonObject.put("sender", getInstallationId());
+        jsonObject.put(TYPE_FIELD, type);
+        jsonObject.put(SENDER_FIELD, ParseInstallation.getCurrentInstallation().getInstallationId());
         return jsonObject;
-    }
-
-    private String getInstallationId() {
-        return ParseInstallation.getCurrentInstallation().getInstallationId();
     }
 
     private void sendPushWithObject(ParsePush push, JSONObject jsonObject) {
@@ -82,60 +90,39 @@ public class BussParseSyncMessenger {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Log.d(TAG,"Object sent!" );
+        Log.d(TAG, "Object sent!");
     }
 
-    public boolean waitForSyncMessage() {
-        Log.d(TAG,"Wating for response");
-        return gotResponse();
-    }
-
-    private boolean gotResponse() {
-        synchronized (this.lock){
-            return responseReceivedAndUnpacked();
-        }
-    }
-
-    private boolean responseReceivedAndUnpacked() {
-        if (noIncommingMessageAfterWait()) return false;
-        unpackMessage();
-        Log.d(TAG, "responseReceivedAndUnpacked: GOT Response!");
-        return true;
-    }
-
-    private boolean noIncommingMessageAfterWait() {
-        if (this.incomingSync == null) {
-            if (responseQueueStillEmptyAfter(TRIES_IN_SECONDS))
-                return true;
-        }
-        return false;
-    }
-
-    private void unpackMessage() {
-        try {
-            retrieveInstallationId();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void retrieveInstallationId() throws JSONException {
-        syncInstallationId = incomingSync.getString("sender");
-    }
-
-    private boolean responseQueueStillEmptyAfter(int tries) {
-        int attempts = 0;
-        while(this.incomingSync == null){
+    public boolean waitForSyncMessageAndReturnSuccess(){
+        lock.lock();
+        int tries = 0;
+        while (incomingSyncMessage == null){ //no message has arrived
             try {
-                attempts++;
-                if(attempts >= tries)
-                    return true;
-                this.lock.wait(1000);
+                tries++;
+                syncMessageArrived.await(1, TimeUnit.SECONDS);
+                if(tries > TRIES_IN_SECONDS)
+                    break;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        return false;
+        if(incomingSyncMessage != null) { //A message was received
+            unpackMessage();
+            lock.unlock();
+            return true;
+        }
+        else{   //No message was received
+            lock.unlock();
+            return false;
+        }
+    }
+
+    private void unpackMessage() {
+        try {
+            syncInstallationId = incomingSyncMessage.getString(SENDER_FIELD);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getSyncInstallationId() {
@@ -143,15 +130,9 @@ public class BussParseSyncMessenger {
     }
 
     public void setSyncMessage(JSONObject response) {
-        retrieveMessageAndNotify(response);
+        lock.lock();
+        incomingSyncMessage = response;
+        syncMessageArrived.signalAll();
+        lock.unlock();
     }
-
-    private void retrieveMessageAndNotify(JSONObject response) {
-        synchronized (lock) {
-            incomingSync = response;
-            lock.notify();
-        }
-    }
-
-
 }

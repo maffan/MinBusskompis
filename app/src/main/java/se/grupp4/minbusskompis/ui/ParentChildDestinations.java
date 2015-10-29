@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.parsebuss.AsyncTaskCompleteCallback;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
 import se.grupp4.minbusskompis.ui.adapters.DestinationsAdapter;
 import se.grupp4.minbusskompis.ui.map.addLocationOnMap;
@@ -115,7 +115,7 @@ public class ParentChildDestinations extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            BussData.getInstance().fetchData(new AsyncTaskCompleteCallback() {
+            ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
                 @Override
                 public void done() {
                     populateDestinations();
@@ -127,7 +127,7 @@ public class ParentChildDestinations extends AppCompatActivity {
 
     private void populateDestinations() {
         destinationsAdapter.clear();
-        ArrayList<BussDestination> destList = BussData.getInstance().getDestinationsForChild(childId);
+        ArrayList<BussDestination> destList = ParseCloudManager.getInstance().getDestinationsForChild(childId);
         if(destList.isEmpty()){
             viewHolder.loadingTextView.setText(R.string.parent_child_destinations_viewholder_defaulttext);
             showMessage();

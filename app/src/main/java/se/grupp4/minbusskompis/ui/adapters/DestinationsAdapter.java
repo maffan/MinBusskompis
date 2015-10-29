@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import se.grupp4.minbusskompis.R;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussDestination;
 
 /**
@@ -69,7 +69,7 @@ public class DestinationsAdapter extends ArrayAdapter<BussDestination> {
             viewHolder.deleteDestinationIconView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    BussData.getInstance().removeDestinationFromChild(currentDestination.getName(),currentInstallId);
+                    ParseCloudManager.getInstance().removeDestinationFromChild(currentDestination.getName(),currentInstallId);
                     currentAdapter.remove(currentDestination);
                     currentAdapter.notifyDataSetChanged();
                 }

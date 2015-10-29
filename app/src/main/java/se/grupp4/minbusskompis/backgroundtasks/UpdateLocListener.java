@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussRelationMessenger;
 
 /**
@@ -33,7 +33,7 @@ public class UpdateLocListener implements LocationListener {
                 Log.d(TAG, "Updated location to Parse");
                 //Spara location
                 ChildLocationAndStatus childLocationAndStatus = new ChildLocationAndStatus(loc,tripStatus,destination);
-                BussData.getInstance().updateLatestPosition(childLocationAndStatus);
+                ParseCloudManager.getInstance().updateLatestLocationAndStatusForSelf(childLocationAndStatus);
 
                 //Skicka push till alla föräldrar att nu finns ny position.
                 BussRelationMessenger.getInstance().notifyPositionUpdate();

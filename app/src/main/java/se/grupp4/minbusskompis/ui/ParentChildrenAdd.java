@@ -13,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import se.grupp4.minbusskompis.R;
-import se.grupp4.minbusskompis.parsebuss.BussData;
+import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
 import se.grupp4.minbusskompis.parsebuss.BussParseSyncMessenger;
-import se.grupp4.minbusskompis.parsebuss.BussSync;
+import se.grupp4.minbusskompis.parsebuss.BussSyncer;
 import se.grupp4.minbusskompis.parsebuss.SyncTaskCompleteCallback;
 
 public class ParentChildrenAdd extends AppCompatActivity {
@@ -46,7 +46,7 @@ public class ParentChildrenAdd extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Sending request
-                BussSync sync = new BussSync(new BussParseSyncMessenger());
+                BussSyncer sync = new BussSyncer(new BussParseSyncMessenger());
                 if (!(codeTextView.getText().toString().equals(""))) {
                     Toast.makeText(context, R.string.parent_children_add_busssync_toast_sync, Toast.LENGTH_LONG).show();
                     sync.syncWithSyncCode(codeTextView.getText().toString(), new SyncTaskCompleteCallback() {
@@ -55,7 +55,7 @@ public class ParentChildrenAdd extends AppCompatActivity {
                             if (success) {
                                 Log.v("ParentChildrenAdd", "Successfully added");
                                 //Save child to parse data
-                                BussData.getInstance().addRelationship(installationId, BussData.CHILD);
+                                ParseCloudManager.getInstance().addRelationshipToSelf(installationId, ParseCloudManager.CHILD);
                                 Toast.makeText(context, R.string.parent_children_add_busssync_toast_success + installationId, Toast.LENGTH_LONG).show();
 
                                 //Switch to ChildSettings, pass on installation id

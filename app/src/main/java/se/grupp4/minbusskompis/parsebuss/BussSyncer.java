@@ -2,38 +2,31 @@ package se.grupp4.minbusskompis.parsebuss;
 
 import android.os.AsyncTask;
 
-import com.parse.ParseInstallation;
+import com.parse.ParseGeoPoint;
 import com.parse.ParsePush;
 
 /**
  * Created by Marcus on 10/4/2015.
  */
-public class BussSync {
+public class BussSyncer {
     private BussParseSyncMessenger messenger;
 
 
-    public BussSync(BussParseSyncMessenger messenger) {
+    public BussSyncer(BussParseSyncMessenger messenger) {
         this.messenger = messenger;
     }
 
+    /**
+     * Attempts to sync with a child device.
+     * @param syncCode Code published by the child device
+     * @param callback
+     */
     public void syncWithSyncCode(String syncCode, SyncTaskCompleteCallback callback){
-        String legalSyncCode = makeLegalSyncCode(syncCode);
-        startSyncTask(legalSyncCode, callback);
-    }
-
-    private String makeLegalSyncCode(String syncCode) {
-        if(Character.isDigit(syncCode.charAt(0)))
-            return "c" + syncCode;
-        else
-            return syncCode;
-    }
-
-    private void startSyncTask(String syncCode, SyncTaskCompleteCallback callback) {
-        SyncRequestTask task = new SyncRequestTask(syncCode,callback);
-        task.execute();
+        new SyncRequestTask(syncCode, callback).execute();
     }
 
     private class SyncRequestTask extends AsyncTask<String,Void,Boolean> {
+
         private SyncTaskCompleteCallback callback;
         private String syncCode;
         private String remoteInstallationId;
@@ -47,7 +40,7 @@ public class BussSync {
         protected Boolean doInBackground(String[] params) {
             setupSyncMessageServices();
             messenger.sendSyncRequest(syncCode);
-            boolean gotResponse = messenger.waitForSyncMessage();
+            boolean gotResponse = messenger.waitForSyncMessageAndReturnSuccess();
             if(gotResponse){
                 remoteInstallationId = messenger.getSyncInstallationId();
             }
@@ -59,8 +52,8 @@ public class BussSync {
         protected void onPostExecute(Boolean success) {
             callback.onSyncTaskComplete(success, remoteInstallationId);
         }
-    }
 
+    }
     private void setupSyncMessageServices() {
         BussSyncMessengerProvider.getInstance().setSyncMessenger(messenger);
     }
@@ -69,11 +62,15 @@ public class BussSync {
         BussSyncMessengerProvider.getInstance().removeMessenger();
     }
 
-    public void waitForSync(CodeGenerator generator, SyncTaskCompleteCallback callback){
+    /**
+     * Waits for a parent device so sync with this device.
+     * @param generator
+     * @param callback
+     */
+    public void waitForSyncRequest(CodeGenerator generator, SyncTaskCompleteCallback callback){
         String syncCode = generator.getCode();
-        String legalSyncCode = makeLegalSyncCode(syncCode);
-        WaitForSyncTask task = new WaitForSyncTask(legalSyncCode, callback);
-        task.execute();
+        String legalSyncCode = BussParseSyncMessenger.getSyncCodeAsChannel(syncCode);
+        new WaitForSyncTask(legalSyncCode, callback).execute();
     }
 
     private class WaitForSyncTask extends AsyncTask<String, Void, Boolean>{
@@ -89,7 +86,7 @@ public class BussSync {
         @Override
         protected Boolean doInBackground(String... params) {
             setupSyncMessageServicesAndSubscribe(syncCode);
-            boolean gotRequest = messenger.waitForSyncMessage();
+            boolean gotRequest = messenger.waitForSyncMessageAndReturnSuccess();
             if(gotRequest) {
                 remoteInstallationId = messenger.getSyncInstallationId();
                 messenger.sendSyncResponse();
