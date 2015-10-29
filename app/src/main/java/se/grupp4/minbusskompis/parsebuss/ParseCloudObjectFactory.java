@@ -40,7 +40,7 @@ public class ParseCloudObjectFactory {
             cache.addObject(POSITION_TYPE,id,positionObject);
             return positionObject;
         } else {
-            return cache.getObect(POSITION_TYPE,id);
+            return cache.getObject(POSITION_TYPE, id);
         }
     }
 
@@ -84,7 +84,7 @@ public class ParseCloudObjectFactory {
             cache.addObject(NAME_TYPE,id,cloudName);
             return cloudName;
         } else {
-            return cache.getObect(NAME_TYPE,id);
+            return cache.getObject(NAME_TYPE, id);
         }
     }
 
@@ -125,7 +125,7 @@ public class ParseCloudObjectFactory {
             cache.addObject(RELATIONSHIPS_TYPE,id,cloudRelationships);
             return cloudRelationships;
         } else {
-            return cache.getObect(RELATIONSHIPS_TYPE,id);
+            return cache.getObject(RELATIONSHIPS_TYPE, id);
         }
     }
 
@@ -167,7 +167,7 @@ public class ParseCloudObjectFactory {
             cache.addObject(DESTINATIONS_TYPE,id,cloudDestinations);
             return cloudDestinations;
         } else {
-            return cache.getObect(DESTINATIONS_TYPE,id);
+            return cache.getObject(DESTINATIONS_TYPE, id);
         }
     }
     public static ParseObject createDestinationsObjectForSelf() {

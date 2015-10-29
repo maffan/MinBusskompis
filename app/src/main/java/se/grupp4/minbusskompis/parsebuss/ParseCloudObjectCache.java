@@ -24,7 +24,7 @@ public class ParseCloudObjectCache {
         return cache.containsKey(type) && cache.get(type).containsKey(id);
     }
 
-    public ParseObject getObect(String type, String id){
+    public ParseObject getObject(String type, String id){
         return cache.get(type).get(id);
     }
 }
