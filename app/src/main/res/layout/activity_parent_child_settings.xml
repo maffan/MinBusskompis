@@ -27,7 +27,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text="Save name"
+        android:text="@string/parent_child_settings_save_child_button"
         android:textColor="@color/button_text"
         android:background="@color/button_background"
         android:layout_marginTop="@dimen/button_top_margin"

@@ -34,8 +34,8 @@
     <string name="parent_active_child_current_status">Aktuell status</string>
     <string name="child_going_to_bus_im_on_bs">Jag är på busshållplatsen</string>
     <string name="child_leave_bus_exit_at_next_stop">Gå av på nästa hållplats</string>
-    <string name="child_leave_bus_stop_button_not_pressed">Stopknapp ej tryckt</string>
-    <string name="child_on_bus_arriving_at">Bussen kommer</string>
+    <string name="child_leave_bus_stop_button_not_pressed">Stoppknapp ej tryckt</string>
+    <string name="child_on_bus_arriving_at">Bussen anländer</string>
     <string name="child_on_bus_title">På bussen</string>
     <string name="child_on_bus_your_bus_stop">Din hållplats</string>
     <string name="child_on_bus_next_bus_stop">Nästa hållplats</string>
@@ -79,4 +79,15 @@
     <string name="next_stop_init_text">Hämtar nästa hållplats...</string>
     <string name="starting_journey_toast">Startar resan...</string>
     <string name="stop_button_pressed">Stoppknappen är tryckt!</string>
+    <string name="child_destinations_not_found">Inga destinationer funna</string>
+    <string name="child_destinations_trying_to_get_gps">Hämtar nuvarande plats...</string>
+    <string name="child_destinations_trying_to_get_gps_not_found">GPS plats ej funnen, försök igen utomhus</string>
+    <string name="child_going_from_bus_dialog_no_button">Hjälp mig att hitta fram.</string>
+    <string name="child_going_from_bus_dialog_message">Är du framme ?</string>
+    <string name="child_going_from_bus_dialog_title">Avsluta resan</string>
+    <string name="child_going_from_bus_dialog_yes_button">Ja</string>
+    <string name="child_leave_bus_stop_button_pressed">Stoppknapp intryckt</string>
+    <string name="parent_child_settings_save_child_button">Spara namn</string>
+    <string name="parent_settings_settings_text">Inställningar</string>
+    <string name="startup_dialog_info_button">OK</string>
 </resources>

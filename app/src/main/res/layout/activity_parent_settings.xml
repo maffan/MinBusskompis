@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Settings"
+        android:text="@string/parent_settings_settings_text"
         android:id="@+id/textView4" />
 
     <Switch
