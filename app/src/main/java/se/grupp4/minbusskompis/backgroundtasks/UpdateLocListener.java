@@ -72,4 +72,8 @@ public class UpdateLocListener implements LocationListener {
             //Toast.makeText(context.getApplicationContext(), provider.toString() + " status changed: " + statusText, Toast.LENGTH_SHORT).show();
 
         }
+
+        public void setTripStatus(int tripStatus){
+            this.tripStatus = tripStatus;
+        }
 }

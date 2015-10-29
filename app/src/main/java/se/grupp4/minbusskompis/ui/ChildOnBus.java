@@ -8,18 +8,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -29,8 +26,82 @@ import se.grupp4.minbusskompis.api.BusData;
 import se.grupp4.minbusskompis.api.Methods;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.BussData;
-
+/*
+    ChildOnBus
+    Activity shown when user is traveling on the bus.
+ */
 public class ChildOnBus extends AppCompatActivity implements ServiceConnection,Runnable {
+    private Context context = this;
+    private TravelingData travelingData;
+    private ViewHolder viewHolder;
+    private UpdateLocToParseService.UpdateLocBinder updateLocBinder;
+    private ScheduledThreadPoolExecutor poolExecutor;
+    //Debug
+    protected Button dummyButtonOnBus;
+
+    private static class ViewHolder {
+        TextView busStopName;
+        TextView timeToStop;
+        TextView nextBusStop;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_child_on_bus);
+        viewHolder = new ViewHolder();
+
+        //Set on bus status
+        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.ON_BUS);
+
+        //Initiate views
+        initiateViews();
+
+        //Get data from intent
+        travelingData = getIntent().getParcelableExtra("data");
+
+        //Set trip information from travelingData
+        viewHolder.busStopName.setText(travelingData.busStopName);
+        viewHolder.timeToStop.setText(travelingData.busArrivingAt);
+
+        //Check if next bus stop is yours, and if the bus have left the last one each 20s
+        poolExecutor = new ScheduledThreadPoolExecutor(1);
+        poolExecutor.scheduleWithFixedDelay(this,0,20, TimeUnit.SECONDS);
+
+        //Dummy buttons, pass forward
+        addButtonListener();
+        //Init service
+        Intent serviceIntent = new Intent(context, UpdateLocToParseService.class);
+        bindService(serviceIntent, this, 0);
+    }
+
+    private void initiateViews() {
+        viewHolder.nextBusStop = (TextView) findViewById(R.id.child_on_bus_next_bus_stop);
+        viewHolder.busStopName = (TextView) findViewById(R.id.child_on_bus_destination_bus_stop);
+        viewHolder.timeToStop = (TextView) findViewById(R.id.child_on_bus_station_time_to_bus_stop);
+    }
+
+    public void addButtonListener(){
+
+        dummyButtonOnBus = (Button)findViewById(R.id.button_dummy_busonbus);
+        dummyButtonOnBus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ChildLeavingBus.class);
+                intent.putExtra("data",travelingData);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        poolExecutor.shutdown();
+        unbindService(this);
+    }
+
     @Override
     public void run() {
         new UpdateViewsTask().execute();
@@ -62,73 +133,6 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
                 ((Activity)context).finish();
             }
         }
-    }
-
-    private static class ViewHolder {
-        TextView busStopName;
-        TextView timeToStop;
-        TextView nextBusStop;
-    }
-
-
-    protected Button dummyButtonOnBus;
-    private Context context = this;
-    private TravelingData travelingData;
-    private ViewHolder viewHolder;
-    private UpdateLocToParseService.UpdateLocBinder updateLocBinder;
-    private ScheduledThreadPoolExecutor poolExecutor;
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        poolExecutor.shutdown();
-        unbindService(this);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child_on_bus);
-        viewHolder = new ViewHolder();
-
-        //Set on bus status
-        BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.ON_BUS);
-
-        //Initiate views
-        viewHolder.nextBusStop = (TextView) findViewById(R.id.child_on_bus_next_bus_stop);
-        viewHolder.busStopName = (TextView) findViewById(R.id.child_on_bus_destination_bus_stop);
-        viewHolder.timeToStop = (TextView) findViewById(R.id.child_on_bus_station_time_to_bus_stop);
-
-        //Get data from intent
-        travelingData = getIntent().getParcelableExtra("data");
-
-        //Set data
-        viewHolder.busStopName.setText(travelingData.busStopName);
-        viewHolder.timeToStop.setText(travelingData.busArrivingAt);
-
-        //Update next busstop
-        poolExecutor = new ScheduledThreadPoolExecutor(1);
-        poolExecutor.scheduleWithFixedDelay(this,0,20, TimeUnit.SECONDS);
-
-        //Dummy buttons, pass forward
-        addButtonListener();
-        //Init service
-        Intent serviceIntent = new Intent(context, UpdateLocToParseService.class);
-        bindService(serviceIntent, this, 0);
-    }
-
-    public void addButtonListener(){
-
-        dummyButtonOnBus = (Button)findViewById(R.id.button_dummy_busonbus);
-        dummyButtonOnBus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ChildLeavingBus.class);
-                intent.putExtra("data",travelingData);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 
     @Override

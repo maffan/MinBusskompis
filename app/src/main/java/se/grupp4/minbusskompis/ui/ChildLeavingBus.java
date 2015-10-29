@@ -27,7 +27,14 @@ import se.grupp4.minbusskompis.api.Methods;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.backgroundtasks.WifiCheckerStart;
 import se.grupp4.minbusskompis.parsebuss.BussData;
+/*
+    ChildLeavingBus
+    Activity shown when child is about to leave bus
 
+    * Update UpdateLocToParseService with new tripStatus
+    * Check every 15s if stop button is pressed
+    * Check via WifiChecker if user leaves bus (looses wifi connection)
+ */
 public class ChildLeavingBus extends AppCompatActivity implements ServiceConnection, Runnable {
 
     private UpdateLocToParseService.UpdateLocBinder updateLocBinder;
@@ -38,48 +45,6 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
     private ScheduledThreadPoolExecutor poolExecutor;
     private WifiCheckerStart wifiCheckerStart;
     private boolean serviceBound = false;
-
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        updateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
-        updateLocBinder.getService().getUpdateLocGpsAndSettings().resetLocationListener();
-        updateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.LEAVING_BUS, travelingData.destinationName);
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-
-    }
-
-    @Override
-    public void run() {
-        new UpdateViewsTask().execute();
-    }
-
-    private class UpdateViewsTask extends AsyncTask<Void, Void, TravelingData> {
-
-        public UpdateViewsTask() {
-        }
-
-        @Override
-        protected TravelingData doInBackground(Void... params) {
-            //Get data from api
-            //String dgw = BusData.getDgwByMac(travelingData.currentBusMacAdress);
-            String dgw = BusData.getDgwByMac("0013951349f7");
-            travelingData.stopButtonPressed = Methods.isStopPressed(BusData.getSimDgw());
-            return travelingData;
-        }
-
-        @Override
-        protected void onPostExecute(TravelingData travelingData) {
-            if(travelingData.stopButtonPressed){
-                viewHolder.stopButtonTextView.setText(R.string.stop_button_pressed);
-                viewHolder.stopButtonImageView.setImageResource(R.drawable.button_pressed);
-            }else{
-                viewHolder.stopButtonImageView.setImageResource(R.drawable.button_not_pressed);
-            }
-        }
-    }
 
     private static class ViewHolder {
         TextView leaveBusTitle;
@@ -105,22 +70,93 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         serviceBound = true;
 
         //Init views
-        viewHolder.leaveBusTitle = (TextView) findViewById(R.id.child_leave_bus_exit_at_next_stop);
-        viewHolder.stopButtonTextView = (TextView) findViewById(R.id.child_leave_bus_stop_button_text);
-        viewHolder.stopButtonImageView = (ImageView) findViewById(R.id.child_leave_bus_stop_button_icon);
+        initViews();
 
-        //Starta wifi-kontroll-tjofräset
+        //Buttons
+        addButtonListeners();
+
+        //WifiChecker, leave bus, checks against previously found mac address
         wifiCheckerStart = new WifiCheckerStart();
         Intent nextIntent = new Intent(this,ChildGoingFromBus.class);
         nextIntent.putExtra("data", travelingData);
         String mac = travelingData.currentBusMacAdress;
+        wifiCheckerStart.startCheckIfLeave(context, nextIntent, mac, 30);
 
-        //wifiCheckerStart.startCheckIfLeave(context, nextIntent, mac, 30);
-
+        //Check stop button task, call this runnable each 15s
         poolExecutor = new ScheduledThreadPoolExecutor(1);
         poolExecutor.scheduleAtFixedRate(this, 0, 15, TimeUnit.SECONDS);
+    }
 
-        addButtonListener();
+    private void initViews() {
+        viewHolder.leaveBusTitle = (TextView) findViewById(R.id.child_leave_bus_exit_at_next_stop);
+        viewHolder.stopButtonTextView = (TextView) findViewById(R.id.child_leave_bus_stop_button_text);
+        viewHolder.stopButtonImageView = (ImageView) findViewById(R.id.child_leave_bus_stop_button_icon);
+    }
+
+    /**
+     * Debug button
+     */
+    public void addButtonListeners(){
+        dummyButton1 = (Button)findViewById(R.id.button_dummy_busstop);
+
+        dummyButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ChildGoingFromBus.class);
+                intent.putExtra("data",travelingData);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+    /**
+     * Check if stop button is pressed, update view
+     */
+    private class CheckIfStopIsPressedAsTask extends AsyncTask<Void, Void, TravelingData> {
+
+        public CheckIfStopIsPressedAsTask() {
+        }
+
+        @Override
+        protected TravelingData doInBackground(Void... params) {
+            //Get data from api
+            String dgw = BusData.getDgwByMac(travelingData.currentBusMacAdress);
+            travelingData.stopButtonPressed = Methods.isStopPressed(dgw);
+            return travelingData;
+        }
+
+        @Override
+        protected void onPostExecute(TravelingData travelingData) {
+            if(travelingData.stopButtonPressed){
+                viewHolder.stopButtonTextView.setText(R.string.stop_button_pressed);
+                viewHolder.stopButtonImageView.setImageResource(R.drawable.button_pressed);
+            }else{
+                viewHolder.stopButtonImageView.setImageResource(R.drawable.button_not_pressed);
+            }
+        }
+    }
+
+    /**
+     * Update service with new tripStatus
+     */
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        updateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
+        updateLocBinder.getService().getUpdateLocGpsAndSettings().setTripStatus(TravelingData.LEAVING_BUS);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+
+    }
+
+    /**
+     * Update stop button
+     */
+    @Override
+    public void run() {
+        new CheckIfStopIsPressedAsTask().execute();
     }
 
     @Override
@@ -133,6 +169,9 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
         }
     }
 
+    /**
+     * Cancel trip dialog if back is pressed
+     */
     @Override
     public void onBackPressed(){
         new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
@@ -148,22 +187,6 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
                 })
                 .setNegativeButton(R.string.child_onbackwardspressed_dialog_option_no, null)
                 .show();
-    }
-
-    public void addButtonListener(){
-        final Context context = this;
-
-        dummyButton1 = (Button)findViewById(R.id.button_dummy_busstop);
-
-        dummyButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ChildGoingFromBus.class);
-                intent.putExtra("data",travelingData);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 
     @Override

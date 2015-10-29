@@ -15,7 +15,7 @@ public class UpdateLocGpsAndSettings {
     private int updateRate;
     private Context context;
     private LocationManager locationManager;
-    private LocationListener locationListener;
+    private UpdateLocListener locationListener;
 
     public UpdateLocGpsAndSettings(Context context, int updateRate){
         //Set mode & updaterate
@@ -62,5 +62,9 @@ public class UpdateLocGpsAndSettings {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void setTripStatus(int tripStatus){
+        locationListener.setTripStatus(tripStatus);
     }
 }

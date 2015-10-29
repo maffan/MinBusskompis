@@ -22,19 +22,20 @@ import se.grupp4.minbusskompis.R;
 import se.grupp4.minbusskompis.TravelingData;
 import se.grupp4.minbusskompis.backgroundtasks.UpdateLocToParseService;
 import se.grupp4.minbusskompis.parsebuss.BussData;
+/*
+    ChildGoingFromBus
+    Gives the user help to find his or her final destination, after leaving bus
 
+    * Updates UpdateToParseService with new mode
+    * Can guide user to end destination via google maps, and current position
+
+ */
 public class ChildGoingFromBus extends AppCompatActivity implements ServiceConnection {
 
     private ViewHolder viewHolder;
     private boolean neededHelp;
     private Intent serviceIntent;
-
-    private static class ViewHolder {
-        Button atDestinationButton;
-        Button helpToFindDestinationButton;
-    }
-
-    private static final String TAG = "WALKMODE";
+    private static final String TAG = "ChildGoingFromBus";
     private static final int TIMEOUT = 60*1000;
     private static final int MODE = 1;
     private Context context = this;
@@ -45,6 +46,11 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
     private String longitude;
     private TravelingData travelingData;
 
+    private static class ViewHolder {
+        Button atDestinationButton;
+        Button helpToFindDestinationButton;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,24 +58,21 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
         viewHolder = new ViewHolder();
 
         //Initiate views
-        viewHolder.atDestinationButton = (Button) findViewById(R.id.child_going_from_bus_on_location);
-        viewHolder.helpToFindDestinationButton = (Button) findViewById(R.id.child_going_from_bus_help_to_loc);
+        initiateViews();
 
         //Set walking status
         BussData.getInstance().setStatusForSelfAndNotifyParents(TravelingData.WALKING);
 
         //Get target destination
         travelingData = (TravelingData) getIntent().getParcelableExtra("data");
-        Log.d(TAG,"Got travelingData as: "+travelingData);
         destination = travelingData.destinationCoordinates;
+
         latitude = String.valueOf(destination.latitude);
         longitude = String.valueOf(destination.longitude);
         destinationName = travelingData.destinationName;
-        Log.d(TAG,"Latitude: "+ latitude);
-        Log.d(TAG, "Longitude: " + longitude);
 
 
-        //Start sending updates to parent
+        //Start sending updates to parent, bind service set needHelp flag (nav or not)
         serviceIntent = new Intent(this, UpdateLocToParseService.class);
         viewHolder.helpToFindDestinationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,13 +91,21 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
         });
     }
 
+    private void initiateViews() {
+        viewHolder.atDestinationButton = (Button) findViewById(R.id.child_going_from_bus_on_location);
+        viewHolder.helpToFindDestinationButton = (Button) findViewById(R.id.child_going_from_bus_help_to_loc);
+    }
+
+    /**
+     * Show dialog when returning from navigation.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         new AlertDialog.Builder(context)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("You have arrived!")
-                .setMessage("Are you at your destination?")
-                .setPositiveButton("Hells yes!", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.child_going_from_bus_dialog_title)
+                .setMessage(R.string.child_going_from_bus_dialog_message)
+                .setPositiveButton(R.string.child_going_from_bus_dialog_yes_button, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -103,7 +114,7 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
                         finish();
                     }
                 })
-                .setNegativeButton("No way!", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.child_going_from_bus_dialog_no_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -156,8 +167,7 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
     public void onServiceConnected(ComponentName name, IBinder service) {
         Log.d(TAG,"Received binder, start location listener");
         parseUpdateLocBinder = (UpdateLocToParseService.UpdateLocBinder) service;
-        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().resetLocationListener();
-        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().startLocationListener(TravelingData.WALKING, destinationName);
+        parseUpdateLocBinder.getService().getUpdateLocGpsAndSettings().setTripStatus(TravelingData.WALKING);
 
         if (neededHelp) {
             Intent intent =
