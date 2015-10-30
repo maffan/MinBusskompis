@@ -1,4 +1,4 @@
-# Min Busskompi s
+# Min Busskompis
 *Teknisk Dokumentation*
 
 ## Parse
@@ -17,49 +17,18 @@ All hantering av Parse i vår applikation ligger i modulen **[parsebuss](https:/
 ## Backgroundtasks
 Under barnets resa finns det mycket som behöver skötas kontinuerligt i bakgrunden. Vi har valt att lägga allt sådant i modulen **[backgroundtasks](https://github.com/maffan/MinBusskompis/tree/master/app/src/main/java/se/grupp4/minbusskompis/backgroundtasks)**. 
 
-Viktiga klasser i **[backgroundtasks](https://github.com/maffan/MinBusskompis/tree/master/app/src/main/java/se/grupp4/minbusskompis/backgroundtasks)** är bland andra **[UpdateLocToParseService](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/backgroundtasks/UpdateLocToParseService.java)** som är den tjänst som ansvarar för att kontinuerligt under hela resans gång se till att uppdatera barnets senaste position och status till Parse. Tjänsten använder sig i sin tur av en UpdateLocGpsAndSettings som hanterar en UpdateLocListener som är själva positionslyssnaren. 
+Viktiga klasser i **[backgroundtasks](https://github.com/maffan/MinBusskompis/tree/master/app/src/main/java/se/grupp4/minbusskompis/backgroundtasks)** är bland andra **[UpdateLocToParseService](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/backgroundtasks/UpdateLocToParseService.java)** som är den tjänst som ansvarar för att kontinuerligt under hela resans gång se till att uppdatera barnets senaste position och status till Parse. Tjänsten använder sig i sin tur av en **[UpdateLocGpsAndSettings](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/backgroundtasks/UpdateLocGpsAndSettings.java)** som hanterar en **[UpdateLocListener](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/backgroundtasks/UpdateLocListener.java)** som är själva positionslyssnaren. 
 
 Så fort barnet förflyttat sig ett visst avstånd eller en viss tid har gått så skickar tjänsten den senaste positionen och statusen till Parse och meddelar eventuella föräldrar om att det finns ny data att hämta.
-WifiCheckerStart hanterar applikationens interaktion med bussarnas accesspunkter. Den använder sig i sin tur av två mer specialiserade klasser. WifiCheckerLookReceiver letar efter närliggande accesspunkter och försöker med hjälp av periodiska sökningar och signalstyrka avgöra när barnet gått på en buss. WifiCheckerLeaveReceiver vet vilken accesspunkt barnets buss har och avgör på liknande sett om barnet lämnat busssen.
-Västtrafik/Innovationsplatformen
-Modulen api hanterar all hämtning av information från Västtrafik och Electricitys innovationsplatform. Klassen Methods innehåller en mängd statiska metoder som är de som är tänkta att användas av applikationen. Denna klass kallar i sin tur på metoder i mer specialiserade klasser. InnovationPlatform innehåller metoder riktade mot electricitys innovationsplatform. Den har funktionalitet för att hämta information om specifika bussar. BusData innehåller statisk information om bussar. Här hittar man bland annat information om MAC-adresser till accesspunkter i specifika bussar. VastTrafik innehåller i sin tur metoder för att få resvägar uträknade via Västtrafiks öppna api.
+**[WifiCheckerStart](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/backgroundtasks/WifiCheckerStart.java)** hanterar applikationens interaktion med bussarnas accesspunkter. Den använder sig i sin tur av två mer specialiserade klasser. **[WifiCheckerLookReceiver](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/backgroundtasks/WifiCheckerLookReceiver.java)** letar efter närliggande accesspunkter och försöker med hjälp av periodiska sökningar och signalstyrka avgöra när barnet gått på en buss. **[WifiCheckerLeaveReceiver](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/backgroundtasks/WifiCheckerLeaveReceiver.java)** vet vilken accesspunkt barnets buss har och avgör på liknande sett om barnet lämnat busssen.
 
+## Västtrafik/Innovationsplatformen
+Modulen **[api](https://github.com/maffan/MinBusskompis/tree/master/app/src/main/java/se/grupp4/minbusskompis/api)** hanterar all hämtning av information från Västtrafik och Electricitys innovationsplatform. Klassen **[Methods](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/api/Methods.java)** innehåller en mängd statiska metoder som är de som är tänkta att användas av applikationen. Denna klass kallar i sin tur på metoder i mer specialiserade klasser. **[InnovationPlatform](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/api/InnovationPlatform.java)** innehåller metoder riktade mot electricitys innovationsplatform. Den har funktionalitet för att hämta information om specifika bussar. **[BusData](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/api/BusData.java)** innehåller statisk information om bussar. Här hittar man bland annat information om MAC-adresser till accesspunkter i specifika bussar. **[VastTrafik](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/api/VastTrafik.java)** innehåller i sin tur metoder för att få resvägar uträknade via Västtrafiks öppna api.
 
-
-
-
-Externa beroenden
+## Externa beroenden
 Vår applikation har i dagsläget två externa beroenden. Parse och Google Play Services. Parse använder vi för att lösa vår datalagring och kommunikation mellan enheter. Google Play Services behöver vi för att kunna visa positioner på en karta.
 
 Vi är i dag också beroende av Google Navigation för att navigera till fots. För att kunna guida ett barn till eller från en busshållplats måste vi idag lämna vår egen applikation och helt hoppa över till Google Maps. Vi hoppas kunna slippa detta i framtiden.
 
-Övrigt
+## Övrigt
 BussRelationMessenger är även en Observable. Detta utnyttjar vi i vår föräldravy genom att kunna reagera omedelbart när ett meddelande kommer in. Så fort ett meddelande kommer in kan vi direkt hämta den senaste informationen från molnet (Parse) och visa denna för användaren.
-
-Komponenter i projektet
-Västtrafik - API
-Vi använder ett flertal olika anrop för att få resturer och annan relevant data som vi behöver visa upp i appen.
-ElectriCity - API
-Ett flertal olika anrop för att få realtidsdata ifrån bussarna då användaren av appen befinner sig på en buss med de möjligheterna (16 bussarna)
-
-Wifi/GPS-services
-Vi använder telefonens kapabilieter då vi vill detekterar närvaron av en 16 buss via wifi. Då för att kunna veta om vi kan visa realtids data ifrån Electricity API. 
-Telefonens gps för att hitta vår nuvarande position som vi sedan använder för att hitta en resväg via Västtrafiks API.
-
-
-Koppling mot Västtrafik/ElectriCity
-Koppling mot Parse
-Wifi/GPS-services
-Design decisions (such as API level, etc.)
-UML
-Flowchart
-Protocol (Client/Server
-Parse
-External dependencies
-Parse
-Google Play Services
-Google Navigation
-Övrigt
-
-
-
