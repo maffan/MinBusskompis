@@ -32,7 +32,7 @@ Vi är i dag också beroende av Google Navigation för att navigera till fots. F
 
 ## Vidareutveckling
 Om man är intresserad av att bygga och köra vår applikation på egen hand så är det viktigt att tänka på följande:
-* Du behöver ordna egna nycklar (och eventuellt konton) för
+* Du behöver ordna egna nycklar (och i vissa fall även konton) för
   * Västtrafik
   * Electricity
   * Parse
