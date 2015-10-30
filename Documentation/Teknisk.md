@@ -2,7 +2,7 @@
 *Teknisk Dokumentation*
 
 ## Parse
-För att snabbt kunna få till en lösning för kommunikation och datadelning mellan enheter valde vi att använda oss av Parse. Parse är en MBaaS med bland annat stöd för datalagring och Push-notifikationer.
+För att snabbt kunna få till en lösning för kommunikation och datadelning mellan enheter valde vi att använda oss av [Parse](https://parse.com/). Parse är en MBaaS med bland annat stöd för datalagring och Push-notifikationer.
 
 All hantering av Parse i vår applikation ligger i modulen **[parsebuss](https://github.com/maffan/MinBusskompis/tree/master/app/src/main/java/se/grupp4/minbusskompis/parsebuss)**. Här kommer en kort beskrivning av de viktigaste klasserna i denna modul.
 
@@ -30,7 +30,7 @@ Modulen **[api](https://github.com/maffan/MinBusskompis/tree/master/app/src/main
 Vi har valt att utföra all testning manuellt. Målsättningen var att ha automatiserade tester men då vår applikation krävde mycket arbete för att få bra funktionalitet fanns det ej tid att lära sig hur man effektivt testar android applikationer. Det finns testprotokoll att läsa.
 
 ## Externa beroenden
-Vår applikation har i dagsläget två externa beroenden. Parse och Google Play Services. Parse använder vi för att lösa vår datalagring och kommunikation mellan enheter. Google Play Services behöver vi för att kunna visa positioner på en karta.
+Vår applikation har i dagsläget två externa beroenden. [Parse](https://parse.com/) och [Google Play Services](https://developers.google.com/android/guides/overview). Parse använder vi för att lösa vår datalagring och kommunikation mellan enheter. Google Play Services behöver vi för att kunna visa positioner på en karta.
 
 Vi är i dag också beroende av Google Navigation för att navigera till fots. För att kunna guida ett barn till eller från en busshållplats måste vi idag lämna vår egen applikation och helt hoppa över till Google Maps. Vi hoppas kunna slippa detta i framtiden.
 
