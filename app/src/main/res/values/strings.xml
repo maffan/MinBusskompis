@@ -28,12 +28,12 @@
     <string name="all_reset_dialog_title">Reset</string>
     <string name="all_reset_dialog_message">This will reset your app, and you will lose all connections
     do you wish to continue?</string>
-    <string name="all_reset_dialog_yes">Yes</string>
-    <string name="all_reset_dialog_no">No</string>
+    <string name="all_dialog_yes">Yes</string>
+    <string name="all_dialog_no">No</string>
+    <string name="all_dialog_reset">Reset</string>
     <string name="all_exit_dialog_title">Exit Min BussKompis</string>
     <string name="all_exit_dialog_message">Do you wish to exit the application?</string>
-    <string name="all_exit_dialog_yes">Yes</string>
-    <string name="all_exit_dialog_no">No</string>
+
 
     <!-- Parent views -->
     <string name="parent_children_loading_text">Loading children...</string>
@@ -51,16 +51,13 @@
 
     <string name="parent_child_settings_destinations_button">Destinations</string>
     <string name="parent_child_settings_delete_child_button">Delete child</string>
-    <string name="parent_child_settings_exit_child_button">Save and exit</string>
+    <string name="parent_child_settings_exit_child_button">Exit</string>
     <string name="parent_child_settings_delete_child_dialog_title">Remove child</string>
     <string name="parent_child_settings_delete_child_dialog_message">Do you really want to remove this child?</string>
-    <string name="parent_child_settings_delete_child_dialog_yes">Yes</string>
-    <string name="parent_child_settings_delete_child_dialog_no">No</string>
     <string name="parent_child_settings_delete_child_toast_post_execute">New name saved!</string>
     <string name="parent_child_settings_save_child_button">Save Name</string>
 
     <string name="parent_settings_settings_text">Settings</string>
-    <string name="parent_settings_reset_button_text">Reset</string>
     <string name="parent_settings_notifications_switch_text">Notifications</string>
     <string name="parent_settings_toast_notifications_on">Notifications on...</string>
     <string name="parent_settings_toast_notifications_off">Notifications off...</string>
@@ -80,7 +77,7 @@
     <string name="parent_child_destinations_viewholder_defaulttext">No destinations for child</string>
 
     <string name="parent_children_add_busssync_toast_sync">Sending sync request...</string>
-    <string name="parent_children_add_busssync_toast_success">Succesfully synced with device with Installation ID: </string>
+    <string name="parent_children_add_busssync_toast_success">Successfully synced with device with Installation ID: </string>
     <string name="parent_children_add_busssync_toast_failed">Could not sync with device</string>
     <string name="parent_children_add_busssynt_toast_noinput">No code has been entered...</string>
 
@@ -92,7 +89,6 @@
 
     <string name="child_code_title">Code:</string>
     <string name="child_code_next_button">Next</string>
-    <string name="child_code_reset_button">Reset</string>
     <string name="child_code_toast_text_received">Received request from device with ID: </string>
     <string name="child_code_toast_text_notreceived">No requests received</string>
 
@@ -106,7 +102,6 @@
     <string name="child_going_from_bus_help_to_loc">Help me find my destination</string>
     <string name="child_going_from_bus_dialog_title">End trip</string>
     <string name="child_going_from_bus_dialog_message">Are you at your final destination?</string>
-    <string name="child_going_from_bus_dialog_yes_button">Yes</string>
     <string name="child_going_from_bus_dialog_no_button">No, help me find it</string>
 
     <string name="child_going_to_bus_im_on_bs">Im at the bus stop</string>
@@ -127,12 +122,10 @@
 
     <string name="child_onbackwardspressed_dialog_title">Stop Trip</string>
     <string name="child_onbackwardspressed_dialog_message">Do you wish to return to Destinations?</string>
-    <string name="child_onbackwardspressed_dialog_option_yes">Yes</string>
-    <string name="child_onbackwardspressed_dialog_option_no">No</string>
     <string name="stop_button_pressed">Stop button is pressed!</string>
 
     <string name="addlocationonmap_no_dest">No destination selected</string>
-    <string name="addlocationonmap_no_name">Enter a destinationname to save</string>
+    <string name="addlocationonmap_no_name">Enter a destination name to save</string>
     <string name="addlocationonmap_saving">Saving...</string>
 
 

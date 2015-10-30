@@ -94,7 +94,7 @@ public class ChildBusStation extends Activity implements ServiceConnection {
         new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle(R.string.child_onbackwardspressed_dialog_title)
                 .setMessage(R.string.child_onbackwardspressed_dialog_message)
-                .setPositiveButton(R.string.child_onbackwardspressed_dialog_option_yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.all_dialog_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(getApplicationContext(), ChildDestinations.class);
@@ -102,7 +102,7 @@ public class ChildBusStation extends Activity implements ServiceConnection {
                         finish();
                     }
                 })
-                .setNegativeButton(R.string.child_onbackwardspressed_dialog_option_no, null)
+                .setNegativeButton(R.string.all_dialog_no, null)
                 .show();
     }
 

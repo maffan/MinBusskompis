@@ -74,7 +74,7 @@ public class ChildChildCode extends AppCompatActivity {
                 new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle(R.string.all_reset_dialog_title)
                         .setMessage(R.string.all_reset_dialog_message)
-                        .setPositiveButton(R.string.all_reset_dialog_yes, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.all_dialog_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 final Intent intent = new Intent(ChildChildCode.this, StartSelectMode.class);
@@ -88,7 +88,7 @@ public class ChildChildCode extends AppCompatActivity {
                                 });
                             }
                         })
-                        .setNegativeButton(R.string.all_reset_dialog_no, null)
+                        .setNegativeButton(R.string.all_dialog_no, null)
                         .show();
             }
         });
