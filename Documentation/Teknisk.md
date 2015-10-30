@@ -25,6 +25,9 @@ Så fort barnet förflyttat sig ett visst avstånd eller en viss tid har gått s
 ## Västtrafik/Innovationsplatformen
 Modulen **[api](https://github.com/maffan/MinBusskompis/tree/master/app/src/main/java/se/grupp4/minbusskompis/api)** hanterar all hämtning av information från Västtrafik och Electricitys innovationsplatform. Klassen **[Methods](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/api/Methods.java)** innehåller en mängd statiska metoder som är de som är tänkta att användas av applikationen. Denna klass kallar i sin tur på metoder i mer specialiserade klasser. **[InnovationPlatform](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/api/InnovationPlatform.java)** innehåller metoder riktade mot electricitys innovationsplatform. Den har funktionalitet för att hämta information om specifika bussar. **[BusData](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/api/BusData.java)** innehåller statisk information om bussar. Här hittar man bland annat information om MAC-adresser till accesspunkter i specifika bussar. **[VastTrafik](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/api/VastTrafik.java)** innehåller i sin tur metoder för att få resvägar uträknade via Västtrafiks öppna api.
 
+## Testning
+Vi har valt att utföra all testning manuellt. Målsättningen var att ha automatiserade tester men då vår applikation krävde mycket arbete för att få bra funktionalitet fanns det ej tid att lära sig hur man effektivt testar android applikationer. Det finns testprotokoll att läsa.
+
 ## Externa beroenden
 Vår applikation har i dagsläget två externa beroenden. Parse och Google Play Services. Parse använder vi för att lösa vår datalagring och kommunikation mellan enheter. Google Play Services behöver vi för att kunna visa positioner på en karta.
 
