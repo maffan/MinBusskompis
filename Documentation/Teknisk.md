@@ -7,7 +7,7 @@ För att snabbt kunna få till en lösning för kommunikation och datadelning me
 All hantering av Parse i vår applikation ligger i modulen **[parsebuss](https://github.com/maffan/MinBusskompis/tree/master/app/src/main/java/se/grupp4/minbusskompis/parsebuss)**. Här kommer en kort beskrivning av de viktigaste klasserna i denna modul.
 
 **[ParseCloudManager](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/parsebuss/ParseCloudManager.java)** hanterar all interaktion med datalagringen i Parse. Det är till exempel via denna klass barn-klienter uppdaterar sin position och status. Det är även via denna klass som föräldrar-klienter kan hämta ny data om de barn de följer.
-**[BussRelationMessenger](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/parsebuss/BussRelationMessenger.java)** är den klass som sköter kontinuerlig kommunikation mellan barn- och föräldrar-klienter. Här anger föräldrar-klienten vilka barn de vill “prenumerera” på och få meddelanden från. Det är även denna klass som barn använder för att skicka meddelanden till de föräldrar som följer barnet. Här finns till exempel funktioner för att meddela föräldrar att man sparat ny information i molnet som de kan hämta.
+**[BussRelationMessenger](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/parsebuss/BussRelationMessenger.java)** är den klass som sköter kontinuerlig kommunikation mellan barn- och föräldrar-klienter. Här anger föräldrar-klienten vilka barn de vill “prenumerera” på och få meddelanden från. Det är även denna klass som barn använder för att skicka meddelanden till de föräldrar som följer barnet. Här finns till exempel funktioner för att meddela föräldrar att man sparat ny information i molnet som de kan hämta. **[BussRelationMessenger](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/parsebuss/BussRelationMessenger.java)** är även en Observable. Detta utnyttjar vi i vår föräldravy genom att kunna reagera omedelbart när ett meddelande kommer in. Så fort ett meddelande kommer in kan vi direkt hämta den senaste informationen från molnet (Parse) och visa denna för användaren.
 
 **[BussSyncer](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/parsebuss/BussSyncer.java)** är den klass som har ansvar för att synkronisera en barn- och föräldra-klient med varandra. Barnet använder sig av en **[BussSyncCodeGenerator](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/parsebuss/BussSyncCodeGenerator.java)** för att få fram en slumpmässig kod som sedan används under synkroniseringsprocessen. Under synkroniseringen skapar bägge klienter var sin temporär **[BussParseSyncMessenger](https://github.com/maffan/MinBusskompis/blob/master/app/src/main/java/se/grupp4/minbusskompis/parsebuss/BussParseSyncMessenger.java)** som ansvarar för att skicka och ta emot synkroniseringsmeddelanden mellan enheterna. En översikt av hela synkroniseringsprocessen finns bifogat som diagram.
 
@@ -30,5 +30,10 @@ Vår applikation har i dagsläget två externa beroenden. Parse och Google Play 
 
 Vi är i dag också beroende av Google Navigation för att navigera till fots. För att kunna guida ett barn till eller från en busshållplats måste vi idag lämna vår egen applikation och helt hoppa över till Google Maps. Vi hoppas kunna slippa detta i framtiden.
 
-## Övrigt
-BussRelationMessenger är även en Observable. Detta utnyttjar vi i vår föräldravy genom att kunna reagera omedelbart när ett meddelande kommer in. Så fort ett meddelande kommer in kan vi direkt hämta den senaste informationen från molnet (Parse) och visa denna för användaren.
+## Vidareutveckling
+Om man är intresserad av att bygga och köra vår applikation på egen hand så är det viktigt att tänka på följande:
+* Du behöver ordna egna nycklar för
+  - Västtrafik
+  - Electricity
+  - Parse
+  - Google Play Services
