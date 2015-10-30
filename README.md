@@ -4,10 +4,10 @@
 
 > Tobias Edvardsson, Marcus Flyckt, Marcus Johnsson, Jesper Larsson, Tobias Nilsson
 
-#### Inga föräldrar ska behöva vara oroliga då deras barn åker buss.
-Vi vill underlätta för både barn och föräldrar då de första bussresorna vankas.
-Som förälder kommer man kunna skapa destinationer, som i barnets telefon snabbt omvandlas till en rutt ens barn enkelt kan följa, både till fots och via buss. Föräldern kommer kunna följa sitt barns väg under hela resans gång. Genom att ge föräldrar dessa verktyg, hoppas vi kunna göra de första bussresorna till en rolig och trygg upplevelse.
-
-#### Inga barn ska vara rädda för att åka buss.
-Som barn kan den första egna bussresan kännas som en, inte bara spännande, utan även skrämmande upplevelse. Vi vill med vår produkt sänka tröskeln för den unge individens första steg ut i det kollektiva resandets värld. Den ska kännas som en kompis under resan, som underlättar de moment som kan upplevas som stressfulla.
-
+## Innehåll
+* [Användarmanual](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Anv%C3%A4ndarmanual.pdf)
+* [Prototypbeskrivning](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Prototyp.pdf), [Koncept och vision](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Koncept%2C%20vision.pdf), [Genomförandeplan](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Genonf%C3%B6rande.pdf) och tankar för [Vidareutveckling](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Vidareutveckling.pdf)
+* [Reflektion](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Reflektion.md)
+* [Teknisk dokumentation](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Teknisk.md)
+* De [testprotokoll](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Testprotokoll.md) vi använde för att testa applikationen.
+* [User stories](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Userstories.md) som vi utgått från under vårt arbete
