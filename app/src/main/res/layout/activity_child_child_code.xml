@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/button_text"
         android:background="@color/button_background"
-        android:text="@string/child_code_reset_button"
+        android:text="@string/all_dialog_reset"
         android:id="@+id/child_code_reset_button" />
 
 
