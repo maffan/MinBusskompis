@@ -1,5 +1,6 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -30,7 +31,7 @@ import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
     * Can guide user to end destination via google maps, and current position
 
  */
-public class ChildGoingFromBus extends AppCompatActivity implements ServiceConnection {
+public class ChildGoingFromBus extends Activity implements ServiceConnection {
 
     private ViewHolder viewHolder;
     private boolean neededHelp;
@@ -139,28 +140,6 @@ public class ChildGoingFromBus extends AppCompatActivity implements ServiceConne
                 })
                 .setNegativeButton(R.string.child_onbackwardspressed_dialog_option_no, null)
                 .show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_child_walk_mode, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

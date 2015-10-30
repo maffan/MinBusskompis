@@ -44,6 +44,9 @@ public class BussApplication extends Application {
         }
     }
 
+    /**
+     * Checks if data traffic is enabled, only checks for mobile data and not wifi connections as it is
+     */
     public boolean checkIfDataEnabled(){
         boolean mobileDataEnabled = false; // Assume disabled
         ConnectivityManager cm1 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

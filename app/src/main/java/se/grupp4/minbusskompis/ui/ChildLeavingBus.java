@@ -1,5 +1,6 @@
 package se.grupp4.minbusskompis.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -35,7 +36,7 @@ import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
     * Check every 15s if stop button is pressed
     * Check via WifiChecker if user leaves bus (looses wifi connection)
  */
-public class ChildLeavingBus extends AppCompatActivity implements ServiceConnection, Runnable {
+public class ChildLeavingBus extends Activity implements ServiceConnection, Runnable {
 
     private UpdateLocToParseService.UpdateLocBinder updateLocBinder;
     protected Button dummyButton1;
@@ -187,27 +188,5 @@ public class ChildLeavingBus extends AppCompatActivity implements ServiceConnect
                 })
                 .setNegativeButton(R.string.child_onbackwardspressed_dialog_option_no, null)
                 .show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_child_bus_stop, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

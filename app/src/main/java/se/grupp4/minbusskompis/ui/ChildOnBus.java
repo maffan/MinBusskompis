@@ -33,7 +33,7 @@ import se.grupp4.minbusskompis.parsebuss.ParseCloudManager;
     * UpdateLocToParseService, change tripStatus
     * Check if next bus stop and the bus has left the last bus stop each 20s, change activity if that occours.
  */
-public class ChildOnBus extends AppCompatActivity implements ServiceConnection,Runnable {
+public class ChildOnBus extends Activity implements ServiceConnection,Runnable {
     private Context context = this;
     private TravelingData travelingData;
     private ViewHolder viewHolder;
@@ -163,28 +163,6 @@ public class ChildOnBus extends AppCompatActivity implements ServiceConnection,R
                 })
                 .setNegativeButton(R.string.child_onbackwardspressed_dialog_option_no, null)
                 .show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_child_on_bus, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
