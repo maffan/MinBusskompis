@@ -1,8 +1,8 @@
-# Min Busskompis 
+# Min Busskompis
 
 *Grupp4*
 
-> Tobias Edvardsson, Marcus Flyckt, Marcus Johnsson, Jesper Larsson, Tobias Nilsson
+> [Tobias Edvardsson](https://github.com/tobedv), [Marcus Flyckt](https://github.com/maffan), [Marcus Johnsson](https://github.com/johnss0n), [Jesper Larsson](https://github.com/snapph), [Tobias Nilsson](https://github.com/laepen)
 
 ## Innehåll
 * [Användarmanual](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Anv%C3%A4ndarmanual.pdf)
