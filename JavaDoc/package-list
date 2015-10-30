@@ -1,0 +1,10 @@
+se.grupp4.minbusskompis
+se.grupp4.minbusskompis.api
+se.grupp4.minbusskompis.api.datatypes.ip
+se.grupp4.minbusskompis.api.datatypes.vt
+se.grupp4.minbusskompis.backgroundtasks
+se.grupp4.minbusskompis.parsebuss
+se.grupp4.minbusskompis.ui
+se.grupp4.minbusskompis.ui.adapters
+se.grupp4.minbusskompis.ui.fragments
+se.grupp4.minbusskompis.ui.map
