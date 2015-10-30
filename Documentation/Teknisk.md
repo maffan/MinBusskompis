@@ -32,8 +32,8 @@ Vi är i dag också beroende av Google Navigation för att navigera till fots. F
 
 ## Vidareutveckling
 Om man är intresserad av att bygga och köra vår applikation på egen hand så är det viktigt att tänka på följande:
-* Du behöver ordna egna nycklar för
-  - Västtrafik
-  - Electricity
-  - Parse
-  - Google Play Services
+* Du behöver ordna egna nycklar (och eventuellt konton) för
+  * Västtrafik
+  * Electricity
+  * Parse
+  * Google Play Services
