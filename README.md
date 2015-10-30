@@ -11,3 +11,4 @@
 * [Teknisk dokumentation](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Teknisk.md)
 * De [Testprotokoll](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Testprotokoll.md) vi använde för att testa applikationen.
 * [User stories](https://github.com/maffan/MinBusskompis/blob/master/Documentation/Userstories.md) som vi utgått från under vårt arbete
+* [JavaDoc](https://rawgit.com/maffan/MinBusskompis/master/JavaDoc/index.html)
