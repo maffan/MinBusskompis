@@ -26,7 +26,7 @@
         android:layout_marginTop="@dimen/button_top_margin"
         android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
-        android:text="@string/parent_settings_reset_button_text"
+        android:text="@string/all_dialog_reset"
         android:textColor="@color/button_text"
         android:background="@color/button_background"
         android:id="@+id/parent_reset_button" />
