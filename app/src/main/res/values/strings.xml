@@ -97,7 +97,7 @@
     <string name="child_code_toast_text_notreceived">No requests received</string>
 
     <string name="child_destinations_loading_text">Loading destinations...</string>
-    <string name="child_destinatins_fetch_data">Fetching data for trip...</string>
+    <string name="child_destinations_fetch_data">Fetching data for trip...</string>
     <string name="child_destinations_not_found">No destinations for child</string>
     <string name="child_destinations_trying_to_get_gps">Trying to get your current location...</string>
     <string name="child_destinations_trying_to_get_gps_not_found">Your current location could not be found, go outside and try again</string>

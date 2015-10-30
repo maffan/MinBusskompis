@@ -173,7 +173,7 @@ public class ChildDestinations extends AppCompatActivity implements AdapterView.
             @Override
             public void done(ParseGeoPoint parseGeoPoint, ParseException e) {
                 if (parseGeoPoint != null) {
-                    Toast.makeText(ChildDestinations.this, R.string.child_destinatins_fetch_data, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChildDestinations.this, R.string.child_destinations_fetch_data, Toast.LENGTH_SHORT).show();
                     //Set current position
                     Coord from = new Coord(String.valueOf(parseGeoPoint.getLatitude()), String.valueOf(parseGeoPoint.getLongitude()));
                     //Set target destination from parse data, passed in travelingdata

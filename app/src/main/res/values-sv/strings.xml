@@ -18,7 +18,7 @@
     <string name="child_code_title">Kod:</string>
     <string name="parent_children_loading_text">Hämtar barn...</string>
     
-    <string name="child_destinatins_fetch_data">Hämtar data för tur...</string><string name="parent_children_list_no_children_text">Inga barn tillagda</string>
+    <string name="child_destinations_fetch_data">Hämtar data för tur...</string><string name="parent_children_list_no_children_text">Inga barn tillagda</string>
     <string name="child_destinations_loading_text">Laddar destinationer...</string>
     <string name="parent_children_list_item_active_text">Klicka för mer information</string>
     <string name="child_going_from_bus_help_to_loc">Hjälp mig hitta mitt mål</string>
