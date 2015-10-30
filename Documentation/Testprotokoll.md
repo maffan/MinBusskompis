@@ -1,4 +1,4 @@
-## Test protocol
+## Testprotokoll
 Här har vi dokumenterade testningar av vår applikation
 <table>
 <th colspan="2">20151030 - Marcus F, Samsung Galaxy S5</th>
