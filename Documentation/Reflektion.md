@@ -165,7 +165,7 @@ Inför att vi skrev ihop reflektionen satte vi oss personligen och skrev ner sva
 
 * Vad tar jag med mig för lärdomar från projektet?
 
-Tobias Edvardsson
+#### Tobias Edvardsson
 
 Jag är absolut mest nöjd med att vår slutprodukt blev såpass teknisk avancerad och välfungerande som den är. Jag tycker även att vi lyckades få till en bra presentation och en bra stund på mässan. Att vi gick och kammade hem pris för vår applikation känns ju väldigt roligt det med. 
 
@@ -177,11 +177,11 @@ Sammanfattande kring vår arbetsprestation tycker jag att vi fick fram en bra sl
 
 Det jag skulle gjort annorlunda ifall jag skulle gjort ett liknande projekt i skolmiljö är att trycka på att vi skall ses mer på plats, de tillfällen vi väl träffats och arbetat ihop har det hänt väldigt mycket till skillnad då det har legat på eget ansvar att lösa uppgifter. Slutligen finns det många småsaker jag tar med mig från projektet kring projektledandet i sig och även utförandet av projektet. Android känner jag mig numera bra på. Men slutligen väljer jag att ta med mig en positiv lärdom i att jag skall tro på mina idéer och vad man klarar av att genomföra utan tidigare kunskap. 
 
-### Tobias Nielsen
+#### Tobias Nielsen
 
 Det som har gått bäst i projektet, i min mening, är att de saker som folk har åtagit sig för respektive sprint har blivit löst med, få undantag. Kommunikationen har fungerat ganska bra, betydligt bättre än i det tidigare projektet vi har gjort tillsammans. Projektet har utvecklats inom de ramar som vi satte från början, vi lade ganska mycket tid på att komma på idéer och koncept, vilket betalade sig senare i projektet. Mitt eget deltagande är jag ganska nöjd med, kunde ha tagit åt mig mer saker som ur min synvinkel verkar svåra samt varit aktivare utanför kodandet. Som helhet så anser jag att projektet har gått bra och vi har tillsammans ändå levererat en produkt som vi kan vara nöjda med. Vill ge en eloge till Edvardsson som agerade projektledare och styrde upp och höll oss samman på ett adekvat sätt. Från projektet så tar jag främst med mig hur man arbetar med Android. Projektmässigt så var det inte lika mycket nytt för mig, då jag har arbetat i liknande former innan Chalmers.
 
-### Marcus Flyckt
+#### Marcus Flyckt
 
 Jag är väldigt nöjd med resultatet av det här grupparbetet. Vi fick ihop en bra prototyp som bygger på en fin idé hämtad från verkliga problem.
 
@@ -191,11 +191,10 @@ Jag är väldigt nöjd med min egen insats. Min kod står för en stor del av ap
 
 Gruppens prestation som helhet resulterade i, som jag jag skrev tidigare, ett riktigt bra resultat som jag är stolt över. Med detta sagt så anser jag att ambitionsnivån tyvärr varierat i gruppen. Om jag skulle gjorde om projektet så skulle jag lägga mindra krut på kodande och mer på grupparbete. Se till så att alla alltid visste vad de skulle göra och hjälpa till i den mån jag kan. Det jag tar med mig från projektet är inte bara hur kul och givande det är att sätta sig in i ett helt nytt område och ta fram en produkt, utan också att grupparbete och gruppdynamik kräver mycket jobb utöver själva utvecklandet.
 
-### Marcus Johnsson
+#### Marcus Johnsson
 
 Generellt så är jag nöjd med mitt och övriga medlemmars insatser i projektet. Vi nåde målet med en fungerande prototyp och alla tillförde något. Personligen är jag nöjd med min egna insats, men i efterhand kan jag inte förneka till att jag själv tidigare kunde lagt mer tid och mer regelbundet ge min tid till projektet. Det finns saker i den kod jag skrivit som definitivt kunde förbättrats, kunde även ha gett min tid till övriga medlemmar för att ge hjälp eller vad än kunde ha behövts. Kommunikationen har överlag varit bra men i perioder så har den varierat, även insatser i projektet har varierat från person till person och över tid. I framtida projekt bör jag tänkar mer på att lägga mer till på att lära mig, koda, och lägga tid till andra om hjälp kan behövas.
 
-### Jesper Larsson
+#### Jesper Larsson
 
 Jag är mycket nöjd med projektet som helhet, att vi satte oss ner och spånade fram en idé som på riktigt löser ett problem vissa kan uppleva och det gjorde att det blev häftigare och mer intressant än andra projekt jag har varit del i då detta kändes mer riktigt. Jag gillade även att jobba med scrum då jag vet att det används på arbetsplatser som jag vill vara en del av i framtiden så att ha koll på hur det fungerar och ha en liten smak av det känns väldigt positivt. De andras prestation i projektet har varit väldigt bra och i synnerhet Edvardsson som i rollen som projektledare drog projektet framåt som ett lok med ett klart mål i sin vision för appen. Min egen prestation har dock inte varit på samma nivå som resten av gruppens och även om jag har bidragit har det varit jag som bidragit mins. Av diverse anledningar vilka är irrelevanta i detta perspektiv har jag inte åtagit mig lika stor del av jobbet och framför allt inte tagit initiativ att hjälpa mer när jag haft möjlighet utan varit nästan rädd att armbåga mig in i något och komma ivägen för något som någon satt och arbeta med. Men även om min last varit minns har jag lärt mig enormt mycket villket gör mig nöjd med projektet och de lärdomar och insikter jag fått kommer jag ha stor nytta av i framtiden.
-
