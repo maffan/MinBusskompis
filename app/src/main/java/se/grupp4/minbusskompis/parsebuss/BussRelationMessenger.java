@@ -1,6 +1,8 @@
 package se.grupp4.minbusskompis.parsebuss;
 
 
+import android.util.Log;
+
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 
@@ -157,15 +159,18 @@ public class BussRelationMessenger extends Observable {
      * @param data
      */
     public void dataReceived(JSONObject data){
+        Log.d(TAG, "dataReceived() called with: " + "data = [" + data + "]");
         enqueueData(data);
         notifyListeners(data);
     }
 
     private void enqueueData(JSONObject data) {
+        Log.d(TAG, "enqueueData() called with: " + "data = [" + data + "]");
         this.incomingData.add(data);
     }
 
     private void notifyListeners(JSONObject data) {
+        Log.d(TAG, "notifyListeners() called with: " + "data = [" + data + "]");
         setChanged();
         notifyObservers(data);
     }

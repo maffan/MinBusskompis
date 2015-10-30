@@ -1,5 +1,7 @@
 package se.grupp4.minbusskompis.parsebuss;
 
+import android.util.Log;
+
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
@@ -19,6 +21,7 @@ public class ParseCloudObjectFactory {
     private static final String POSITION_TYPE = "Position";
     private static final String NAME_TYPE = "Name";
     private static final String RELATIONSHIPS_TYPE = "Relationships";
+    private static final String TAG = "PARSE_FACTORY";
     private static ParseCloudObjectCache cache = new ParseCloudObjectCache();
 
     private static ParseQuery getTypeQueryForId(String type, String id) {
@@ -137,6 +140,11 @@ public class ParseCloudObjectFactory {
             cloudRelationships = query.getFirst();
         } catch (ParseException e) {
             cloudRelationships = createDefaultRelationshipsObject(id);
+        }
+        try {
+            cloudRelationships.fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return cloudRelationships;
     }
