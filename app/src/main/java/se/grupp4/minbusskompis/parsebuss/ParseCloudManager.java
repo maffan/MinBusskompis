@@ -3,7 +3,9 @@ package se.grupp4.minbusskompis.parsebuss;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -30,6 +32,7 @@ public class ParseCloudManager {
     private static final String NAME_FIELD = "name";
     private static final String NAME_TYPE = "Name";
     private static final String LOCATION_PROVIDER = "ParseCloud";
+    private static final String TAG = "PARSE_CLOUD";
 
     private List<String> parents;
     private List<String> children;
@@ -61,8 +64,10 @@ public class ParseCloudManager {
             cloudDestinations = ParseCloudObjectFactory.createDestinationsObjectForSelf();
 
             cloudRelationships = ParseCloudObjectFactory.createRelationshipsObjectForSelf();
+            Log.d(TAG, "doInBackground: cloudRelationships: "+cloudRelationships);
             parents = cloudRelationships.getList(PARENTS_FIELD);
             children = cloudRelationships.getList(CHILDREN_FIELD);
+            Log.d(TAG, "doInBackground: children: "+children);
 
             cloudName = ParseCloudObjectFactory.createNameObjectForSelf();
 

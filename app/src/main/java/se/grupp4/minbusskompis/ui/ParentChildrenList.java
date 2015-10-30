@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,7 +61,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         initViews();
         addButtonListeners();
         initList();
-        populateList();
+        new PopulateChildrenListTask().execute();
         ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
             @Override
             public void done() {
@@ -116,10 +117,6 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
      */
     @Override
     public void update(Observable observable, Object data) {
-        populateList();
-    }
-
-    private void populateList() {
         new PopulateChildrenListTask().execute();
     }
 
@@ -129,7 +126,7 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
     @Override
     protected void onResume() {
         super.onResume();
-        populateList();
+        new PopulateChildrenListTask().execute();
     }
 
     /**
@@ -185,18 +182,11 @@ public class ParentChildrenList extends AppCompatActivity implements AdapterView
         ParseCloudManager.getInstance().fetchLatestDataFromCloud(new AsyncTaskCompleteCallback() {
             @Override
             public void done() {
-                ArrayList<ChildData> tempList = getChildrenListFromParse();
+                Log.d(TAG, "done() called with: " + "");
+                ArrayList<ChildData> tempList = ParseCloudManager.getInstance().getChildren().getAsChildDataList();
                 showContentOrMessage(tempList);
             }
         });
-    }
-
-    /**
-     * Converts parse json data to arraylist
-     * @return
-     */
-    private ArrayList<ChildData> getChildrenListFromParse() {
-        return ParseCloudManager.getInstance().getChildren().getAsChildDataList();
     }
 
     /**

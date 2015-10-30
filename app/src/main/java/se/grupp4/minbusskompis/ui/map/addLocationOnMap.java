@@ -163,7 +163,7 @@ public class addLocationOnMap extends FragmentActivity implements OnMapReadyCall
         ParseCloudManager.getInstance().addDestinationToChild(destination, childId);
 
         //Saveing, going back to childdestinations
-        Toast.makeText(addLocationOnMap.this, R.string.addlocationonmap_saving + ": " + name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(addLocationOnMap.this, getResources().getString(R.string.addlocationonmap_saving) + ": " + name, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, ParentChildDestinations.class);
         intent.putExtra("child_id", childId);
         startActivity(intent);

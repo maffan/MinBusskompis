@@ -74,6 +74,7 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
         updateInfo(initialStatus);
 
         //Start listening for updates
+        Log.d(TAG, "onCreate: adding self as observer");
         BussRelationMessenger.getInstance().addObserver(this);
     }
 
@@ -121,6 +122,7 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
      */
     @Override
     public void update(Observable observable, Object data) {
+        Log.d(TAG, "update() called with: " + "observable = [" + observable + "], data = [" + (JSONObject)data + "]");
         Log.d(TAG,"Got update!");
         JSONObject object = (JSONObject) data;
         try {
@@ -129,6 +131,8 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
                 ChildLocationAndStatus locationAndStatus =
                         ParseCloudManager.getInstance().getChildLocationAndStatusForId(childId);
                 updateInfo(locationAndStatus);
+            }else{
+                Log.d(TAG, "update: Update was NOT from my child");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -140,6 +144,7 @@ public class ParentActiveChild extends AppCompatActivity implements Observer {
      * @param locationAndStatus Data about the current location and status
      */
     private void updateInfo(ChildLocationAndStatus locationAndStatus) {
+        Log.d(TAG, "updateInfo() called with: " + "locationAndStatus = [" + locationAndStatus + "]");
         status = locationAndStatus.getTripStatus();
         destination = locationAndStatus.getDestination();
         latitude = locationAndStatus.getLatitude();

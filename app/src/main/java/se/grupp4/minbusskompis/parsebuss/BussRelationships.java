@@ -1,5 +1,7 @@
 package se.grupp4.minbusskompis.parsebuss;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,9 +9,11 @@ import java.util.List;
 import se.grupp4.minbusskompis.ui.adapters.ChildData;
 
 public class BussRelationships  {
+    private static final String TAG = "RELATIONSHIPS";
     private LinkedList<String> relations;
 
     public BussRelationships(List relations) {
+        Log.d(TAG, "BussRelationships() called with: " + "relations = [" + relations + "]");
         this.relations = new LinkedList<>(relations);
     }
 
